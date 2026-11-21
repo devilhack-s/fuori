@@ -1,0 +1,7 @@
+city.ph|Scrivi la città o il paese dove vuoi l'attività|Type the town or village where you want the activity|Escribe la ciudad o el pueblo donde quieres la actividad|Escreva a cidade ou vila onde você quer a atividade
+radius.any|Ovunque|Anywhere|En cualquier lugar|Em qualquer lugar
+radius.upto|Entro {n} km|Within {n} km|A menos de {n} km|Até {n} km
+radius.fromYou|da te|from you|de ti|de você
+radius.fromCity|da {c}|from {c}|de {c}|de {c}
+radius.cityNone|Non trovo quella città. Scrivi meglio il nome, oppure svuota il campo.|I can't find that town. Check the name, or clear the field.|No encuentro esa ciudad. Revisa el nombre o vacía el campo.|Não encontro essa cidade. Confira o nome ou limpe o campo.
+radius.onlyCity|Solo a {c}|Only in {c}|Solo en {c}|Só em {c}

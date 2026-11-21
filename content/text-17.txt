@@ -1,0 +1,9 @@
+dir.btn|Indicazioni|Directions|Indicaciones|Rotas
+dir.title|Come ci arrivo?|How do I get there?|¿Cómo llego?|Como eu chego?
+dir.sub|Scegli l'app che usi di solito: parte già con la destinazione.|Pick the app you usually use: it opens with the destination ready.|Elige la app que sueles usar: se abre con el destino listo.|Escolha o app que você costuma usar: abre com o destino pronto.
+dir.google|Google Maps|Google Maps|Google Maps|Google Maps
+dir.waze|Waze|Waze|Waze|Waze
+dir.apple|Mappe di Apple|Apple Maps|Mapas de Apple|Mapas da Apple
+dir.other|Altre app di mappe|Other map apps|Otras apps de mapas|Outros apps de mapas
+dir.copy|Copia l'indirizzo|Copy the address|Copiar la dirección|Copiar o endereço
+dir.copied|Indirizzo copiato.|Address copied.|Dirección copiada.|Endereço copiado.

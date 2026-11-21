@@ -1,0 +1,7 @@
+ai.howto|Per entrare in un evento basta il profilo: nome, foto, città. Poi tocchi Partecipa. Per organizzarne uno, il pulsante in basso. Chi organizza può approvare le richieste e chiudere le iscrizioni quando vuole.|To join an event you just need a profile: name, photo, city. Then tap Join. To host one, the button at the bottom. Hosts can approve requests and close sign-ups.|Para entrar en un evento basta el perfil: nombre, foto, ciudad. Luego tocas Me apunto. Para organizar uno, el botón de abajo. Quien organiza aprueba solicitudes y cierra inscripciones.|Para entrar num evento basta o perfil: nome, foto, cidade. Depois toca Vou participar. Para organizar um, o botão embaixo. Quem organiza aprova pedidos e fecha inscrições.
+prof.withPhoto|Con foto|With photo|Con foto|Com foto
+prof.noPhoto|Senza foto|No photo|Sin foto|Sem foto
+prof.addPhoto|Aggiungi una foto|Add a photo|Añade una foto|Adicione uma foto
+ai.busy|L'assistente è occupato adesso. Riprova tra poco.|The assistant is busy right now. Try again shortly.|El asistente está ocupado ahora. Reintenta en un momento.|O assistente está ocupado agora. Tente de novo em instantes.
+ai.thinking|Sto guardando…|Checking…|Mirando…|Olhando…
+detail.realNote|Il profilo è tuo: chi organizza vede nome e foto prima di accettare.|The profile is yours: the host sees name and photo before accepting.|El perfil es tuyo: quien organiza ve nombre y foto antes de aceptar.|O perfil é seu: quem organiza vê nome e foto antes de aceitar.

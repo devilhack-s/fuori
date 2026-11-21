@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>FUORI · card invito</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    background: #070708; color: #fff; position: relative; overflow: hidden;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* alone lime in alto a destra */
+  .glow {
+    position: absolute; width: 980px; height: 980px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,255,46,.22), rgba(200,255,46,.05) 45%, rgba(200,255,46,0) 66%);
+    top: -430px; right: -290px;
+  }
+  /* alone freddo in basso a sinistra */
+  .glow2 {
+    position: absolute; width: 760px; height: 760px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(90,140,255,.10), rgba(90,140,255,0) 65%);
+    bottom: -420px; left: -240px;
+  }
+  /* trama sottile */
+  .grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at 70% 30%, #000 5%, transparent 72%);
+  }
+  .arcs { position: absolute; right: -140px; bottom: -180px; opacity: .5; }
+  .wrap { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 64px 72px; }
+
+  .top { display: flex; align-items: center; justify-content: space-between; }
+  .mark { display: flex; align-items: center; gap: 16px; }
+  .mark svg { width: 54px; height: 54px; }
+  .mark b { font-size: 32px; letter-spacing: 4.5px; font-weight: 800; }
+  .only { font-size: 17px; letter-spacing: .4px; color: #9aa09a; border: 1px solid rgba(255,255,255,.16); padding: 9px 16px; border-radius: 100px; }
+
+  .mid { max-width: 720px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #c8ff2e; color: #0a0c00; font-weight: 800;
+    font-size: 17px; letter-spacing: 3.2px; padding: 11px 18px; border-radius: 100px; margin-bottom: 26px;
+  }
+  .pill i { width: 8px; height: 8px; border-radius: 50%; background: #0a0c00; display: block; }
+  h1 { font-size: 86px; line-height: .98; letter-spacing: -2.6px; font-weight: 800; }
+  h1 em { color: #c8ff2e; font-style: normal; }
+  p.sub { margin-top: 26px; font-size: 24px; line-height: 1.42; color: #b9bdb5; max-width: 640px; }
+
+  .bottom { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .chip {
+    font-size: 16px; color: #d5d8cf; background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.10); padding: 10px 16px; border-radius: 100px;
+  }
+  .chip b { color: #fff; font-weight: 700; }
+  .url { margin-left: auto; font-size: 16px; color: #6f746b; letter-spacing: .2px; }
+
+  /* grande marchio a destra, come un sigillo */
+  .seal {
+    position: absolute; right: 86px; top: 50%; transform: translateY(-50%);
+    width: 300px; height: 300px; border-radius: 50%;
+    border: 1px solid rgba(200,255,46,.35);
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 45%, rgba(200,255,46,.16), rgba(200,255,46,0) 70%);
+  }
+  .seal svg { width: 190px; height: 190px; color: #c8ff2e; }
+  .seal:after {
+    content: ""; position: absolute; inset: -18px; border-radius: 50%;
+    border: 1px dashed rgba(255,255,255,.12);
+  }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="glow2"></div>
+  <div class="grid"></div>
+  <svg class="arcs" width="620" height="620" viewBox="0 0 620 620" fill="none">
+    <circle cx="310" cy="310" r="220" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+    <circle cx="310" cy="310" r="170" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+    <circle cx="310" cy="310" r="120" stroke="rgba(200,255,46,.10)" stroke-width="1"/>
+  </svg>
+
+  <div class="seal">
+    <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <path class="ring" d="M82 54A32 32 0 1 1 50 22" stroke="currentColor" stroke-width="8" stroke-linecap="butt"/>
+      <path d="M96 10 56.8 29.7 70.8 32.1Z" fill="currentColor"/>
+      <path d="M96 10 70.8 32.1 71.2 46.3Z" fill="currentColor" fill-opacity=".72"/>
+    </svg>
+  </div>
+
+  <div class="wrap">
+    <div class="top">
+      <div class="mark">
+        <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+          <path d="M82 54A32 32 0 1 1 50 22" stroke="#c8ff2e" stroke-width="9" stroke-linecap="butt"/>
+          <path d="M96 10 56.8 29.7 70.8 32.1Z" fill="#c8ff2e"/>
+          <path d="M96 10 70.8 32.1 71.2 46.3Z" fill="#c8ff2e" fill-opacity=".72"/>
+        </svg>
+        <b>FUORI</b>
+      </div>
+      <span class="only">Eventi in Sicilia</span>
+    </div>
+
+    <div class="mid">
+      <span class="pill"><i></i>INVITO</span>
+      <h1>Ti aspettano<br><em>fuori.</em></h1>
+      <p class="sub">Un evento privato su FUORI. Apri il link, guarda chi c'è e tocca Partecipo: l'indirizzo lo vedi solo tu che sei invitato.</p>
+    </div>
+
+    <div class="bottom">
+      <span class="chip"><b>Solo su invito</b></span>
+      <span class="chip">Indirizzo riservato</span>
+      <span class="chip">Gratis, senza pubblicità</span>
+      <span class="url">fuori.fuori-catania.workers.dev</span>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+ai.dialog|Dialogo|Dialogue|Diálogo|Diálogo
+ai.dialogStop|Fine dialogo|End dialogue|Fin del diálogo|Fim do diálogo
+ai.dialogListen|Ti ascolto… parla quando vuoi|Listening… speak whenever you like|Te escucho… habla cuando quieras|Estou ouvindo… fale quando quiser
+ai.dialogThink|Ci penso un attimo…|Thinking for a second…|Lo pienso un momento…|Pensando um instante…
+ai.dialogSpeak|Parlo io…|My turn…|Hablo yo…|Falo eu…
+ai.dialogNoSr|Questo telefono non permette il dialogo continuo. Tieni premuto il microfono e parla.|This phone can't do hands-free dialogue. Hold the mic and speak.|Este teléfono no permite el diálogo continuo. Mantén pulsado el micrófono y habla.|Este telefone não permite diálogo contínuo. Segure o microfone e fale.

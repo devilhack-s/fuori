@@ -1,0 +1,10 @@
+create.age|Fascia d'età|Age range|Rango de edad|Faixa de idade
+create.ageHint|Trascina i due pallini. Agli estremi vuol dire “per tutti”.|Drag the two dots. At the ends it means "for everyone".|Arrastra los dos puntos. En los extremos significa "para todos".|Arraste os dois pontos. Nas pontas significa "para todos".
+age.all|Per tutti|For everyone|Para todos|Para todos
+age.range|Da {a} a {b} anni|Ages {a} to {b}|De {a} a {b} años|De {a} a {b} anos
+age.min|Dai {a} anni in su|Ages {a} and up|Desde {a} años|A partir de {a} anos
+age.max|Fino a {b} anni|Up to {b} years old|Hasta {b} años|Até {b} anos
+age.blocked|Questo evento è per {who}: il tuo profilo dice {age} anni. Guarda gli altri, ce ne sono di tutti i tipi.|This event is for {who}: your profile says {age}. Have a look at the others, there are all kinds.|Este evento es para {who}: tu perfil dice {age} años. Mira los demás, hay de todo.|Este evento é para {who}: seu perfil diz {age} anos. Veja os outros, tem de todo.
+age.whoRange|chi ha tra i {a} e i {b} anni|people aged {a} to {b}|quienes tienen entre {a} y {b} años|quem tem entre {a} e {b} anos
+age.whoMin|chi ha almeno {a} anni|people aged {a} and up|quienes tienen al menos {a} años|quem tem pelo menos {a} anos
+age.whoMax|chi ha fino a {b} anni|people up to {b} years old|quienes tienen hasta {b} años|quem tem até {b} anos

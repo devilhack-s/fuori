@@ -1,0 +1,101 @@
+push.barText|Gli avvisi sono spenti: così non ti arrivano i messaggi dei gruppi né le richieste.|Notifications are off: you won't get group messages or requests.|Los avisos están apagados: así no te llegan los mensajes de los grupos ni las solicitudes.|Os avisos estão desligados: assim não recebe as mensagens dos grupos nem os pedidos.
+push.barBtn|Accendi|Turn on|Activar|Ativar
+push.title|Attiva gli avvisi dei gruppi?|Turn on group notifications?|¿Activar los avisos de los grupos?|Ativar os avisos dos grupos?
+push.sub|Ti arriva “Christian: il messaggio” col nome di chi scrive e il gruppo. Niente pubblicità, e puoi silenziare un gruppo quando vuoi.|You get “Christian: the message” with the sender's name and the group. No ads, and you can mute a group whenever you want.|Te llega “Christian: el mensaje” con el nombre de quien escribe y el grupo. Sin publicidad, y puedes silenciar un grupo cuando quieras.|Chega “Christian: a mensagem” com o nome de quem escreve e o grupo. Sem publicidade, e pode silenciar um grupo quando quiser.
+install.ora|Installa adesso|Install now|Instalar ahora|Instalar agora
+install.copia|Copia il link del sito|Copy the site link|Copiar el enlace del sitio|Copiar o link do site
+install.copiato|Link copiato: incollalo in una scheda normale di Chrome.|Link copied: paste it in a normal Chrome tab.|Enlace copiado: pégalo en una pestaña normal de Chrome.|Link copiado: cole numa aba normal do Chrome.
+install.passiTitolo|Come si installa, in tre tocchi|How to install, in three taps|Cómo se instala, en tres toques|Como instalar, em três toques
+install.passo1|Apri il sito in Chrome, in una scheda normale (non in navigazione anonima).|Open the site in Chrome, in a normal tab (not incognito).|Abre el sitio en Chrome, en una pestaña normal (no incógnito).|Abra o site no Chrome, numa aba normal (não anónima).
+install.passo2|Tocca i tre puntini in alto a destra.|Tap the three dots at the top right.|Toca los tres puntos arriba a la derecha.|Toque nos três pontos no canto superior direito.
+install.passo3|Scegli «Installa app» (su alcuni telefoni «Aggiungi a schermata Home»).|Choose "Install app" (on some phones "Add to Home screen").|Elige «Instalar app» (en algunos móviles «Añadir a pantalla de inicio»).|Escolha «Instalar app» (em alguns telemóveis «Adicionar ao ecrã inicial»).
+install.anonimo|Se stai navigando in anonimo, l'installazione non è disponibile: chiudi la finestra anonima e riapri il sito in una scheda normale.|If you're in incognito, installing isn't available: close the incognito window and reopen the site in a normal tab.|Si navegas en incógnito no se puede instalar: cierra la ventana de incógnito y abre el sitio en una pestaña normal.|Se estiver em navegação anónima não é possível instalar: feche a janela anónima e abra o site numa aba normal.
+pushHelp.title|Gli avvisi sono bloccati da Chrome|Chrome blocked the alerts|Chrome bloqueó los avisos|O Chrome bloqueou os avisos
+pushHelp.sub|Non è colpa dell'app: è il browser che ha spento gli avvisi per questo sito. Si riaccendono in dieci secondi.|It's not the app: the browser turned alerts off for this site. You can switch them back on in ten seconds.|No es culpa de la app: el navegador apagó los avisos para este sitio. Se reactivan en diez segundos.|Não é culpa da app: o navegador desligou os avisos para este site. Voltam em dez segundos.
+pushHelp.step1|Tocca il lucchetto (o l'icona ⓘ) accanto all'indirizzo del sito, in alto.|Tap the padlock (or the ⓘ icon) next to the site address, at the top.|Toca el candado (o el icono ⓘ) junto a la dirección del sitio, arriba.|Toque no cadeado (ou no ícone ⓘ) ao lado do endereço, em cima.
+pushHelp.step2|Autorizzazioni, poi Notifiche, poi Consenti.|Permissions, then Notifications, then Allow.|Permisos, luego Notificaciones, luego Permitir.|Permissões, depois Notificações, depois Permitir.
+pushHelp.step3|Chiudi e riapri l'app: da lì gli avvisi arrivano come app, anche a schermo spento.|Close and reopen the app: from then on alerts arrive as an app, even with the screen off.|Cierra y abre la app: desde ahí los avisos llegan como app, incluso con la pantalla apagada.|Feche e reabra a app: a partir daí os avisos chegam como app, mesmo com o ecrã desligado.
+pushHelp.anonimo|Se sei in navigazione anonima gli avvisi restano bloccati: apri il sito in una scheda normale.|In incognito, alerts stay blocked: open the site in a normal tab.|En incógnito los avisos siguen bloqueados: abre el sitio en una pestaña normal.|Em navegação anónima os avisos ficam bloqueados: abra o site numa aba normal.
+pushHelp.retry|Ho riattivato, riprova|I turned them on, try again|Ya los activé, reintentar|Já ativei, tentar de novo
+pushHelp.ancora|Non è cambiato niente: chiudi del tutto l'app e riaprila, Chrome legge le impostazioni all'avvio.|Nothing changed: close the app completely and reopen it — Chrome reads the settings at startup.|No cambió nada: cierra del todo la app y ábrela otra vez, Chrome lee los ajustes al inicio.|Não mudou nada: feche a app por completo e reabra — o Chrome lê as definições no arranque.
+pushHelp.close|Chiudi|Close|Cerrar|Fechar
+install.vecchia|Se hai ancora la vecchia app installata, disinstallala prima: quella si chiudeva da sola.|If you still have the old app installed, uninstall it first: that one closed by itself.|Si aún tienes la app vieja instalada, desinstálala antes: esa se cerraba sola.|Se ainda tem a app antiga instalada, desinstale primeiro: essa fechava sozinha.
+chat.loading|Sto aprendo il gruppo…|Opening the group…|Abriendo el grupo…|A abrir o grupo…
+radius.needPos|Per usare il raggio mi serve la tua posizione: tocca il mirino sulla mappa e consentila.|To use the radius I need your location: tap the target on the map and allow it.|Para usar el radio necesito tu ubicación: toca el objetivo en el mapa y permítela.|Para usar o raio preciso da tua localização: toca no alvo do mapa e permite.
+voce.f|Femminile|Female|Femenina|Feminina
+voce.m|Maschile|Male|Masculina|Masculina
+voce.maschioOra|Voce maschile attiva. Se ti sembra troppo bassa, ripassa a femminile.|Male voice on. If it sounds too low, switch back to female.|Voz masculina activada. Si te suena muy grave, vuelve a femenina.|Voz masculina ativa. Se soar demasiado grave, volte para feminina.
+revisione|Revisione|Review|Revisión|Revisão
+revisione.sub|Qui trovi chi aspetta un controllo e chi non è passato: guardi le due foto e decidi tu. Nessuno resta bloccato.|Here are the ones waiting for a check and the ones that didn't pass: look at both photos and decide. Nobody stays stuck.|Aquí están los que esperan revisión y los que no pasaron: mira las dos fotos y decides tú. Nadie se queda bloqueado.|Aqui estão os que esperam revisão e os que não passaram: olha as duas fotos e decides tu. Ninguém fica bloqueado.
+revisione.vuota|Niente da rivedere: sei in pari.|Nothing to review: you're all caught up.|Nada que revisar: estás al día.|Nada para rever: está tudo em dia.
+revisione.attesa|in attesa|waiting|en espera|em espera
+revisione.rifiutata|non approvata|not approved|no aprobada|não aprovada
+revisione.verificato|Verificato|Verified|Verificado|Verificado
+revisione.no|Non approvato|Not approved|No aprobado|Não aprovado
+revisione.auto|Controllo automatico: {a} su 1|Automatic check: {a} out of 1|Control automático: {a} sobre 1|Controlo automático: {a} de 1
+revisione.apri|Revisione|Review|Revisión|Revisão
+detail.organizer|Chi organizza|Who organises it|Quién organiza|Quem organiza
+persone.titolo|Chi c'è|Who's here|Quién está|Quem está
+persone.sub|Tutte le persone in un posto solo. Ordina e filtra come vuoi: tocca una scheda per aprirla.|Everyone in one place. Sort and filter as you like: tap a card to open it.|Todas las personas en un solo lugar. Ordena y filtra como quieras: toca una ficha para abrirla.|Todas as pessoas num só lugar. Ordena e filtra como quiseres: toca num cartão para abrir.
+persone.nuovi|Ultimi arrivi|Newest|Últimos|Mais recentes
+persone.vecchi|Primi|First|Primeros|Primeiros
+persone.giovani|Età ↑|Age ↑|Edad ↑|Idade ↑
+persone.grandi|Età ↓|Age ↓|Edad ↓|Idade ↓
+persone.tutti|Tutti|All|Todos|Todos
+persone.confoto|Con foto|With photo|Con foto|Com foto
+persone.senzafoto|Senza foto|No photo|Sin foto|Sem foto
+persone.viso|Viso verificato|Face verified|Rostro verificado|Rosto verificado
+persone.visono|Viso non verificato|Face not verified|Rostro no verificado|Rosto não verificado
+persone.apri|Chi c'è|Who's here|Quién está|Quem está
+persone.conta|{n} persone|{n} people|{n} personas|{n} pessoas
+persone.vuoto|Con questo filtro non c'è nessuno.|Nobody with this filter.|Nadie con este filtro.|Ninguém com este filtro.
+persone.contaUno|1 persona|1 person|1 persona|1 pessoa
+persone.posizione|Con posizione|Shared location|Con ubicación|Com localização
+persone.senzaposizione|Senza posizione|No location|Sin ubicación|Sem localização
+revisione.coda|Da rivedere ({n})|To review ({n})|Por revisar ({n})|Para rever ({n})
+revisione.ok|Già verificate ({n})|Already verified ({n})|Ya verificadas ({n})|Já verificadas ({n})
+revisione.verificateApri|Già verificate ({n})|Already verified ({n})|Ya verificadas ({n})|Já verificadas ({n})
+revisione.nessunaVerificata|Nessuno verificato, per ora.|Nobody verified yet.|Nadie verificado, por ahora.|Ninguém verificado, por agora.
+revisione.il|verificato il {d}|verified on {d}|verificado el {d}|verificado a {d}
+revisione.togli|Togli la verifica|Remove verification|Quitar la verificación|Retirar a verificação
+home.creaTitolo|Crea il tuo evento|Create your event|Crea tu evento|Cria o teu evento
+home.creaSub|Un nome, un posto e un orario: bastano due secondi e lo vedi qui sotto.|A name, a place and a time: it takes two seconds, and it's right below.|Un nombre, un sitio y una hora: son dos segundos y lo ves justo debajo.|Um nome, um sítio e uma hora: são dois segundos e aparece já aqui abaixo.
+onb.catTitle|Cosa ti va di fare?|What would you like to do?|¿Qué te apetece hacer?|O que te apetece fazer?
+onb.catSub|Scegli le categorie che ti interessano, quante vuoi. Se vuoi, puoi vedere le attività nel dettaglio.|Pick the categories you like, as many as you want. If you like, you can see the activities in detail.|Elige las categorías que te interesan, las que quieras. Si quieres, puedes ver las actividades en detalle.|Escolha as categorias que te interessam, quantas quiser. Se quiser, pode ver as atividades em detalhe.
+onb.catNext|Se vuoi, vedi le attività nel dettaglio|See the activities in detail, if you like|Ver las actividades en detalle, si quieres|Ver as atividades em detalhe, se quiser
+onb.catErr|Scegli quello che ti interessa, quante vuoi.|Pick what you like, as many as you want.|Elige lo que te interesa, las que quieras.|Escolha o que lhe interessa, quantas quiser.
+onb.catCount|{n} categorie scelte|{n} categories picked|{n} categorías elegidas|{n} categorias escolhidas
+onb.specificTitle|Nello specifico|Down to specifics|En concreto|Ao detalhe
+onb.specificSub|Scegli quello che ti va di fare, quanto vuoi. Più categorie scegli, più eventi diversi vedrai.|Pick what you'd like to do, as much as you want. The more categories, the more varied the events you'll see.|Elige lo que te apetece hacer, cuanto quieras. Cuantas más categorías elijas, más variados serán los eventos.|Escolha o que lhe apetece fazer, quanto quiser. Quantas mais categorias escolher, mais variados serão os eventos.
+onb.changeCats|Cambia le categorie|Change categories|Cambiar categorías|Mudar categorias
+seg.apri|Apri le segnalazioni|Open reports|Abrir las denuncias|Abrir as denúncias
+seg.risolta|Risolta|Solved|Resuelta|Resolvida
+seg.riapri|Riapri|Reopen|Reabrir|Reabrir
+seg.vuoto|Nessuna segnalazione per ora.|No reports for now.|Ninguna denuncia por ahora.|Nenhuma denúncia para já.
+segnalazioni.titolo|Segnalazioni e cose da sistemare|Reports|Denuncias|Denúncias
+segnalazioni.sub|Qui dentro: cosa non va, perché succede e come si risolve. Scrivi come lo vuoi tu e lo leggo appena mi parli in chat.|What people say is broken, plus the errors the app finds by itself. When something is fixed, mark it "Solved".|Lo que la gente dice que falla y los errores que la app encuentra sola. Cuando algo esté arreglado, marca "Resuelta".|O que as pessoas dizem que falha e os erros que a app encontra sozinha. Quando algo estiver corrigido, marca "Resolvida".
+map.filtTutti|Tutti gli eventi|All events|Todos los eventos|Todos os eventos
+map.filtPreferiti|Solo i miei preferiti|Only my favourites|Solo mis favoritos|Só os meus favoritos
+map.filtScelti|Scegli quali…|Choose which…|Elige cuáles…|Escolhe quais…
+map.sceltaTitolo|Quali eventi sulla mappa|Which events on the map|Qué eventos en el mapa|Que eventos no mapa
+map.sceltaSub|Tocca quelli che vuoi vedere: sulla mappa restano solo questi.|Tap the ones you want to see: only those stay on the map.|Toca los que quieres ver: en el mapa quedan solo esos.|Toca os que queres ver: no mapa ficam só esses.
+map.sceltaOk|Mostra questi|Show these|Mostrar estos|Mostrar estes
+map.contaTutti|{n} eventi sulla mappa|{n} events on the map|{n} eventos en el mapa|{n} eventos no mapa
+map.contaPreferiti|{n} dei tuoi preferiti sulla mappa|{n} of your favourites on the map|{n} de tus favoritos en el mapa|{n} dos teus favoritos no mapa
+map.contaScelti|{n} eventi scelti da te|{n} events you picked|{n} eventos elegidos por ti|{n} eventos escolhidos por ti
+map.contaNessuno|Nessun evento in programma adesso.|No events coming up right now.|Ningún evento por ahora.|Nenhum evento para já.
+map.contaNoPreferiti|Non hai ancora messo eventi tra i preferiti.|You haven't saved any events yet.|Aún no has guardado eventos.|Ainda não guardaste eventos.
+map.contaNoScelti|Tocca «Scegli quali…» per decidere cosa vedere.|Tap "Choose which…" to pick what to see.|Toca «Elige cuáles…» para elegir qué ver.|Toca «Escolhe quais…» para escolher o que ver.
+map.filtInteressi|Solo per i miei interessi|Only what I'm into|Solo lo que me gusta|Só o que eu gosto
+map.contaTuttiUno|1 evento sulla mappa|1 event on the map|1 evento en el mapa|1 evento no mapa
+map.contaPreferitiUno|1 dei tuoi preferiti sulla mappa|1 of your favourites on the map|1 de tus favoritos en el mapa|1 dos teus favoritos no mapa
+map.contaInteressiUno|1 evento che fa per te|1 event that suits you|1 evento que te pega|1 evento a teu gosto
+map.contaInteressi|{n} eventi che fanno per te|{n} events that suit you|{n} eventos que te pegan|{n} eventos a teu gosto
+map.contaNoInteressi|Adesso non c'è niente che faccia per te: prova «Tutti gli eventi».|Nothing that suits you right now: try "All events".|Ahora no hay nada para ti: prueba «Todos los eventos».|Agora não há nada para ti: tenta «Todos os eventos».
+map.noInteressi|Prima dimmi cosa ti piace: così ti mostro solo quello.|First tell me what you're into: then I'll show only that.|Primero dime qué te gusta: así te muestro solo eso.|Primeiro diz-me do que gostas: assim mostro só isso.
+map.noPreferiti|Non hai ancora preferiti: tocca il cuore su un evento e lo trovi qui.|No favourites yet: tap the heart on an event and it shows up here.|Aún no tienes favoritos: toca el corazón en un evento y aparece aquí.|Ainda não tens favoritos: toca no coração de um evento e aparece aqui.
+map.noScelti|Nessun evento scelto: torno a mostrarli tutti.|No events picked: showing them all again.|Ningún evento elegido: vuelvo a mostrarlos todos.|Nenhum evento escolhido: volto a mostrar todos.
+ai.convHelp|Come funziona: tocchi il pulsante e diventa rosso, così parli tu. Lo tocchi di nuovo: mi fermo e rispondo io. Quando ho finito la parola torna a te.|How it works: tap the button and it turns red, then you speak. Tap again: I stop and answer. When I'm done the turn is yours again.|Cómo va: tocas el botón y se pone rojo, así hablas tú. Lo tocas otra vez: me paro y respondo yo. Cuando termino, el turno vuelve a ti.|Como funciona: tocas no botão e fica vermelho, assim falas tu. Tocas outra vez: paro e respondo eu. Quando acabo, a vez volta a ser tua.
+ai.convTurn|La parola è a te: tocca il pulsante quando vuoi parlare.|Your turn: tap the button when you want to speak.|El turno es tuyo: toca el botón cuando quieras hablar.|A vez é tua: toca no botão quando quiseres falar.
+ai.convListening|Sto ascoltando… tocca di nuovo per passarmi la parola.|Listening… tap again to hand the turn to me.|Te escucho… toca otra vez para pasarme el turno.|Estou a ouvir… toca outra vez para me passares a vez.
+ai.convStart|Tocca il pulsante: diventa rosso e parli tu.|Tap the button: it turns red and you speak.|Toca el botón: se pone rojo y hablas tú.|Toca no botão: fica vermelho e falas tu.

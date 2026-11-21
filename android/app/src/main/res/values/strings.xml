@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">FUORI</string>
+  <string name="asset_statements" translatable="false">
+    [{
+      \"relation\": [{\"relation\": \"delegate_permission/common.handle_all_urls\"}],
+      \"target\": {\"namespace\": \"android_app\", \"package_name\": \"it.fuori.app\", \"sha256_cert_fingerprints\": [\"6B:17:69:9A:77:95:12:15:E4:59:2E:73:73:73:BD:A7:B6:7A:D7:23:A8:63:78:E1:67:EC:FA:1A:53:B9:62:73\"]}
+    }]
+  </string>
+</resources>

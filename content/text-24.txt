@@ -1,0 +1,4 @@
+verify.noCamPerm|La fotocamera è bloccata dal telefono. Ti ho aperto le autorizzazioni: attivala e riprova.|The camera is blocked by the phone. I opened the permissions: turn it on and try again.|La cámara está bloqueada por el teléfono. Abrí los permisos: actívala y vuelve a intentarlo.|A câmera está bloqueada pelo telefone. Abri as permissões: ative e tente de novo.
+verify.noCamFound|Non trovo una fotocamera su questo telefono. Puoi comunque cambiare la foto dal profilo.|I can't find a camera on this phone. You can still change the photo from your profile.|No encuentro una cámara en este teléfono. Puedes cambiar la foto desde el perfil.|Não encontro uma câmera neste telefone. Você ainda pode mudar a foto pelo perfil.
+login.showPass|Mostra password|Show password|Mostrar contraseña|Mostrar senha
+login.hidePass|Nascondi password|Hide password|Ocultar contraseña|Ocultar senha

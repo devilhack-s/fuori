@@ -1,0 +1,8 @@
+past.kicker|Ti sei perso|You missed|Te lo perdiste|Perdeste
+past.hint|Roba così succede quasi ogni sera qui intorno.|Stuff like this happens almost every night around here.|Cosas así pasan casi cada noche por aquí.|Coisas assim acontecem quase todas as noites por aqui.
+past.go|Guarda cosa c'è adesso|See what's on now|Mira lo que hay ahora|Vê o que há agora
+past.generico|Qualcosa di bello|Something good|Algo bonito|Algo bom
+past.oggi|oggi|today|hoy|hoje
+past.ieri|ieri|yesterday|ayer|ontem
+past.giorni|{n} giorni fa|{n} days ago|hace {n} días|há {n} dias
+past.persone|{n} persone|{n} people|{n} personas|{n} pessoas

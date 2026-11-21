@@ -1,0 +1,125 @@
+Yoga e meditazione|benessere|Yoga and meditation|Yoga y meditación|Ioga e meditação
+Meditazione|benessere|Meditation|Meditación|Meditação
+Respirazione|benessere|Breathwork|Respiración|Respiração
+Spa|benessere|Spa|Spa|Spa
+Terme|benessere|Thermal baths|Termas|Termas
+Massaggi|benessere|Massage|Masajes|Massagens
+Sauna|benessere|Sauna|Sauna|Sauna
+Bagno turco|benessere|Steam room|Baño turco|Banho turco
+Doccia fredda|benessere|Cold plunge|Baño de hielo|Banho gelado
+Retreat|benessere|Retreat|Retiro|Retiro
+Digiuno e detox|benessere|Fasting and detox|Ayuno y detox|Jejum e detox
+Sonno e riposo|benessere|Sleep and rest|Sueño y descanso|Sono e descanso
+Passeggiata consapevole|benessere|Mindful walk|Paseo consciente|Caminhada consciente
+Fitness all'aperto|benessere|Outdoor fitness|Fitness al aire libre|Fitness ao ar livre
+Stretching|benessere|Stretching|Estiramientos|Alongamento
+Riabilitazione e postura|benessere|Posture and rehab|Postura y rehab|Postura e reabilitação
+Nutrizione|benessere|Nutrition|Nutrición|Nutrição
+Salute mentale|benessere|Mental health|Salud mental|Saúde mental
+Gruppo di supporto|benessere|Support group|Grupo de apoyo|Grupo de apoio
+Coaching|benessere|Coaching|Coaching|Coaching
+Public speaking|benessere|Public speaking|Hablar en público|Falar em público
+Networking|sociale|Networking|Networking|Networking
+Colazione di lavoro|sociale|Work breakfast|Desayuno de trabajo|Café da manhã de trabalho
+Afterwork|sociale|Afterwork|Afterwork|Afterwork
+Festa a tema|serate|Themed party|Fiesta temática|Festa temática
+Festa in maschera|serate|Masquerade|Fiesta de disfraces|Festa à fantasia
+Halloween|serate|Halloween|Halloween|Halloween
+Capodanno|serate|New Year|Año Nuevo|Ano Novo
+Compleanno|serate|Birthday|Cumpleaños|Aniversário
+Addio al celibato|serate|Bachelor party|Despedida de soltero|Despedida de solteiro
+Big party|serate|Big party|Gran fiesta|Festa grande
+Big festival|serate|Big festival|Gran festival|Grande festival
+Festa universitaria|serate|Student party|Fiesta universitaria|Festa universitária
+Festa in piazza|serate|Street party|Fiesta en la plaza|Festa na praça
+Notte bianca|serate|White night|Noche blanca|Noite branca
+Partita allo stadio|serate|Stadium match|Partido en el estadio|Jogo no estádio
+Guardare la partita insieme|serate|Watch the match|Ver el partido|Assistir ao jogo
+Sfilata|serate|Fashion show|Desfile|Desfile
+Comic convention|serate|Comic convention|Cómic|Comic con
+Fiera del libro|serate|Book fair|Feria del libro|Feira do livro
+Visita guidata|cinema|Guided tour|Visita guiada|Visita guiada
+Museo|cinema|Museum|Museo|Museu
+Mostra d'arte|cinema|Art exhibition|Exposición de arte|Exposição de arte
+Galleria|cinema|Gallery|Galería|Galeria
+Siti archeologici|cinema|Archaeological sites|Yacimientos|Sítios arqueológicos
+Chiese e monumenti|cinema|Churches and monuments|Iglesias y monumentos|Igrejas e monumentos
+Mercatini|cinema|Flea markets|Mercadillos|Feirinhas
+Visita a un borgo|cinema|Village visit|Visita a un pueblo|Visita a um vilarejo
+Storia locale|cinema|Local history|Historia local|História local
+Architettura|cinema|Architecture|Arquitectura|Arquitetura
+Fotografia urbana|cinema|Urban photography|Fotografía urbana|Fotografia urbana
+Tour dei murales|cinema|Street art tour|Arte urbano|Arte urbana
+Conferenza|cinema|Conference|Conferencia|Conferência
+Ted talk e incontri|cinema|Talks|Charlas|Palestras
+Dibattito|cinema|Debate|Debate|Debate
+Podcast dal vivo|cinema|Live podcast|Pódcast en vivo|Podcast ao vivo
+Workshop|cinema|Workshop|Taller|Workshop
+Corso di fotografia|cinema|Photography course|Curso de fotografía|Curso de fotografia
+Lingua inglese|lingue|English|Inglés|Inglês
+Lingua spagnola|lingue|Spanish|Español|Espanhol
+Lingua francese|lingue|French|Francés|Francês
+Lingua tedesca|lingue|German|Alemán|Alemão
+Lingua portoghese|lingue|Portuguese|Portugués|Português
+Lingua araba|lingue|Arabic|Árabe|Árabe
+Lingua giapponese|lingue|Japanese|Japonés|Japonês
+Lingua cinese|lingue|Chinese|Chino|Chinês
+Lingua russa|lingue|Russian|Ruso|Russo
+Italiano per stranieri|lingue|Italian for foreigners|Italiano para extranjeros|Italiano para estrangeiros
+Scambio linguistico|lingue|Language exchange|Intercambio de idiomas|Intercâmbio de idiomas
+Conversazione in inglese|lingue|English conversation|Conversación en inglés|Conversação em inglês
+Club di lettura in lingua|lingue|Reading club|Club de lectura|Clube de leitura
+Cineclub in lingua originale|lingue|Original language films|Cine en versión original|Cinema original
+Filosofia|lingue|Philosophy|Filosofía|Filosofia
+Storia|lingue|History|Historia|História
+Scienza|lingue|Science|Ciencia|Ciência
+Divulgazione|lingue|Science talks|Divulgación|Divulgação
+Matematica e logica|lingue|Maths and logic|Matemáticas y lógica|Matemática e lógica
+Programmazione|tech|Coding|Programación|Programação
+Intelligenza artificiale|tech|Artificial intelligence|Inteligencia artificial|Inteligência artificial
+Robotica|tech|Robotics|Robótica|Robótica
+Elettronica e Arduino|tech|Electronics and Arduino|Electrónica y Arduino|Eletrônica e Arduino
+Stampanti 3D|tech|3D printing|Impresión 3D|Impressão 3D
+Making e riparazioni|tech|Making and repairs|Hacer y reparar|Fazer e consertar
+Startup e imprenditoria|tech|Startups|Startups|Startups
+Crypto e finanza|tech|Crypto and finance|Cripto y finanzas|Cripto e finanças
+Fotografia digitale|tech|Digital photography|Fotografía digital|Fotografia digital
+Montaggio video|tech|Video editing|Edición de vídeo|Edição de vídeo
+Musica elettronica e DAW|tech|Electronic music and DAWs|Música electrónica y DAW|Música eletrônica e DAW
+Droni|tech|Drones|Drones|Drones
+Cybersecurity|tech|Cybersecurity|Ciberseguridad|Cibersegurança
+Social media|tech|Social media|Redes sociales|Redes sociais
+Cani|animali|Dogs|Perros|Cães
+Gatti|animali|Cats|Gatos|Gatos
+Cavalli|animali|Horses|Caballos|Cavalos
+Animali esotici|animali|Exotic pets|Mascotas exóticas|Animais exóticos
+Passeggiata con cani|animali|Dog walking|Paseo con perros|Passeio com cães
+Volontariato al canile|animali|Shelter volunteering|Voluntariado en protectora|Voluntariado em abrigo
+Pet therapy|animali|Pet therapy|Terapia con animales|Terapia com animais
+Fattoria didattica|animali|Farm visit|Granja educativa|Fazenda pedagógica
+Volontariato|volontariato|Volunteering|Voluntariado|Voluntariado
+Protezione civile|volontariato|Civil protection|Protección civil|Defesa civil
+Pulizia di spiagge|volontariato|Beach clean-up|Limpieza de playas|Limpeza de praias
+Piantare alberi|volontariato|Tree planting|Plantar árboles|Plantar árvores
+Banco alimentare|volontariato|Food bank|Banco de alimentos|Banco de alimentos
+Cucina solidale|volontariato|Community kitchen|Cocina solidaria|Cozinha solidária
+Tutoraggio|volontariato|Tutoring|Tutoría|Tutoria
+Donazione sangue|volontariato|Blood donation|Donación de sangre|Doação de sangue
+Raccolta fondi|volontariato|Fundraising|Recaudación|Arrecadação
+Associazione locale|volontariato|Local association|Asociación local|Associação local
+Politica locale|volontariato|Local politics|Política local|Política local
+Sindacato e diritti|volontariato|Unions and rights|Sindicatos y derechos|Sindicatos e direitos
+Viaggio di gruppo|viaggi|Group trip|Viaje en grupo|Viagem em grupo
+Weekend fuori porta|viaggi|Weekend away|Escapada de fin de semana|Fim de semana fora
+Road trip|viaggi|Road trip|Road trip|Road trip
+Interrail|viaggi|Interrail|Interrail|Interrail
+Cammino di Santiago|viaggi|Camino de Santiago|Camino de Santiago|Caminho de Santiago
+Tour in bici|viaggi|Bike tour|Ruta en bici|Tour de bike
+Turismo lento|viaggi|Slow travel|Turismo lento|Turismo lento
+Visita alle isole|viaggi|Island hopping|Islas|Ilhas
+Gita in montagna|viaggi|Mountain day trip|Excursión a la montaña|Bate-volta na montanha
+Gita al mare|viaggi|Beach day|Día de playa|Dia de praia
+Viaggio low cost|viaggi|Budget travel|Viaje low cost|Viagem barata
+Scambio casa|viaggi|House swap|Intercambio de casa|Troca de casa
+Couchsurfing|viaggi|Couchsurfing|Couchsurfing|Couchsurfing
+Camper e van|viaggi|Camper van|Furgoneta|Motorhome

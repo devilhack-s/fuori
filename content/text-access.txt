@@ -1,0 +1,7 @@
+create.access|Chi è ammesso|Who's allowed in|Quién puede entrar|Quem pode entrar
+create.accessOpen|Tutti|Anyone|Todos|Todos
+create.accessPhoto|Solo chi ha una foto profilo|Only people with a profile photo|Solo quien tenga foto de perfil|Só quem tem foto de perfil
+create.accessVerified|Solo persone verificate|Verified people only|Solo personas verificadas|Só pessoas verificadas
+access.open|Aperto a tutti|Open to everyone|Abierto a todos|Aberto a todos
+access.photo|Solo con foto profilo|Profile photo required|Solo con foto de perfil|Só com foto de perfil
+access.verified|Solo persone verificate|Verified people only|Solo personas verificadas|Só pessoas verificadas

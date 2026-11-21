@@ -1,0 +1,20 @@
+name = "fuori-local"
+main = "worker.js"
+compatibility_date = "2026-11-13"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "fuori-local"
+database_id = "00000000-0000-0000-0000-000000000000"
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "fuori-local"
+
+[vars]
+ADMIN_KEY = "test-admin"
+ADMIN_EMAIL = "christianguarrera@gmail.com"
+
+[assets]
+directory = "./public"
+binding = "ASSETS"

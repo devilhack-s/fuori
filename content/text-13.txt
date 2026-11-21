@@ -1,0 +1,12 @@
+wx.now|Qui adesso: {t}°, {mood}.|Right here, right now: {t}°, {mood}.|Aquí ahora: {t}°, {mood}.|Aqui agora: {t}°, {mood}.
+wx.mood.pioggia|piove|raining|llueve|chovendo
+wx.mood.temporale|c'è temporale|there's a storm|hay tormenta|tem tempestade
+wx.mood.freddo|fa freddo|it's cold|hace frío|está frio
+wx.mood.caldo|fa caldo|it's hot|hace calor|está calor
+wx.mood.sole|c'è il sole|it's sunny|hay sol|está sol
+wx.mood.mite|si sta bene|it's mild|se está bien|está agradável
+home.ideas|Idee per adesso|Ideas for right now|Ideas para ahora|Ideias para agora
+onb.more|Mostra tutte ({n})|Show all ({n})|Ver todas ({n})|Mostrar todas ({n})
+onb.less|Mostra meno|Show less|Ver menos|Mostrar menos
+onb.seasonNote|Qui sotto vedi prima le cose che hanno senso in questo periodo: stagione e meteo contano.|Below you see first what makes sense right now: season and weather count.|Abajo ves primero lo que tiene sentido ahora: cuentan la estación y el tiempo.|Abaixo você vê primeiro o que faz sentido agora: estação e clima contam.
+home.ideaEmpty|Nessuno ha ancora proposto {a}. Se ti va, proponilo tu: due minuti e lo vede tutta la zona.|Nobody has proposed {a} yet. If you like, be the one: two minutes and the whole area sees it.|Nadie ha propuesto {a} todavía. Si quieres, proponlo tú: dos minutos y lo ve toda la zona.|Ninguém propôs {a} ainda. Se quiser, proponha você: dois minutos e toda a zona vê.

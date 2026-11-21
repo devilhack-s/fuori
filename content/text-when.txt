@@ -1,0 +1,21 @@
+create.repTitle|Si ripete?|Repeats?|¿Se repite?|Repete?
+create.repSingle|Un giorno solo|One day only|Un solo día|Um só dia
+create.repRange|Più giorni di fila|Several days in a row|Varios días seguidos|Vários dias seguidos
+create.repDays|Giorni scelti (anche non di fila)|Chosen days (not necessarily in a row)|Días elegidos (no seguidos)|Dias escolhidos (não seguidos)
+create.repWeekly|Un giorno ogni settimana|Same day every week|Un día cada semana|Um dia por semana
+create.repEnd|Ultimo giorno|Last day|Último día|Último dia
+create.repDaysList|Aggiungi i giorni|Add the days|Añade los días|Adiciona os dias
+create.dayAdd|Aggiungi|Add|Añadir|Adicionar
+create.repWeekday|Che giorno|Which day|Qué día|Que dia
+create.repUntil|Fino al (puoi lasciare vuoto)|Until (you can leave it empty)|Hasta el (puedes dejarlo vacío)|Até (pode deixar vazio)
+when.ogni|ogni {g}|every {g}|cada {g}|toda {g}
+when.ogniData|{d} · ogni settimana|{d} · every week|{d} · cada semana|{d} · toda semana
+when.dal|dal {a} al {b}|from {a} to {b}|del {a} al {b}|de {a} a {b}
+when.fino|fino al {d}|until {d}|hasta el {d}|até {d}
+day.lun|Lunedì|Monday|Lunes|Segunda
+day.mar|Martedì|Tuesday|Martes|Terça
+day.mer|Mercoledì|Wednesday|Miércoles|Quarta
+day.gio|Giovedì|Thursday|Jueves|Quinta
+day.ven|Venerdì|Friday|Viernes|Sexta
+day.sab|Sabato|Saturday|Sábado|Sábado
+day.dom|Domenica|Sunday|Domingo|Domingo

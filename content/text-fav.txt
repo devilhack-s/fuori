@@ -1,0 +1,14 @@
+# preferiti, personalizzazione e notifiche
+detail.save|Salva nei preferiti|Save to favourites|Guardar en favoritos|Salvar nos favoritos
+detail.saved|Nei preferiti|In favourites|En favoritos|Nos favoritos
+fav.title|I tuoi preferiti|Your favourites|Tus favoritos|Seus favoritos
+fav.sub|Quello che metti da parte resta qui, anche quando chiudi l'app.|What you save stays here, even when you close the app.|Lo que guardas se queda aquí, aunque cierres la app.|O que você salva fica aqui, mesmo quando fecha o app.
+fav.count|{n} eventi messi da parte|{n} events saved|{n} eventos guardados|{n} eventos salvos
+fav.one|1 evento messo da parte|1 event saved|1 evento guardado|1 evento salvo
+fav.empty|Non hai ancora preferiti. Apri un evento e tocca «Salva nei preferiti»: lo ritrovi qui.|No favourites yet. Open an event and tap "Save to favourites": you'll find it here.|Aún no tienes favoritos. Abre un evento y toca «Guardar en favoritos»: lo encontrarás aquí.|Ainda sem favoritos. Abra um evento e toque «Salvar nos favoritos»: ele fica aqui.
+fav.gone|Questo evento non c'è più.|This event is gone.|Este evento ya no existe.|Este evento não existe mais.
+fav.added|Salvato nei preferiti|Saved to favourites|Guardado en favoritos|Salvo nos favoritos
+fav.removed|Tolto dai preferiti|Removed from favourites|Quitado de favoritos|Removido dos favoritos
+chip.forYou|✨ Per te|✨ For you|✨ Para ti|✨ Para você
+forYou.note|Qui metto solo ciò che somiglia a quello che hai aperto, salvato e a cui ti sei iscritto.|Here you only see what looks like what you opened, saved and joined.|Aquí solo ves lo que se parece a lo que abriste, guardaste y a lo que te apuntaste.|Aqui você só vê o que se parece com o que abriu, salvou e a que se inscreveu.
+forYou.none|Ancora non ti conosco bene: apri qualche evento e salva quelli che ti piacciono, poi torno qui con le idee giuste.|I don't know you well yet: open a few events and save the ones you like, then I'll come back with better ideas.|Todavía no te conozco bien: abre algunos eventos y guarda los que te gusten, luego vuelvo con mejores ideas.|Ainda não te conheço bem: abra alguns eventos e salve os que gostar, depois volto com ideias melhores.

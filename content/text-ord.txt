@@ -1,0 +1,4 @@
+ord.label|Ordina per|Sort by|Ordenar por|Ordenar por
+ord.nuovi|Pubblicati di recente|Recently published|Publicados hace poco|Publicados recentemente
+ord.prima|Per data (prima)|By date (soonest)|Por fecha (antes)|Por data (primeiro)
+ord.dopo|Cominciano dopo|Starting latest|Comienzan después|Começam depois

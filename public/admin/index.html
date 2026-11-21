@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>FUORI · stanza dei bottoni</title>
+<style>
+  :root { --lime:#d7ff3e; --line: rgba(255,255,255,.13); --muted:#8b8b86; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: #050505; color: #f6f6f4; padding: 22px 16px 80px;
+    font-family: ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1 { font-size: 15px; letter-spacing: .22em; font-weight: 700; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 12px; margin: 0 0 24px; line-height: 1.5; }
+  .gate { display: flex; gap: 10px; margin-bottom: 26px; }
+  .gate input {
+    flex: 1; background: transparent; border: 0; border-bottom: 1px solid rgba(255,255,255,.25);
+    color: #fff; font-size: 15px; padding: 10px 0; outline: none; font-family: inherit;
+  }
+  .gate input:focus { border-bottom-color: var(--lime); }
+  .gate button, .mini {
+    border: 1px solid rgba(215,255,62,.45); background: rgba(215,255,62,.12); color: var(--lime);
+    border-radius: 999px; padding: 10px 18px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(96px,1fr)); gap: 8px; margin-bottom: 26px; }
+  .card { border: 1px solid var(--line); border-radius: 13px; padding: 12px; }
+  .card b { display: block; font-size: 23px; font-weight: 600; letter-spacing: -.03em; }
+  .card span { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  h2 { font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin: 30px 0 10px; font-weight: 600; }
+  .bar { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { border-collapse: collapse; font-size: 12.5px; min-width: 620px; width: 100%; }
+  td, th { text-align: left; padding: 9px 8px 9px 0; border-bottom: 1px solid rgba(255,255,255,.07); vertical-align: top; }
+  th { font-size: 9px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  td.mail { color: #fff; word-break: break-all; }
+  td.dim { color: var(--muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td .tags { display: flex; flex-wrap: wrap; gap: 4px; max-width: 220px; }
+  td .tag { border: 1px solid var(--line); border-radius: 999px; padding: 2px 7px; font-size: 10px; color: var(--soft); }
+  .note { border: 1px solid var(--line); border-radius: 13px; padding: 13px; margin-bottom: 9px; }
+  .note p { margin: 0 0 8px; font-size: 13.5px; line-height: 1.5; white-space: pre-wrap; }
+  .note .meta { font-size: 10.5px; color: var(--muted); display: flex; gap: 10px; justify-content: space-between; }
+  .empty { color: var(--muted); font-size: 13px; padding: 14px 0; }
+  .mini { padding: 5px 11px; font-size: 11px; }
+  .hidden { display: none; }
+  .tops { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .fresh { display: flex; gap: 10px; align-items: center; border: 1px solid rgba(215,255,62,.35); background: rgba(215,255,62,.06); border-radius: 13px; padding: 11px 12px; margin-bottom: 8px; }
+  .fresh .dotnew { width: 8px; height: 8px; border-radius: 50%; background: var(--lime); flex: 0 0 auto; box-shadow: 0 0 0 4px rgba(215,255,62,.12); }
+  .fresh .who { flex: 1; min-width: 0; }
+  .fresh .who b { display: block; font-size: 14px; }
+  .fresh .who span { font-size: 11.5px; color: var(--muted); }
+  .fresh time { font-size: 11px; color: var(--lime); white-space: nowrap; }
+  .ins-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 8px; margin-bottom: 10px; }
+  .ins { border: 1px solid var(--line); border-radius: 13px; padding: 12px; }
+  .ins span { display: block; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .ins b { font-size: 15px; font-weight: 600; line-height: 1.25; }
+  .ins i { display: block; font-style: normal; font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.4; }
+  .top-pill { border: 1px solid rgba(215,255,62,.35); border-radius: 999px; padding: 5px 11px; font-size: 11.5px; color: var(--soft); }
+  .top-pill b { color: var(--lime); }
+</style>
+</head>
+<body>
+
+<h1>FUORI · STANZA DEI BOTTONI</h1>
+<p class="sub">Le persone registrate, cosa vogliono fare, cosa dicono, e i numeri veri.</p>
+
+<div class="gate" id="gate">
+  <input id="keyInput" type="password" placeholder="chiave d'accesso" autocomplete="off" />
+  <button id="gateBtn">Entra</button>
+</div>
+
+<div id="panel" class="hidden">
+  <div class="bar"><span class="sub" id="updatedAt" style="margin:0"></span><button class="mini" id="reloadBtn">Aggiorna</button></div>
+  <div class="cards" id="cards"></div>
+
+  <h2>Insight (si aggiorna da solo)</h2>
+  <div id="insight"></div>
+
+  <h2>Novità <span id="newsCount"></span></h2>
+  <div id="news"></div>
+
+  <h2>Cosa vogliono fare (le community da aprire)</h2>
+  <div class="tops" id="tops"></div>
+
+  <div class="bar">
+    <h2>Persone registrate (<span id="leadCount">0</span>)</h2>
+    <button class="mini" id="csvBtn">Scarica CSV</button>
+  </div>
+  <div class="scroll" id="leadsWrap"></div>
+
+  <h2>Cosa dicono (<span id="fbCount">0</span>)</h2>
+  <div id="feedbackWrap"></div>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+let key = localStorage.getItem("fuori.admin.key") || "";
+let data = null;
+let labels = new Map();
+
+const when = (ts) =>
+  new Date(ts).toLocaleString("it-IT", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+
+const esc = (v) =>
+  String(v ?? "").replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]));
+
+async function loadLabels() {
+  try {
+    const res = await fetch("./interests.json");
+    const groups = await res.json();
+    for (const group of groups) for (const item of group.items) labels.set(item.id, item.label);
+  } catch {}
+}
+
+async function load(k) {
+  const res = await fetch(`/api/admin?key=${encodeURIComponent(k)}`);
+  if (!res.ok) throw new Error(res.status === 401 ? "Chiave sbagliata." : "Errore nel caricamento.");
+  return res.json();
+}
+
+function interestsOf(lead) {
+  try {
+    return JSON.parse(lead.interests || "[]").map((id) => labels.get(id) || id);
+  } catch {
+    return [];
+  }
+}
+
+function render() {
+  $("#panel").classList.remove("hidden");
+  $("#gate").classList.add("hidden");
+
+  const push = data.push || {};
+  const live = data.live || {};
+  const cards = [
+    ["iscritti", data.stats.leads],
+    ["nuovi 24h", live.nuovi ?? "—"],
+    ["con avvisi", data.stats.push],
+    ["avvisi ok", push.ok ?? "—"],
+    ["avvisi ko", push.fail ?? "—"],
+    ["persone attive", data.stats.people],
+    ["eventi", data.stats.events],
+    ["feedback", data.stats.feedback],
+  ];
+  $("#cards").innerHTML = cards
+    .map(([label, value]) => `<div class="card"><b>${value}</b><span>${label}</span></div>`)
+    .join("");
+  $("#updatedAt").textContent = "Aggiornato alle " + new Date().toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+
+  // chi è arrivato da poco: prima di tutti, così non si perde nessuno
+  const now = Date.now();
+  const recenti = data.leads.filter((l) => now - Number(l.created_at || 0) < 7 * 864e5);
+  $("#newsCount").textContent = recenti.length ? `(${recenti.length} negli ultimi 7 giorni)` : "";
+  $("#news").innerHTML = recenti.length
+    ? recenti.slice(0, 14).map((l) => {
+        const nome = [l.first_name, l.last_name].filter(Boolean).join(" ") || l.email;
+        const ore = Math.max(0, Math.round((now - Number(l.created_at || now)) / 3600000));
+        return `<div class="fresh"><span class="dotnew"></span><div class="who"><b>${esc(nome)}</b><span>${esc(l.email)}${l.city ? " · " + esc(l.city) : ""}${l.age ? " · " + esc(l.age) + " anni" : ""}</span></div><time>${ore < 1 ? "adesso" : ore < 24 ? ore + " h fa" : Math.round(ore / 24) + " g fa"}</time></div>`;
+      }).join("")
+    : `<p class="empty">Nessun nuovo iscritto negli ultimi 7 giorni.</p>`;
+
+  // quattro numeri che dicono come sta andando, calcolati adesso
+  const conEta = data.leads.filter((l) => Number(l.age) > 0);
+  const mediaEta = conEta.length ? Math.round(conEta.reduce((s, l) => s + Number(l.age), 0) / conEta.length) : 0;
+  const citta = new Map();
+  for (const l of data.leads) if (l.city) citta.set(l.city, (citta.get(l.city) || 0) + 1);
+  const topCitta = [...citta.entries()].sort((a, b) => b[1] - a[1])[0];
+  const topVoglia = data.topInterests[0];
+  const ultimoAvviso = push.ultimoOk ? new Date(push.ultimoOk).toLocaleString("it-IT", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "mai";
+  $("#insight").innerHTML = `<div class="ins-grid">
+    <div class="ins"><span>Cosa vogliono fare</span><b>${topVoglia ? esc(labels.get(topVoglia.interest) || topVoglia.interest) : "—"}</b><i>${topVoglia ? topVoglia.count + " persone" : "Nessun interesse scelto"}</i></div>
+    <div class="ins"><span>Età media</span><b>${mediaEta || "—"}</b><i>su ${conEta.length} profili con età</i></div>
+    <div class="ins"><span>Da dove</span><b>${topCitta ? esc(topCitta[0]) : "—"}</b><i>${topCitta ? topCitta[1] + " iscritti" : ""}</i></div>
+    <div class="ins"><span>Avvisi</span><b>${push.subs || 0} attivi</b><i>${push.fail ? push.fail + " da controllare" : "ultimo invio " + ultimoAvviso}</i></div>
+  </div>`;
+
+  $("#tops").innerHTML = data.topInterests.length
+    ? data.topInterests
+        .map((t) => `<span class="top-pill">${esc(labels.get(t.interest) || t.interest)} <b>${t.count}</b></span>`)
+        .join("")
+    : `<span class="empty">Nessuno ha ancora scelto i suoi interessi.</span>`;
+
+  $("#leadCount").textContent = data.leads.length;
+  $("#leadsWrap").innerHTML = data.leads.length
+    ? `<table><thead><tr>
+         <th>Persona</th><th>Contatti</th><th>Cosa vuole fare</th><th>Da dove</th><th></th>
+       </tr></thead><tbody>
+       ${data.leads
+         .map((l) => {
+           const name = [l.first_name, l.last_name].filter(Boolean).join(" ") || "—";
+           const interests = interestsOf(l);
+           return `<tr>
+             <td>${esc(name)}<br><span class="dim">${esc(l.city || "")}</span></td>
+             <td class="mail">${esc(l.email)}<br><span class="dim">${esc(l.phone || "no telefono")}</span></td>
+             <td><div class="tags">${
+               interests.length
+                 ? interests.slice(0, 8).map((i) => `<span class="tag">${esc(i)}</span>`).join("") +
+                   (interests.length > 8 ? `<span class="tag">+${interests.length - 8}</span>` : "")
+                 : `<span class="dim">—</span>`
+             }</div></td>
+             <td class="dim">${esc(l.source)}<br>${when(l.created_at)}</td>
+             <td><button class="mini" data-del-email="${esc(l.email)}">togli</button></td>
+           </tr>`;
+         })
+         .join("")}
+       </tbody></table>`
+    : `<p class="empty">Ancora nessuno iscritto.</p>`;
+
+  $("#fbCount").textContent = data.feedback.length;
+  $("#feedbackWrap").innerHTML = data.feedback.length
+    ? data.feedback
+        .map(
+          (f) => `<div class="note">
+            <p>${esc(f.text)}</p>
+            <div class="meta">
+              <span>${when(f.created_at)}${f.email ? " · " + esc(f.email) : ""}</span>
+              <button class="mini" data-del-fb="${f.id}">togli</button>
+            </div>
+          </div>`
+        )
+        .join("")
+    : `<p class="empty">Ancora nessun feedback.</p>`;
+}
+
+async function refresh(silent) {
+  try {
+    data = await load(key);
+    render();
+  } catch (err) {
+    if (silent) return;
+    alert(err.message);
+    $("#panel").classList.add("hidden");
+    $("#gate").classList.remove("hidden");
+  }
+}
+
+// la stanza dei bottoni si aggiorna da sola: niente più numeri vecchi
+setInterval(() => { if (key && !document.hidden) refresh(true); }, 20000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && key) refresh(true); });
+$("#reloadBtn").addEventListener("click", () => refresh(false));
+
+function downloadCsv() {
+  const rows = [["nome", "cognome", "email", "telefono", "citta", "interessi", "da_dove", "iscritto_il"]];
+  for (const l of data.leads) {
+    rows.push([
+      l.first_name || "",
+      l.last_name || "",
+      l.email,
+      l.phone || "",
+      l.city || "",
+      interestsOf(l).join(" | "),
+      l.source || "",
+      new Date(l.created_at).toISOString(),
+    ]);
+  }
+  const csv = rows
+    .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+    .join("\n");
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `fuori-iscritti-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+}
+
+$("#gateBtn").addEventListener("click", async () => {
+  key = $("#keyInput").value.trim();
+  localStorage.setItem("fuori.admin.key", key);
+  if (!labels.size) await loadLabels();
+  refresh();
+});
+$("#keyInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") $("#gateBtn").click();
+});
+$("#keyInput").value = key;
+
+$("#csvBtn").addEventListener("click", downloadCsv);
+
+document.addEventListener("click", async (e) => {
+  const email = e.target.dataset?.delEmail;
+  const fb = e.target.dataset?.delFb;
+  if (!email && !fb) return;
+  if (!confirm("Togliere questo elemento?")) return;
+  const q = email ? `email=${encodeURIComponent(email)}` : `feedback=${fb}`;
+  await fetch(`/api/admin?key=${encodeURIComponent(key)}&${q}`, { method: "DELETE" });
+  refresh();
+});
+
+(async () => {
+  if (key) {
+    await loadLabels();
+    refresh();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+cookie.title|Un'ultima cosa, e poi si comincia|One last thing, then we start|Una última cosa y empezamos|Mais uma coisa e já começamos
+cookie.fine|Puoi cambiare scelta quando vuoi, dal profilo.|You can change your mind anytime from your profile.|Puedes cambiar de opinión cuando quieras, desde tu perfil.|Você pode mudar de ideia quando quiser, no perfil.
+wel.title|Prima di uscire|Two things and you're in|Dos cosas y estás dentro|Duas coisas e você está dentro
+wel.sub|Servono tutti per far funzionare FUORI: posizione, notifiche, fotocamera, microfono e cookie. Restano protetti sul tuo telefono, non vanno a nessuno: niente pubblicità, niente dati venduti.|They're not mandatory and there's nothing shady: these permissions only help FUORI work better. No ads, no data sold, and you can switch everything off whenever you want.|No son obligatorios y no hay nada raro: estos permisos solo hacen que FUORI funcione mejor. Sin publicidad, sin vender datos, y puedes apagarlo todo cuando quieras.|Não são obrigatórios e não há nada estranho: estas permissões só fazem o FUORI funcionar melhor. Sem publicidade, sem vender dados, e pode desligar tudo quando quiser.
+wel.geo|Posizione|Location|Ubicación|Localização
+wel.geoWhy|per mostrarti gli eventi più vicini a te.|to show you the events closest to you. We don't track you or tell anyone where you are.|para mostrarte los eventos más cercanos. No te seguimos ni decimos a nadie dónde estás.|para mostrar os eventos mais próximos. Não te seguimos nem dizemos a ninguém onde estás.
+wel.notif|Notifiche|Notifications|Notificaciones|Notificações
+wel.notifWhy|per avvisarti quando esce un evento che ti interessa.|a heads-up when an event you'd like comes out. Few of them, never at night, never ads.|un aviso cuando sale un evento que te interesa. Pocos, nunca de noche, nunca publicidad.|um aviso quando sai um evento que te interessa. Poucos, nunca à noite, nunca publicidade.
+wel.cam|Fotocamera e microfono|Camera and microphone|Cámara y micrófono|Câmera e microfone
+wel.camWhy|per la foto di verifica e per parlare con l’assistente.|for the face check and to talk to the assistant. Face photos are only seen by whoever runs FUORI, to keep fake profiles out.|para la verificación del rostro y para hablar con el asistente. Las fotos solo las ve quien gestiona FUORI, para evitar perfiles falsos.|para a verificação do rosto e para falar com o assistente. As fotos só são vistas por quem gere o FUORI, para evitar perfis falsos.
+wel.cookie|Cookie|Cookies|Cookies|Cookies
+wel.cookieWhy|per ricordare le tue scelte.|they remember your choices and tell us anonymously what works, so the app opens faster.|recuerdan tus elecciones y nos dicen de forma anónima qué funciona, así la app abre más rápido.|lembram as suas escolhas e dizem-nos de forma anónima o que funciona, para a app abrir mais rápido.
+wel.fine|Puoi spegnerli quando vuoi da Profilo → Autorizzazioni.|You can change your mind anytime: Profile → Permissions.|Puedes cambiar de opinión cuando quieras: Perfil → Permisos.|Pode mudar de ideia quando quiser: Perfil → Permissões.
+wel.all|Attiva tutto e continua|Fine, turn it all on|Vale, activa todo|Tudo bem, ativa tudo
+wel.one|Preferisco sceglierli io|I'd rather pick them myself|Prefiero elegirlos yo|Prefiro escolher eu
+wel.later|Non ora|Not now|Ahora no|Agora não
+wel.busy|Un attimo…|One moment…|Un momento…|Um momento…
+wel.s1|Sto chiedendo le notifiche…|Asking for notifications…|Pidiendo las notificaciones…|A pedir as notificações…
+wel.s2|Sto chiedendo la posizione…|Asking for your location…|Pidiendo tu ubicación…|A pedir a sua localização…
+wel.s3|Sto chiedendo la fotocamera…|Asking for the camera…|Pidiendo la cámara…|A pedir a câmera…
+wel.s4|Sto chiedendo il microfono…|Asking for the microphone…|Pidiendo el micrófono…|A pedir o microfone…
+wel.ok|Fatto. Benvenuto in FUORI.|Done. Welcome to FUORI.|Hecho. Bienvenido a FUORI.|Feito. Bem-vindo ao FUORI.

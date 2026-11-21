@@ -1,0 +1,10 @@
+ai.rec|Parla|Speak|Habla|Fale
+ai.recording|Ti ascolto… tocca per fermare|Listening… tap to stop|Te escucho… toca para parar|Estou ouvindo… toque para parar
+ai.transcribing|Trascrivo…|Transcribing…|Transcribiendo…|Transcrevendo…
+ai.voice|Ascolta le risposte|Read answers aloud|Escuchar las respuestas|Ouvir as respostas
+ai.voiceOn|Voce attiva|Voice on|Voz activada|Voz ativada
+ai.voiceOff|Voce spenta|Voice off|Voz desactivada|Voz desativada
+ai.micDenied|Serve il permesso del microfono. Attivalo dalle impostazioni del telefono.|Mic permission needed. Turn it on in your phone settings.|Hace falta permiso del micrófono. Actívalo en los ajustes del teléfono.|Precisa de permissão do microfone. Ative nas configurações do telefone.
+ai.micNo|Questo browser non registra la voce. Scrivi pure.|This browser can't record voice. Just type.|Este navegador no graba voz. Escribe.|Este navegador não grava voz. Escreva.
+ai.micHeard|Non ho capito. Riprova avvicinandoti al telefono.|I didn't catch that. Try again closer to the phone.|No te entendí. Prueba más cerca del teléfono.|Não entendi. Tente mais perto do telefone.
+ai.tooLong|Troppo lungo: registra meno di un minuto.|Too long: record under a minute.|Demasiado largo: graba menos de un minuto.|Longo demais: grave menos de um minuto.

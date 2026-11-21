@@ -1,0 +1,10 @@
+lang.title|In che lingua vuoi leggere?|Which language do you want?|¿En qué idioma quieres leer?|Em que idioma você quer ler?
+lang.hint|Puoi cambiarla quando vuoi, da qui in alto.|Change it whenever you like, from up here.|Puedes cambiarlo cuando quieras, desde aquí arriba.|Você pode mudar quando quiser, aqui em cima.
+help.title|Come funziona|How it works|Cómo funciona|Como funciona
+help.sub|Quattro passi e sei dentro. Guarda, scegli, partecipa: se non c'è, crea tu.|Four steps and you're in. Look, choose, join: if it's not there, make it.|Cuatro pasos y estás dentro. Mira, elige, participa: si no hay nada, crea tú.|Quatro passos e estás dentro. Olha, escolhe, participa: se não houver nada, cria tu.
+help.s1|Apri l'app e guarda gli eventi qui vicino.|Open the app and look at events near you.|Abre la app y mira los eventos cerca de ti.|Abre a app e vê os eventos perto de ti.
+help.s2|Tocca un evento: leggi dove, quando e chi c'è.|Tap an event: read where, when and who's going.|Toca un evento: lee dónde, cuándo y quién va.|Toca num evento: lê onde, quando e quem vai.
+help.s3|Tocca «Partecipo». Se serve, metti foto e selfie: è per farti riconoscere.|Tap «Join». If it asks, add a photo and a selfie so people know it's you.|Toca «Participo». Si te lo pide, pon foto y selfie: es para que te reconozcan.|Toca «Participo». Se pedir, põe foto e selfie: é para te reconhecerem.
+help.s4|Non trovi niente? Tocca «+», scrivi cosa, dove e quando, poi «Pubblica».|Nothing you like? Tap «+», say what, where and when, then «Publish».|¿No hay nada que te guste? Toca «+», escribe qué, dónde y cuándo, y luego «Publicar».|Não há nada de que gostes? Toca «+», escreve o quê, onde e quando, e depois «Publicar».
+help.lang|Cambia la lingua|Change the language|Cambiar el idioma|Mudar o idioma
+help.account|Accedi o crea il profilo|Sign in or create a profile|Entra o crea tu perfil|Entre ou crie seu perfil

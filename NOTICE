@@ -1,0 +1,14 @@
+Titolare del progetto FUORI: Christian Guarrera (christianguarrera@gmail.com).
+Amministratore unico dell'app e del pannello: la stessa email.
+
+Dove stanno le cose che contano:
+- dati degli iscritti: database del sito (Cloudflare D1), non scaricabile dal browser;
+- chiavi private (assistente AI, notifiche, email, amministrazione): variabili
+  segrete del server, mai dentro i file che il telefono scarica;
+- pannello di amministrazione: /api/admin, serve la chiave privata oppure il
+  token che solo l'account dell'amministratore può ottenere (/api/owner).
+
+Il JavaScript che arriva al browser è minificato e senza commenti, così non si
+legge a colpo d'occhio. Nessun codice che gira in un browser può essere reso
+illeggibile al 100%: la protezione vera è che i dati e le chiavi restano sul
+server, e che il sito vive solo sul dominio dell'autore.

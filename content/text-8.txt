@@ -1,0 +1,5 @@
+crop.title|Ritaglia la foto|Crop your photo|Recorta la foto|Recorte a foto
+crop.sub|Trascinala per spostarla, la barra la ingrandisce. Nel cerchio ci sta il viso e poco altro.|Drag to move it, the slider zooms. The circle fits your face and not much more.|Arrástrala para moverla, la barra la amplía. En el círculo cabe tu cara y poco más.|Arraste para mover, a barra amplia. No círculo cabe seu rosto e pouco mais.
+crop.zoom|Ingrandisci|Zoom|Ampliar|Ampliar
+crop.ok|Usa questa|Use this one|Usar esta|Usar esta
+crop.working|Preparo…|Preparing…|Preparando…|Preparando…

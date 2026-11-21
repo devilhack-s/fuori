@@ -1,0 +1,24 @@
+hero.kickerNear|{z}, adesso|{z}, right now|{z}, ahora|{z}, agora
+mood.q|Come ti senti oggi?|How do you feel today?|¿Cómo te sientes hoy?|Como você se sente hoje?
+mood.sub|Dimmi come stai e ti dico cosa fare adesso: vicino a te, con il meteo di oggi.|Tell me how you feel and I'll say what to do now: near you, with today's weather.|Dime cómo estás y te digo qué hacer ahora: cerca de ti, con el tiempo de hoy.|Diga como você está e eu digo o que fazer agora: perto de você, com o clima de hoje.
+mood.calma|Voglio rilassarmi|I want to relax|Quiero relajarme|Quero relaxar
+mood.energia|Voglio muovermi|I want to move|Quiero moverme|Quero me mexer
+mood.divertimento|Voglio divertirmi|I want to have fun|Quiero divertirme|Quero me divertir
+mood.scoperta|Voglio scoprire|I want to explore|Quiero descubrir|Quero descobrir
+mood.gusto|Voglio mangiare bene|I want to eat well|Quiero comer bien|Quero comer bem
+mood.ideas|Idee per te, adesso|Ideas for you, now|Ideas para ti, ahora|Ideias para você, agora
+mood.whyHere|Tipico qui: {z}|Typical around {z}|Típico por {z}|Típico por {z}
+mood.whereZone|Sei vicino a {z}.|You're near {z}.|Estás cerca de {z}.|Você está perto de {z}.
+mood.whereAsk|Dimmi dove sei|Tell me where you are|Dime dónde estás|Diga onde você está
+mood.why.sole|C'è il sole: si sta fuori.|It's sunny: stay outside.|Hay sol: afuera se está bien.|Está sol: melhor ficar fora.
+mood.why.pioggia|Oggi piove: meglio al coperto.|Raining today: better indoors.|Hoy llueve: mejor bajo techo.|Hoje chove: melhor no coberto.
+mood.why.freddo|Fa freddo: meglio al chiuso, o sulla neve.|It's cold: indoors, or up in the snow.|Hace frío: mejor dentro, o en la nieve.|Está frio: melhor dentro, ou na neve.
+mood.why.caldo|Fa caldo: acqua, ombra o posto fresco.|It's hot: water, shade or somewhere cool.|Hace calor: agua, sombra o un sitio fresco.|Está calor: água, sombra ou lugar fresco.
+mood.why.mite|Si sta bene: quello che ti va.|Nice out: whatever you feel like.|Se está bien: lo que te apetezca.|Está agradável: o que der na telha.
+mood.noPos|Per consigliarti cose vicine mi serve la posizione. Attivala e riprova.|To suggest things nearby I need your location. Turn it on and try again.|Para recomendarte cosas cerca necesito tu ubicación. Actívala y reintenta.|Para sugerir coisas perto preciso da sua localização. Ative e tente de novo.
+mood.anywhere|In giro per la Sicilia|Around Sicily|Por Sicilia|Pela Sicília
+mood.pick|Scegli una: prima guardo se c'è già qualcosa di simile.|Pick one: first I'll check if something similar already exists.|Elige una: primero miro si ya hay algo parecido.|Escolha uma: primeiro vejo se já existe algo parecido.
+mood.interested|Potrebbe interessarti uno di questi eventi già creati?|One of these events already created might interest you.|¿Te podría interesar uno de estos eventos ya creados?|Pode te interessar um destes eventos já criados?
+mood.createOwn|Crea il tuo evento|Create your own event|Crea tu evento|Crie o seu evento
+mood.noneLike|Non c'è ancora niente di simile: crealo tu.|Nothing like this yet: create it yourself.|Todavía no hay nada parecido: créalo tú.|Ainda não há nada parecido: crie você.
+mood.sheetSub|{n} già in programma|{n} already planned|{n} ya en programa|{n} já programados

@@ -1,0 +1,47 @@
+Tornio da vasaio|creativita|Potter's wheel|Torno de alfarero|Torno de oleiro
+Serigrafia|creativita|Screen printing|Serigrafía|Serigrafia
+Fumetto|creativita|Comics|Cómic|Quadrinhos
+Calligrafia|creativita|Calligraphy|Caligrafía|Caligrafia
+Mosaico|creativita|Mosaic|Mosaico|Mosaico
+Incisione e stampa|creativita|Printmaking|Grabado|Gravura
+Legatoria|creativita|Bookbinding|Encuadernación|Encadernação
+Fotografia analogica|creativita|Film photography|Fotografía analógica|Fotografia analógica
+Camera oscura|creativita|Darkroom|Cuarto oscuro|Câmara escura
+Cake design|creativita|Cake design|Decoración de tartas|Decoração de bolos
+Profumi fai da te|creativita|DIY perfume|Perfumes caseros|Perfumes caseiros
+Cosmetica naturale|creativita|Natural cosmetics|Cosmética natural|Cosmética natural
+Ricamo|creativita|Embroidery|Bordado|Bordado
+Scrittura di canzoni|creativita|Songwriting|Composición de canciones|Composição de canções
+Recitazione|cinema|Acting|Actuación|Atuação
+Doppiaggio|cinema|Voice acting|Doblaje|Dublagem
+Corso di teatro|cinema|Theatre class|Clase de teatro|Aula de teatro
+DJ set|musica|DJ set|Sesión de DJ|Set de DJ
+Beatmaking|musica|Beatmaking|Beatmaking|Beatmaking
+Produzione musicale|musica|Music production|Producción musical|Produção musical
+Chitarra|musica|Guitar|Guitarra|Violão
+Ukulele|musica|Ukulele|Ukelele|Ukulele
+Calcio balilla|giochi|Table football|Futbolín|Pebolim
+Bocce|giochi|Boules|Petanca|Boça
+Mahjong|giochi|Mahjong|Mahjong|Mahjong
+Puzzle e rompicapo|giochi|Puzzles|Rompecabezas|Quebra-cabeças
+LARP|giochi|LARP|LARP|LARP
+Carte collezionabili|giochi|Trading cards|Cartas coleccionables|Cartas colecionáveis
+Cena con delitto|giochi|Murder mystery dinner|Cena con misterio|Jantar mistério
+Lingua dei segni|lingue|Sign language|Lengua de signos|Língua de sinais
+Debate|lingue|Debate|Debate|Debate
+Giornalismo|lingue|Journalism|Periodismo|Jornalismo
+Sviluppo di videogiochi|tech|Game development|Desarrollo de videojuegos|Desenvolvimento de jogos
+Podcast e audio|tech|Podcasting|Podcast y audio|Podcast e áudio
+Modellismo|tech|Model making|Modelismo|Modelismo
+Pickleball|sport|Pickleball|Pickleball|Pickleball
+Ultimate frisbee|sport|Ultimate frisbee|Ultimate frisbee|Ultimate frisbee
+Footgolf|sport|Footgolf|Footgolf|Footgolf
+Slackline|sport|Slackline|Slackline|Slackline
+Trampolino elastico|sport|Trampoline|Trampolín|Trampolim
+Speed date|sociale|Speed dating|Citas rápidas|Encontros rápidos
+Open mic|serate|Open mic|Open mic|Open mic
+Apicoltura|natura|Beekeeping|Apicultura|Apicultura
+Micologia|natura|Mushroom foraging|Micología|Micologia
+Astrofotografia|natura|Astrophotography|Astrofotografía|Astrofotografia
+Orto sociale|volontariato|Community garden|Huerto comunitario|Horta comunitária
+Riparazione biciclette|volontariato|Bike repair|Reparación de bicicletas|Reparação de bicicletas

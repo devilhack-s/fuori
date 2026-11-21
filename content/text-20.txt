@@ -1,0 +1,17 @@
+login.forgot|Password dimenticata?|Forgot your password?|¿Olvidaste la contraseña?|Esqueceu a senha?
+forgot.title|Ti mando un link|I'll send you a link|Te mando un enlace|Vou te mandar um link
+forgot.sub|Scrivi la mail con cui ti sei iscritto: ti arriva un link per scegliere una password nuova. Vale un'ora.|Type the email you signed up with: you'll get a link to pick a new password. It lasts an hour.|Escribe el correo con el que te registraste: recibirás un enlace para elegir una contraseña nueva. Vale una hora.|Escreva o e-mail com que se inscreveu: chega um link para escolher uma senha nova. Vale uma hora.
+forgot.send|Mandami il link|Send me the link|Mándame el enlace|Mande o link
+forgot.done|Fatto. Se quella mail è registrata, il link sta arrivando adesso. Guarda anche nello spam.|Done. If that email is registered, the link is on its way. Check spam too.|Listo. Si ese correo está registrado, el enlace ya va. Mira también en spam.|Feito. Se esse e-mail estiver cadastrado, o link está chegando. Olhe também no spam.
+reset.title|Nuova password|New password|Contraseña nueva|Senha nova
+reset.sub|Scegline una che ti ricordi. Almeno 8 caratteri.|Pick one you'll remember. At least 8 characters.|Elige una que recuerdes. Mínimo 8 caracteres.|Escolha uma que você lembre. Pelo menos 8 caracteres.
+reset.password|Nuova password|New password|Contraseña nueva|Senha nova
+reset.repeat|Ripetila|Repeat it|Repítela|Repita
+reset.send|Salva la password|Save the password|Guardar la contraseña|Salvar a senha
+reset.mismatch|Le due password non sono uguali.|The two passwords don't match.|Las dos contraseñas no coinciden.|As duas senhas não são iguais.
+reset.done|Password cambiata. Ora puoi entrare.|Password changed. You can log in now.|Contraseña cambiada. Ya puedes entrar.|Senha alterada. Agora você pode entrar.
+reset.bad|Link scaduto o già usato. Chiedine un altro.|Link expired or already used. Ask for a new one.|Enlace caducado o ya usado. Pide otro.|Link expirado ou já usado. Peça outro.
+forgot.off|Il recupero via email non è ancora acceso. Scrivi a|Email recovery isn't switched on yet. Write to|La recuperación por email aún no está activa. Escribe a|A recuperação por e-mail ainda não está ativa. Escreva para
+forgot.link|Il link qui sotto vale un'ora: aprilo e scegli la password nuova.|The link below works for an hour: open it and pick a new password.|El enlace de abajo vale una hora: ábrelo y elige la contraseña nueva.|O link abaixo vale uma hora: abra e escolha a senha nova.
+forgot.open|Scegli la password nuova|Choose a new password|Elige la contraseña nueva|Escolha a senha nova
+forgot.none|Questa mail non risulta iscritta. Se è la prima volta, iscriviti di nuovo: ci vuole un minuto.|This email isn't registered. If it's your first time, sign up again — it takes a minute.|Este correo no está registrado. Si es tu primera vez, regístrate otra vez: es un minuto.|Este e-mail não está cadastrado. Se é a primeira vez, inscreva-se de novo: leva um minuto.

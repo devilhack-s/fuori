@@ -1,0 +1,81 @@
+reg.title|Chi sei|Who you are|Quién eres|Quem você é
+reg.first|Nome|First name|Nombre|Nome
+reg.last|Cognome|Last name|Apellido|Sobrenome
+reg.email|Email|Email|Email|Email
+reg.phone|Telefono|Phone|Teléfono|Telefone
+reg.age|Età|Age|Edad|Idade
+reg.sex|Sesso|Sex|Sexo|Sexo
+reg.sexF|Donna|Female|Mujer|Mulher
+reg.sexC|Uomo|Male|Hombre|Homem
+reg.sexN|Preferisco non dirlo|Prefer not to say|Prefiero no decirlo|Prefiro não dizer
+reg.city|Città|City|Ciudad|Cidade
+reg.privacy|Come trattiamo i dati|How we handle your data|Cómo tratamos tus datos|Como tratamos seus dados
+reg.submit|Crea il profilo|Create profile|Crear perfil|Criar perfil
+reg.err|Controlla i campi segnati.|Check the highlighted fields.|Revisa los campos marcados.|Confira os campos marcados.
+reg.errEmail|Questa email non sembra giusta.|That email does not look right.|Ese email no parece correcto.|Esse email não parece certo.
+reg.errPhone|Numero italiano, con o senza prefisso.|Italian number, with or without prefix.|Número italiano, con o sin prefijo.|Número italiano, com ou sem prefixo.
+reg.errAge|Serve un'età tra 18 e 99.|Age between 18 and 99.|Edad entre 18 y 99.|Idade entre 18 e 99.
+ver.title|Ultimo passo|Last step|Último paso|Último passo
+ver.sub|Ti mandiamo un codice di sei cifre. Dimostra che sei una persona, non un bot.|We send a six-digit code. It proves you are a person, not a bot.|Te enviamos un código de seis cifras. Demuestra que eres una persona, no un bot.|Enviamos um código de seis dígitos. Prova que você é uma pessoa, não um robô.
+ver.email|Email|Email|Email|Email
+ver.phone|Telefono|Phone|Teléfono|Telefone
+ver.send|Mandami il codice|Send me the code|Mándame el código|Envie o código
+ver.resend|Rimanda|Resend|Reenviar|Reenviar
+ver.codePh|Le sei cifre|The six digits|Las seis cifras|Os seis dígitos
+ver.confirm|Conferma|Confirm|Confirmar|Confirmar
+ver.done|Verificato|Verified|Verificado|Verificado
+ver.todo|Da verificare|Not verified yet|Sin verificar|Não verificado
+ver.trial|Modalità prova: l'invio non è ancora collegato. Il tuo codice è {code}|Trial mode: sending is not connected yet. Your code is {code}|Modo prueba: el envío aún no está conectado. Tu código es {code}|Modo teste: o envio ainda não está ligado. Seu código é {code}
+ver.wait|Aspetta un minuto prima di chiederne un altro.|Wait a minute before asking for another.|Espera un minuto antes de pedir otro.|Espere um minuto antes de pedir outro.
+ver.wrong|Codice sbagliato.|Wrong code.|Código incorrecto.|Código errado.
+ver.expired|Codice scaduto. Chiedine un altro.|Code expired. Ask for a new one.|Código caducado. Pide otro.|Código expirado. Peça outro.
+ver.sent|Codice inviato.|Code sent.|Código enviado.|Código enviado.
+ver.later|Lo faccio dopo|I will do it later|Lo hago luego|Faço depois
+ver.needEmail|Verifica prima l'email.|Verify your email first.|Primero verifica tu email.|Primeiro verifique seu email.
+prof.title|Il tuo profilo|Your profile|Tu perfil|Seu perfil
+prof.photo|Foto|Photo|Foto|Foto
+prof.photoHint|Una faccia, non un panorama. Si carica in un secondo.|A face, not a landscape. Takes a second to upload.|Una cara, no un paisaje. Se sube en un segundo.|Um rosto, não uma paisagem. Sobe em um segundo.
+prof.bio|Chi sei, in breve|Who you are, in short|Quién eres, en breve|Quem você é, em resumo
+prof.looking|Cosa cerchi qui|What you are looking for|Qué buscas aquí|O que você procura aqui
+prof.done|Cosa ti piace fare e cosa hai fatto|What you like doing, and what you've done|Qué te gusta hacer y qué has hecho|Do que você gosta e o que já fez
+prof.donePh|Ho fatto il bagno a gennaio, perso una finale di briscola, cucinato pasta per venti persone. Rifarei tutto tranne la finale.|I swam in January, lost a cards final, cooked pasta for twenty people. I'd do it all again except the final.|Me bañé en enero, perdí una final de cartas, cociné pasta para veinte personas. Lo repetiría todo menos la final.|Tomei banho de mar em janeiro, perdi uma final de cartas, cozinhei massa para vinte pessoas. Faria tudo de novo menos a final.
+prof.save|Salva|Save|Guardar|Salvar
+prof.saved|Salvato.|Saved.|Guardado.|Salvo.
+prof.age|Età|Age|Edad|Idade
+prof.sex|Sesso|Sex|Sexo|Sexo
+prof.photoReady|Foto aggiornata.|Photo updated.|Foto actualizada.|Foto atualizada.
+prof.photoErr|Immagine troppo pesante o non leggibile.|Image too heavy or unreadable.|Imagen demasiado pesada o ilegible.|Imagem pesada demais ou ilegível.
+prof.tapVerify|Tocca per verificare.|Tap to verify.|Toca para verificar.|Toque para verificar.
+onb.title1|Cosa cerchi su FUORI?|What are you looking for on FUORI?|¿Qué buscas en FUORI?|O que você procura no FUORI?
+onb.g1|Dare un'occhiata in giro|Just having a look|Echar un vistazo|Só dar uma olhada
+onb.g2|Voglio conoscere gente|Meet new people|Conocer gente|Conhecer gente
+onb.g3|Trovare gente con i miei hobby|People who share my hobbies|Gente con mis hobbies|Gente com os mesmos hobbies
+onb.g4|Uscire di più|Get out more|Salir más|Sair mais
+onb.g5|Trovare la mia compagnia|Find my crowd|Encontrar mi grupo|Encontrar minha turma
+onb.g6|Conoscere qualcuno|Meet someone|Conocer a alguien|Conhecer alguém
+onb.title2|Chi vuoi incontrare?|Who do you want to meet?|¿A quién quieres conocer?|Quem você quer conhecer?
+onb.sub2|Serve solo a filtrare. Nessuno ti mette in una casella.|It only filters. Nobody puts you in a box.|Solo sirve para filtrar. Nadie te encasilla.|Serve só para filtrar. Ninguém te coloca numa caixa.
+onb.m1|Persone della mia età|People my age|Gente de mi edad|Pessoas da minha idade
+onb.m2|Nessuna preferenza|No preference|Sin preferencia|Sem preferência
+onb.m3|Persone affini|Like-minded people|Gente afín|Pessoas parecidas
+onb.m4|Professionisti|Professionals|Profesionales|Profissionais
+onb.m5|Studenti|Students|Estudiantes|Estudantes
+onb.m6|Neoarrivati in città|New to the city|Recién llegados|Recém-chegados
+onb.m7|Genitori|Parents|Padres|Pais
+onb.m8|Appassionati di sport|Sports lovers|Amantes del deporte|Apaixonados por esporte
+onb.title3|Com'è la tua serata ideale?|What's your ideal night out?|¿Cómo es tu noche ideal?|Como é a sua noite ideal?
+onb.sub3|Puoi sceglierne più di una.|You can pick more than one.|Puedes elegir más de una.|Você pode escolher mais de uma.
+onb.o1|Tranquilla|Quiet|Tranquila|Tranquila
+onb.o2|Movimentata|Lively|Movida|Agitada
+onb.o3|All'aperto|Outdoors|Al aire libre|Ao ar livre
+onb.o4|Culturale|Cultural|Cultural|Cultural
+onb.o5|Sportiva|Sporty|Deportiva|Esportiva
+onb.o6|Buon cibo|Good food|Buena comida|Boa comida
+onb.o7|Musica dal vivo|Live music|Música en vivo|Música ao vivo
+onb.o8|Conoscersi con calma|Getting to know each other slowly|Conocerse con calma|Conhecer-se com calma
+onb.title4|Cosa ti interessa?|What are you into?|¿Qué te interesa?|Do que você gosta?
+onb.sub4|Scegline quante vuoi. Si cambiano quando vuoi.|Pick as many as you like. Change them anytime.|Elige las que quieras. Se cambian cuando quieras.|Escolha quantas quiser. Muda quando quiser.
+onb.done|Fatto|Done|Hecho|Feito
+onb.counter|{n} scelti|{n} chosen|{n} elegidos|{n} escolhidos
+onb.search|Cerca un'attività|Search an activity|Busca una actividad|Busque uma atividade
+onb.errMin|Scegline quante vuoi.|Pick as many as you like.|Elige las que quieras.|Escolha quantas quiser.

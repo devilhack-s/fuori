@@ -1,0 +1,13 @@
+mute.groupsBtn|Notifiche dei gruppi|Group notifications|Notificaciones de los grupos|Notificações dos grupos
+mute.titleGroup|Notifiche di questo gruppo|Notifications for this group|Notificaciones de este grupo|Notificações deste grupo
+mute.titleAll|Notifiche dei gruppi|Group notifications|Notificaciones de los grupos|Notificações dos grupos
+mute.subGroup|Scegli quanto silenziare questo gruppo. Gli avvisi degli altri gruppi restano come sono.|Choose how long to silence this group. Other groups stay as they are.|Elige cuánto silenciar este grupo. Los demás siguen igual.|Escolha por quanto silenciar este grupo. Os outros continuam como estão.
+mute.subAll|Silenzia tutti i gruppi in una volta. Puoi riaccenderli qui quando vuoi.|Silence every group at once. You can turn them back on here anytime.|Silencia todos los grupos a la vez. Puedes reactivarlos aquí cuando quieras.|Silencia todos os grupos de uma vez. Pode reativar aqui quando quiser.
+mute.d1|Silenzia per 1 giorno|Silence for 1 day|Silenciar 1 día|Silenciar por 1 dia
+mute.d2|Silenzia per 2 giorni|Silence for 2 days|Silenciar 2 días|Silenciar por 2 dias
+mute.forever|Silenzia sempre|Always silence|Silenciar siempre|Silenciar sempre
+mute.on|Riattiva le notifiche|Turn notifications back on|Reactivar notificaciones|Reativar notificações
+mute.stateOn|Adesso le notifiche sono attive.|Notifications are on right now.|Ahora las notificaciones están activas.|Agora as notificações estão ativas.
+mute.stateOff|Notifiche silenziate.|Notifications silenced.|Notificaciones silenciadas.|Notificações silenciadas.
+mute.okToast|Notifiche silenziate|Notifications silenced|Notificaciones silenciadas|Notificações silenciadas
+mute.onToast|Notifiche riattivate|Notifications back on|Notificaciones reactivadas|Notificações reativadas

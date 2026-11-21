@@ -1,0 +1,46 @@
+chat.title|Chat del gruppo|Group chat|Chat del grupo|Chat do grupo
+chat.members|{n} nel gruppo|{n} in the group|{n} en el grupo|{n} no grupo
+chat.ph|Scrivi al gruppo…|Message the group…|Escribe al grupo…|Escreva para o grupo…
+chat.send|Invia|Send|Enviar|Enviar
+chat.locked|Solo chi partecipa può scrivere.|Only people in can write.|Solo quien participa puede escribir.|Só quem participa pode escrever.
+chat.tooLong|Massimo 500 caratteri.|500 characters max.|Máximo 500 caracteres.|Máximo 500 caracteres.
+chat.err|Messaggio non inviato. Riprova.|Message not sent. Try again.|Mensaje no enviado. Reintenta.|Mensagem não enviada. Tente de novo.
+ai.title|Assistente|Assistant|Asistente|Assistente
+ai.sub|Due chiacchiere, eventi e uso dell'app. Questa chat è tua: non la vede nessuno e non resta salvata.|A bit of chat, events and how the app works. This chat is yours: nobody else sees it and it isn't saved.|Dos charlas, eventos y uso de la app. Este chat es tuyo: nadie más lo ve y no se guarda.|Um pouco de conversa, eventos e uso do app. Este chat é seu: ninguém vê e não fica salvo.
+ai.ph|Cosa c'è stasera?|What is on tonight?|¿Qué hay esta noche?|O que tem hoje?
+ai.found|Ecco cosa ho trovato ({n}):|Here is what I found ({n}):|Esto es lo que encontré ({n}):|Aqui está o que encontrei ({n}):
+ai.recap|Nella tua raccolta hai {n} eventi:|You have {n} saved:|Tienes {n} guardados:|Você tem {n} salvos:
+ai.howto|Per entrare in un evento serve il profilo con l'email verificata: un codice di sei cifre, trenta secondi. Poi tocchi "Partecipo". Per organizzarne uno, il più in basso.|To join you need a profile with a verified email: a six-digit code, thirty seconds. Then tap "Join". To host one, the button at the bottom.|Para entrar necesitas perfil con email verificada: un código de seis cifras, treinta segundos. Luego tocas "Me apunto". Para organizar uno, el botón de abajo.|Para entrar você precisa de perfil com email verificado: um código de seis dígitos, trinta segundos. Depois toca "Vou participar". Para organizar um, o botão embaixo.
+ai.stats|Quanti siamo, quanti eventi e chi si iscrive sono dati miei, non dell'assistente. Quello che vedi sono gli eventi pubblici.|How many people, how many events, who signs up: that is my data, not the assistant's. You see public events only.|Cuántos somos, cuántos eventos y quién se apunta son mis datos. Tú ves los eventos públicos.|Quantos somos, quantos eventos e quem se inscreve são meus dados. Você vê os eventos públicos.
+ai.tonight|Stasera|Tonight|Esta noche|Hoje à noite
+ai.tomorrow|Domani|Tomorrow|Mañana|Amanhã
+ai.weekend|Nel weekend|This weekend|Este fin de semana|Neste fim de semana
+ai.askCity|Chiedimi cosa fare qua intorno: sport, musica, cibo, qualcosa per domenica.|Ask me about Catania: sport, music, food, something for Sunday.|Pregúntame por Catania: deporte, música, comida, algo para el domingo.|Pergunte sobre Catania: esporte, música, comida, algo para domingo.
+fb.title|Cosa non funziona?|What is not working?|¿Qué no funciona?|O que não funciona?
+fb.ph|Scrivi qui, anche una riga.|Write here, even one line.|Escribe aquí, aunque sea una línea.|Escreva aqui, mesmo uma linha.
+fb.emailPh|Email, se vuoi risposta|Email, if you want a reply|Email, si quieres respuesta|Email, se quiser resposta
+fb.send|Manda|Send|Enviar|Enviar
+fb.ok|Ricevuto. Grazie.|Got it. Thank you.|Recibido. Gracias.|Recebido. Obrigado.
+fb.err|Scrivi almeno due parole.|At least two words.|Escribe al menos dos palabras.|Escreva pelo menos duas palavras.
+fb.kind|Tipo|Type|Tipo|Tipo
+fb.kindBug|Qualcosa non va|Something is broken|Algo no va|Algo não funciona
+fb.kindIdea|Un'idea|An idea|Una idea|Uma ideia
+fb.kindEvent|Un evento che manca|A missing event|Un evento que falta|Um evento que falta
+push.title|Ti avviso quando serve?|Shall I warn you when it matters?|¿Te aviso cuando importa?|Aviso quando importa?
+push.yes|Attiva gli avvisi|Turn on alerts|Activar avisos|Ativar avisos
+push.no|Non ora|Not now|Ahora no|Agora não
+push.ok|Avvisi attivi.|Alerts on.|Avisos activados.|Avisos ativados.
+push.blocked|Il telefono li ha bloccati. Si riattivano dalle impostazioni del browser.|Your phone blocked them. Re-enable from browser settings.|Tu teléfono los bloqueó. Se activan en los ajustes del navegador.|Seu telefone os bloqueou. Ative nas configurações do navegador.
+push.ios|Su iPhone: Condividi, poi "Aggiungi a Home". Da lì gli avvisi funzionano.|On iPhone: Share, then "Add to Home Screen". Alerts work from there.|En iPhone: Compartir, luego "Añadir a inicio". Desde ahí funcionan.|No iPhone: Compartilhar, depois "Adicionar à Tela". Aí os avisos funcionam.
+cookie.only|Solo necessari|Essential only|Solo necesarios|Só necessários
+cookie.all|Accetta|Accept|Aceptar|Aceitar
+cookie.more|Dettagli|Details|Detalles|Detalhes
+privacy.title|Dati e privacy|Data and privacy|Datos y privacidad|Dados e privacidade
+privacy.body|Il profilo vive su questo telefono. Sul server teniamo nome, email, telefono, età, città e interessi per farti entrare agli eventi e avvisarti. La foto sta in uno spazio privato. Non vendiamo niente a nessuno e non profiliamo per pubblicità. Puoi chiedere la cancellazione quando vuoi dalla casella dei pareri.|Your profile lives on this phone. On the server we keep name, email, phone, age, city and interests to let you into events and notify you. The photo sits in private storage. We sell nothing to anyone and we do not profile you for ads. You can ask for deletion anytime from the feedback box.|Tu perfil vive en este teléfono. En el servidor guardamos nombre, email, teléfono, edad, ciudad e intereses para dejarte entrar y avisarte. La foto está en un espacio privado. No vendemos nada y no perfilamos para publicidad. Puedes pedir el borrado desde el buzón de opiniones.|Seu perfil vive neste telefone. No servidor guardamos nome, email, telefone, idade, cidade e interesses para deixar você entrar e avisar. A foto fica num espaço privado. Não vendemos nada e não perfilamos para publicidade. Pode pedir exclusão pela caixa de opiniões.
+install.title|Portala con te|Keep it with you|Llévala contigo|Leve com você
+install.body|Si installa dal browser, senza store e senza aggiornamenti da fare: si aggiorna da sola.|Installs from the browser, no store, no updates to run: it updates itself.|Se instala desde el navegador, sin tienda y sin actualizaciones: se actualiza sola.|Instala pelo navegador, sem loja e sem atualizações: ele se atualiza sozinho.
+install.done|Fatto. Ti aspetto qui.|Done. I will be here.|Hecho. Te espero aquí.|Feito. Espero você aqui.
+toast.copied|Link copiato.|Link copied.|Enlace copiado.|Link copiado.
+toast.deleted|Evento eliminato.|Event deleted.|Evento eliminado.|Evento excluído.
+toast.noShare|Copia il link dalla barra del browser.|Copy the link from the browser bar.|Copia el enlace de la barra.|Copie o link da barra.
+lang.name|Italiano|English|Español|Português

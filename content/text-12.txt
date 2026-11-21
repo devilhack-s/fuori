@@ -1,0 +1,20 @@
+create.activity|Cosa nello specifico|What exactly|Qué exactamente|O que exatamente
+create.activityPh|Cerca: arrampicata, sushi, vinili…|Search: climbing, sushi, vinyl…|Busca: escalada, sushi, vinilos…|Busque: escalada, sushi, vinis…
+create.activityHint|Se non c'è in elenco, scrivilo tu.|If it's not listed, type it yourself.|Si no está en la lista, escríbelo tú.|Se não estiver na lista, escreva você.
+create.errPlace|Scegli un posto o scrivilo a mano.|Pick a place or type it yourself.|Elige un sitio o escríbelo.|Escolha um lugar ou escreva.
+place.near|Usa la mia posizione|Use my location|Usar mi ubicación|Usar minha localização
+place.nearOk|Posizione presa: cerco i posti vicini.|Location taken: looking nearby.|Ubicación lista: busco sitios cercanos.|Localização pronta: busco lugares próximos.
+place.nearErr|Posizione non disponibile: scrivi il posto a mano.|Location not available: type the place.|Ubicación no disponible: escribe el sitio.|Localização indisponível: escreva o lugar.
+place.none|Nessun posto trovato. Scrivilo come vuoi.|No place found. Type it your way.|Ningún sitio encontrado. Escríbelo como quieras.|Nenhum lugar encontrado. Escreva como quiser.
+place.searching|Cerco…|Searching…|Buscando…|Buscando…
+radius.label|Raggio|Radius|Radio|Raio
+radius.off|Tutta la città|Whole city|Toda la ciudad|Cidade toda
+radius.5|Entro 5 km|Within 5 km|A menos de 5 km|Até 5 km
+radius.10|Entro 10 km|Within 10 km|A menos de 10 km|Até 10 km
+radius.25|Entro 25 km|Within 25 km|A menos de 25 km|Até 25 km
+radius.50|Entro 50 km|Within 50 km|A menos de 50 km|Até 50 km
+radius.none|Nessun evento qui. Allarga il raggio o cambia città.|No events in this radius. Widen it or look at the whole city.|Ningún evento en este radio. Amplíalo o mira toda la ciudad.|Nenhum evento neste raio. Amplie ou veja a cidade toda.
+card.km|a {n} km|{n} km away|a {n} km|a {n} km
+detail.maps|Apri in Google Maps|Open in Google Maps|Abrir en Google Maps|Abrir no Google Maps
+ai.friend|Resto qui. Se vuoi ti tengo compagnia due minuti: raccontami com'è andata oggi.|I'm here. If you want, keep me company for two minutes: tell me how today went.|Aquí estoy. Si quieres te acompaño dos minutos: cuéntame cómo fue el día.|Estou aqui. Se quiser, me faça companhia dois minutos: conta como foi o dia.
+ai.joke|Te ne dico una: due amici a Catania d'inverno. Uno: «Andiamo al mare?» L'altro: «Sì, ma col cappotto.»|Here's one: two friends in Catania in winter. One: "Shall we go to the sea?" The other: "Yes, but with a coat."|Te digo uno: dos amigos en Catania en invierno. Uno: «¿Vamos al mar?» El otro: «Sí, pero con abrigo.»|Vou te contar: dois amigos em Catania no inverno. Um: «Vamos ao mar?» O outro: «Sim, mas de casaco.»

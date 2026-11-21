@@ -1,0 +1,41 @@
+# Zone della Sicilia: nome|lat|lng|attività tipiche (separate da ;)
+# Le attività devono esistere nel catalogo (activities-*.txt), altrimenti vengono ignorate.
+Trecastagni e l'Etna|37.6186|15.0778|Escursioni;Forest bathing;Corsa;Vino e degustazione;Picnic;Quad
+Nicolosi e Rifugio Sapienza|37.7000|15.0000|Volcano trekking;Escursioni;Mountain bike;Quad;Ciaspole;Osservare le stelle
+Zafferana Etnea|37.6900|15.1000|Trekking;Vino e degustazione;Picnic;Birdwatching;Passeggiata consapevole;Falò e tramonti
+Gole dell'Alcantara|37.8700|15.0400|Trekking;Grotte e speleologia;Fiume e cascate;Fotografia;Canoa
+Catania centro|37.5022|15.0873|Aperitivo;Street food;Visita guidata;Mercato rionale;Cinema;Cocktail
+Catania mare|37.5300|15.1200|Nuoto in acque libere;Sup;Beach volley;Snorkeling;Aperitivo
+Acireale e la Riviera|37.6126|15.1663|Snorkeling;Nuoto in acque libere;Passeggiata consapevole;Street food;Visita a un borgo
+Taormina|37.8516|15.2853|Visita a un borgo;Teatro;Snorkeling;Trekking;Aperitivo;Barca a vela
+Messina|38.1938|15.5540|Aperitivo;Visita guidata;Corsa al parco;Vela;Street food
+Isole Eolie|38.4667|14.9500|Visita alle isole;Barca a vela;Snorkeling;Terme;Volcano trekking;Escursione all'alba
+Nebrodi|37.8800|14.9500|Escursioni;Forest bathing;Birdwatching;Equitazione;Micologia;Campeggio con tende
+Madonie|37.8000|14.0900|Trekking;Ciaspole;Birdwatching;Visita a un borgo;Gita in montagna
+Cefalù|38.0389|14.0227|Mare e snorkeling;Visita a un borgo;Trekking;Aperitivo;Barca e gommone
+Palermo centro|38.1157|13.3615|Street food;Mercato rionale;Visita guidata;Teatro;Aperitivo;Cocktail
+Mondello|38.2000|13.3200|Beach volley;Sup;Nuoto in acque libere;Aperitivo;Windsurf
+Monreale|38.0800|13.2900|Visita guidata;Chiese e monumenti;Mosaico;Fotografia
+San Vito Lo Capo|38.1740|12.7350|Mare e snorkeling;Windsurf;Trekking;Street food;Campeggio con tende
+Riserva dello Zingaro|38.1000|12.7900|Trekking;Snorkeling;Birdwatching;Fotografia;Escursione all'alba
+Trapani ed Erice|38.0176|12.5365|Visita a un borgo;Visita guidata;Vino e degustazione;Barca a vela;Falò e tramonti
+Marsala|37.7990|12.4360|Vino e degustazione;Barca a vela;Visita guidata;Falò e tramonti
+Agrigento e la Valle dei Templi|37.2900|13.5860|Siti archeologici;Visita guidata;Fotografia;Passeggiata consapevole
+Scala dei Turchi|37.2900|13.4700|Mare e snorkeling;Trekking;Fotografia;Falò e tramonti
+Sciacca|37.5090|13.0830|Terme;Street food;Barca a vela;Visita a un borgo
+Ragusa Ibla|36.9250|14.7180|Visita a un borgo;Visita guidata;Cena fuori;Fotografia
+Modica|36.8580|14.7730|Vino e degustazione;Pasticceria;Visita a un borgo;Mercatini
+Noto|36.8920|15.0690|Visita a un borgo;Architettura;Fotografia;Aperitivo
+Marzamemi|36.7400|15.1200|Mare e snorkeling;Street food;Barca a vela;Falò e tramonti
+Siracusa e Ortigia|37.0590|15.2930|Visita guidata;Teatro;Aperitivo;Siti archeologici;Nuoto in acque libere
+Vendicari|36.7900|15.0900|Birdwatching;Trekking;Mare e snorkeling;Fotografia
+Piazza Armerina|37.3850|14.3660|Siti archeologici;Visita guidata;Mosaico;Fotografia
+Enna|37.5670|14.2790|Visita a un borgo;Visita guidata;Trekking;Falò e tramonti
+Caltanissetta|37.4900|14.0620|Visita guidata;Corsa al parco;Cena fuori;Mercatini
+Gela|37.0700|14.2500|Mare e snorkeling;Street food;Barca a vela;Corsa
+Avola e il Cassibile|36.9100|15.1300|Mare e snorkeling;Vino e degustazione;Ciclismo;Street food
+Bronte|37.7900|14.8300|Vino e degustazione;Pasticceria;Escursioni;Visita a un borgo
+Caltagirone|37.2370|14.5150|Ceramica;Visita a un borgo;Mercatini;Visita guidata
+Ustica|38.7080|13.1900|Immersioni sub;Snorkeling;Mare e snorkeling;Barca a vela
+Pantelleria|36.7860|11.9900|Terme;Trekking;Mare e snorkeling;Vino e degustazione
+Lampedusa|35.5030|12.6060|Mare e snorkeling;Snorkeling;Barca e gommone;Falò e tramonti

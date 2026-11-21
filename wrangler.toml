@@ -1,0 +1,34 @@
+name = "fuori"
+main = "worker.js"
+compatibility_date = "2026-11-13"
+
+# database degli utenti/eventi (lo schema lo crea il worker al primo avvio)
+[[d1_databases]]
+binding = "DB"
+database_name = "fuori"
+database_id = "4c79ee68-51de-4ee7-8af6-22a7d1e85280"
+
+# foto profilo e immagini di verifica
+# R2 temporaneamente disattivato (va abilitato dal dashboard)
+#[[r2_buckets]]
+#binding = "FILES"
+#bucket_name = "fuori-files"
+
+# sito statico
+[assets]
+directory = "./public"
+binding = "ASSETS"
+# il tasto "scarica" deve passare dal worker, altrimenti il download non si conta
+# la home passa dal worker: serve a dare a WhatsApp/Instagram un'anteprima
+# giusta quando si condivide un link d'evento (?e=...)
+run_worker_first = ["/fuori.apk", "/", "/index.html"]
+
+[ai]
+binding = "AI"
+
+[vars]
+ADMIN_EMAIL = "christianguarrera@gmail.com"
+
+# un promemoria al giorno alle 9 (ora italiana d'inverno): leggero, uno solo
+[triggers]
+crons = ["0 9 * * *"]

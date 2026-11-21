@@ -1,0 +1,18 @@
+login.title|Bentornato|Welcome back|Bienvenido|Bem-vindo
+login.sub|Entra con la mail con cui ti sei registrato. Il profilo torna com'era.|Sign in with the email you used. Your profile comes back as it was.|Entra con el email con el que te registraste. Tu perfil vuelve como estaba.|Entre com o email que você usou. Seu perfil volta como estava.
+login.enter|Entra|Sign in|Entrar|Entrar
+login.err|Email o password sbagliati.|Wrong email or password.|Email o contraseña incorrectos.|Email ou senha errados.
+login.noAccount|Non hai un account? Registrati|No account? Sign up|¿No tienes cuenta? Regístrate|Sem conta? Cadastre-se
+login.haveAccount|Hai già un account? Entra|Already have an account? Sign in|¿Ya tienes cuenta? Entra|Já tem conta? Entre
+login.working|Entro…|Signing in…|Entrando…|Entrando…
+reg.password|Password|Password|Contraseña|Senha
+reg.passwordHint|Almeno 8 caratteri. Serve a ritrovare il tuo profilo su un altro telefono.|At least 8 characters. It brings your profile back on another phone.|Al menos 8 caracteres. Sirve para recuperar tu perfil en otro teléfono.|Pelo menos 8 caracteres. Serve para recuperar seu perfil em outro telefone.
+reg.errPassword|La password è troppo corta: almeno 8 caratteri.|Password too short: at least 8 characters.|Contraseña demasiado corta: al menos 8 caracteres.|Senha curta demais: pelo menos 8 caracteres.
+reg.errExists|Questa mail è già registrata. Entra con la password.|That email is already registered. Sign in with your password.|Ese email ya está registrado. Entra con tu contraseña.|Esse email já está registrado. Entre com sua senha.
+reg.done|Sei dentro.|You're in.|Estás dentro.|Você está dentro.
+prof.logout|Esci|Sign out|Salir|Sair
+prof.logoutConfirm|Esci da questo telefono? Il profilo resta salvato, puoi rientrare quando vuoi.|Sign out of this phone? Your profile stays saved.|¿Salir de este teléfono? Tu perfil queda guardado.|Sair deste telefone? Seu perfil fica salvo.
+prof.interests|Cosa ti interessa|What you're into|Qué te interesa|Do que você gosta
+prof.interestsSaved|Interessi aggiornati.|Interests updated.|Intereses actualizados.|Interesses atualizados.
+onb.saveInterests|Salva gli interessi|Save interests|Guardar intereses|Salvar interesses
+onb.allHint|Tutte le attività, divise per categoria. Segna quelle che ti va di fare.|All activities, by category. Mark the ones you'd do.|Todas las actividades, por categoría. Marca las que harías.|Todas as atividades, por categoria. Marque as que você faria.

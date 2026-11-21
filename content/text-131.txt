@@ -1,0 +1,5 @@
+detail.edit|Modifica|Edit|Editar|Editar
+edit.title|Modifica evento|Edit event|Editar evento|Editar evento
+edit.sub|Cambia quello che vuoi e salva: chi è già iscritto resta iscritto.|Change whatever you like and save: people already in stay in.|Cambia lo que quieras y guarda: quien ya está dentro sigue dentro.|Mude o que quiser e salve: quem já está dentro continua dentro.
+edit.save|Salva modifiche|Save changes|Guardar cambios|Salvar alterações
+edit.ok|Evento aggiornato|Event updated|Evento actualizado|Evento atualizado

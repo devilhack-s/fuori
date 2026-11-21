@@ -1,0 +1,37 @@
+map.loading|Carico la mappa…|Loading the map…|Cargando el mapa…|Carregando o mapa…
+perm.open|Autorizzazioni|Permissions|Permisos|Permissões
+perm.title|Cosa serve per usarla bene|What the app needs|Lo que necesita la app|O que o app precisa
+perm.sub|Tre permessi e niente di più: dove sei, il microfono per parlarci, le notifiche quando serve davvero. Puoi spegnerli quando vuoi, da qui.|Three permissions, nothing more: where you are, the microphone to talk to us, notifications when it actually matters. You can turn them off from here anytime.|Tres permisos y nada más: dónde estás, el micrófono para hablarnos, las notificaciones cuando de verdad hacen falta. Puedes desactivarlos aquí cuando quieras.|Três permissões e nada mais: onde você está, o microfone para falar com a gente, as notificações quando realmente importa. Você pode desligá-las aqui quando quiser.
+perm.geo|Posizione|Location|Ubicación|Localização
+perm.mic|Microfono|Microphone|Micrófono|Microfone
+perm.push|Notifiche|Notifications|Notificaciones|Notificações
+perm.ask|Da attivare|Not on yet|Sin activar|Ainda não
+perm.yes|Attivo|On|Activo|Ativo
+perm.no|Bloccato|Blocked|Bloqueado|Bloqueado
+perm.na|Non disponibile|Not available|No disponible|Indisponível
+perm.on|Attiva|Turn on|Activar|Ativar
+perm.settings|Impostazioni|Settings|Ajustes|Configurações
+perm.done|Fatto|Done|Hecho|Pronto
+perm.hint|Una voce è bloccata. Si riapre dalle impostazioni del telefono: cerca FUORI (o Chrome) e poi Autorizzazioni.|One item is blocked. Reopen it in your phone settings: look for FUORI (or Chrome), then Permissions.|Una opción está bloqueada. Se reactiva en los ajustes del teléfono: busca FUORI (o Chrome) y luego Permisos.|Um item está bloqueado. Reative nas configurações do telefone: procure FUORI (ou Chrome) e depois Permissões.
+perm.geoNo|La posizione serve per dirti cosa c'è vicino. Senza permesso del telefono non posso usarla.|Location is how I tell you what's nearby. Without the phone's permission I can't use it.|La ubicación sirve para decirte qué hay cerca. Sin el permiso del teléfono no puedo usarla.|A localização serve para dizer o que há perto. Sem a permissão do telefone não consigo usar.
+perm.micOk|Microfono pronto.|Microphone ready.|Micrófono listo.|Microfone pronto.
+perm.blockedHint|Se l'hai bloccato, riaprilo dalle impostazioni del telefono.|If you blocked it, turn it back on in your phone settings.|Si lo bloqueaste, vuelve a activarlo en los ajustes del teléfono.|Se você bloqueou, reative nas configurações do telefone.
+perm.androidHint|Su Android fotocamera, microfono e posizione appartengono a Chrome, non a FUORI: in Info app possono non comparire, ed è normale. Per cambiarle: Chrome → ⋮ → Impostazioni → Impostazioni sito.|On Android the camera, microphone and location belong to Chrome, not FUORI: they may not appear in App info, and that is normal. To change them: Chrome → ⋮ → Settings → Site settings.|En Android la cámara, el micrófono y la ubicación pertenecen a Chrome, no a FUORI: puede que no aparezcan en Info de la app, y es normal. Para cambiarlas: Chrome → ⋮ → Ajustes → Configuración de sitios.|No Android a câmera, o microfone e a localização pertencem ao Chrome, não ao FUORI: podem não aparecer em Info do app, e isso é normal. Para alterá-las: Chrome → ⋮ → Configurações → Configurações de sites.
+perm.testBtn|Prova una notifica|Send a test notification|Probar una notificación|Testar uma notificação
+perm.testSent|Inviata: guarda in alto sullo schermo|Sent: look at the top of the screen|Enviada: mira arriba de la pantalla|Enviada: olhe no topo da tela
+perm.testOff|Prima accendi le notifiche qui sopra.|Turn notifications on above first.|Primero activa las notificaciones arriba.|Primeiro ative as notificações acima.
+twa.bar|Gli avvisi arrivano a nome Chrome. Per averli a nome FUORI: apri il sito in Chrome e tocca Installa app.|Notifications come from Chrome. To get them from FUORI: open the site in Chrome and tap Install app.|Las notificaciones llegan como Chrome. Para tenerlas como FUORI: abre el sitio en Chrome y toca Instalar app.|As notificações chegam como Chrome. Para tê-las como FUORI: abra o site no Chrome e toque em Instalar app.
+twa.btn|Come si fa|How to|Cómo se hace|Como fazer
+twa.title|Avvisi a nome FUORI|Notifications as FUORI|Notificaciones como FUORI|Notificações como FUORI
+twa.sub|Tre tocchi, una volta sola. Poi usi quell'icona e le notifiche portano il nome e il simbolo di FUORI.|Three taps, once. Then use that icon and notifications carry the FUORI name and symbol.|Tres toques, una vez. Luego usa ese icono y las notificaciones llevan el nombre y el símbolo de FUORI.|Três toques, uma vez. Depois use esse ícone e as notificações levam o nome e o símbolo do FUORI.
+twa.s1|Apri Chrome e vai su fuori.fuori-catania.workers.dev|Open Chrome and go to fuori.fuori-catania.workers.dev|Abre Chrome y ve a fuori.fuori-catania.workers.dev|Abra o Chrome e vá para fuori.fuori-catania.workers.dev
+twa.s2|Tocca il menu in alto a destra (tre puntini) e scegli Installa app (o Aggiungi a schermata Home)|Tap the menu at the top right (three dots) and choose Install app (or Add to Home screen)|Toca el menú arriba a la derecha (tres puntos) y elige Instalar app (o Añadir a pantalla de inicio)|Toque no menu no canto superior direito (três pontos) e escolha Instalar app (ou Adicionar à tela inicial)
+twa.s3|Apri FUORI da quella icona nuova e tocca Accendi sugli avvisi: da lì in poi arrivano a nome FUORI|Open FUORI from that new icon and turn notifications on: from then on they come as FUORI|Abre FUORI desde ese icono nuevo y activa las notificaciones: desde ahí llegan como FUORI|Abra o FUORI por esse ícone novo e ative as notificações: a partir daí chegam como FUORI
+create.accessInvite|Solo su invito · indirizzo nascosto|Invite only · hidden address|Solo por invitación · dirección oculta|Somente por convite · endereço oculto
+access.invite|Su invito|Invite only|Por invitación|Por convite
+invite.hidden|Indirizzo nascosto: si vede solo dopo l'invito|Address hidden: visible only once invited|Dirección oculta: solo se ve tras la invitación|Endereço oculto: só aparece depois do convite
+invite.onlyInvited|Evento privato: si entra solo con l'invito di chi organizza. Chiedi il link a chi lo ha creato.|Private event: entry only with the organiser's invite. Ask them for the link.|Evento privado: se entra solo con la invitación de quien organiza. Pídele el enlace.|Evento privado: só entra com o convite de quem organiza. Peça o link a essa pessoa.
+invite.share|Copia link d'invito|Copy invite link|Copiar enlace de invitación|Copiar link do convite
+invite.copied|Link d'invito copiato: chi lo riceve può entrare|Invite link copied: whoever gets it can join|Enlace copiado: quien lo reciba puede entrar|Link copiado: quem receber pode entrar
+card.ages|{a}–{b} anni|{a}–{b} years|{a}–{b} años|{a}–{b} anos
+card.ageOne|{a} anni|{a} years|{a} años|{a} anos

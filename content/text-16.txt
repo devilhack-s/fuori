@@ -1,0 +1,22 @@
+map.btn|Mappa|Map|Mapa|Mapa
+map.title|Chi c'è, adesso|Who's around, right now|Quién hay, ahora|Quem está por perto, agora
+map.sub|Tu, le persone intorno e gli eventi qui vicino. La posizione serve solo a questo.|You, the people around you and the events nearby. Location is only used for this.|Tú, la gente alrededor y los eventos cercanos. La ubicación solo sirve para esto.|Você, as pessoas ao redor e os eventos por perto. A localização só serve para isso.
+map.share|Mostrami sulla mappa|Show me on the map|Muéstrame en el mapa|Mostre-me no mapa
+map.shareHint|Posizione approssimata a circa 100 metri, sparisce dopo 45 minuti. Puoi spegnerla quando vuoi.|Approximate location, about 100 metres, gone after 45 minutes. You can switch it off whenever.|Ubicación aproximada a unos 100 metros, desaparece a los 45 minutos. Puedes apagarla cuando quieras.|Localização aproximada em cerca de 100 metros, some depois de 45 minutos. Pode desligar quando quiser.
+map.you|Tu sei qui|You are here|Tú estás aquí|Você está aqui
+map.legendPeople|Persone|People|Personas|Pessoas
+map.legendEvents|Eventi|Events|Eventos|Eventos
+map.privacy|La mappa usa OpenStreetMap, che è libera e gratuita. La tua posizione non finisce in nessuna cronologia: serve solo a dirti cosa hai intorno.|The map uses OpenStreetMap, which is free and open. Your location is not kept in any history: it only tells you what's around.|El mapa usa OpenStreetMap, que es libre y gratuito. Tu ubicación no va a ningún historial: solo sirve para decirte qué hay alrededor.|O mapa usa OpenStreetMap, que é livre e gratuito. Sua localização não entra em histórico nenhum: só serve para dizer o que há por perto.
+map.needPos|Senza la tua posizione ti mostro la Sicilia da Catania. Se vuoi, riprova.|Without your location I'll show Catania from the centre. Try again if you like.|Sin tu ubicación te muestro Catania desde el centro. Si quieres, reintenta.|Sem sua localização mostro Catania do centro. Se quiser, tente de novo.
+map.noLib|La mappa non si è caricata, forse sei offline. Riprova tra un attimo.|The map didn't load, maybe you're offline. Try again in a moment.|El mapa no se cargó, quizá estés sin conexión. Reintenta en un momento.|O mapa não carregou, talvez você esteja offline. Tente de novo em instantes.
+map.open|Apri l'evento|Open the event|Abrir el evento|Abrir o evento
+map.rosterTitle|Chi partecipa|Who's coming|Quién participa|Quem participa
+map.rosterSub|{n} su {cap} posti|{n} of {cap} spots|{n} de {cap} plazas|{n} de {cap} vagas
+map.rosterEmpty|Per ora c'è solo chi organizza.|For now it's just the organiser.|Por ahora solo está quien organiza.|Por enquanto só tem quem organiza.
+map.who|Chi c'è|Who's coming|Quién hay|Quem está
+map.peopleEmpty|Nessuno si è ancora mostrato qui intorno.|Nobody has shown up around here yet.|Nadie se ha mostrado por aquí todavía.|Ninguém se mostrou por aqui ainda.
+map.eventsEmpty|Nessun evento con un posto preciso qui vicino.|No events with an exact spot nearby.|Ningún evento con un lugar exacto cerca.|Nenhum evento com local exato por perto.
+map.away|{n} m da te|{n} m away|{n} m de ti|{n} m de você
+map.awayKm|{n} km da te|{n} km away|{n} km de ti|{n} km de você
+map.loading|Guardo chi c'è intorno…|Looking around…|Mirando quién hay alrededor…|Olhando quem está por perto…
+map.added|Aggiunta alle attività: da adesso la vedono tutti.|Added to the activities: now everyone sees it.|Añadida a las actividades: ahora la ven todos.|Adicionada às atividades: agora todos veem.

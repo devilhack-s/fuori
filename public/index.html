@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FUORI — Cosa ti va di fare oggi?</title>
+<meta name="description" content="Eventi, persone e idee per uscire. In Sicilia, a due passi da dove sei. Gratis, senza pubblicità.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FUORI">
+<meta property="og:locale" content="it_IT">
+<meta property="og:title" content="FUORI — Cosa ti va di fare oggi?">
+<meta property="og:description" content="Eventi, persone e idee per uscire. In Sicilia, a due passi da dove sei.">
+<meta property="og:url" content="https://fuori.fuori-catania.workers.dev/">
+<meta property="og:image" content="https://fuori.fuori-catania.workers.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="FUORI — Cosa ti va di fare oggi?">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FUORI — Cosa ti va di fare oggi?">
+<meta name="twitter:description" content="Eventi, persone e idee per uscire. In Sicilia, a due passi da dove sei.">
+<meta name="twitter:image" content="https://fuori.fuori-catania.workers.dev/og.png">
+<meta name="twitter:image:alt" content="FUORI — eventi in Sicilia">
+<meta name="theme-color" content="#060606">
+<meta name="color-scheme" content="dark">
+<link rel="manifest" href="/manifest.webmanifest?v=95b621e8">
+<link rel="icon" href="/icons/favicon-32.png?v=95b621e8" sizes="32x32">
+<link rel="icon" href="/icons/favicon-192.png?v=95b621e8" sizes="192x192">
+<link rel="apple-touch-icon" href="/icons/icon-180.png?v=95b621e8">
+<link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
+<script src="/boot.js?v=560"></script>
+<link rel="stylesheet" href="/styles.css?v=560">
+<link rel="preload" as="script" href="/app.min.js?v=560">
+</head>
+<body>
+
+<div id="app">
+  <header class="bar">
+    <a class="mark" href="/" aria-label="FUORI">
+      <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <path class="ring" d="M82 54A32 32 0 1 1 50 22" stroke="currentColor" stroke-width="9" stroke-linecap="butt"/>
+        <path class="plane" d="M96 10 56.8 29.7 70.8 32.1Z" fill="currentColor"/>
+        <path class="plane2" d="M96 10 70.8 32.1 71.2 46.3Z" fill="currentColor" fill-opacity=".72"/>
+      </svg>
+      <span>FUORI</span>
+    </a>
+    <div class="bar-right">
+      <button id="loginBtn" class="login-pill" type="button" hidden data-i="login.enter"></button>
+      <button id="langBtn" class="lang" type="button" aria-label="Lingua">
+        <svg class="globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3.5 9h17M3.5 15h17"/><path d="M12 3c2.6 3 2.6 15 0 18M12 3c-2.6 3-2.6 15 0 18"/></svg>
+        <span class="lang-word" data-i="lang.word">Lingua</span>
+        <span id="langLabel">IT</span>
+        <span class="caret" aria-hidden="true">▾</span>
+      </button>
+      <button id="meBtn" class="me" type="button" aria-label="Profilo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c1.3-3.4 4.2-5 7.5-5s6.2 1.6 7.5 5"/></svg></button>
+    </div>
+  </header>
+
+  <button id="helpBtn" class="help-strip" type="button">
+    <span class="q" aria-hidden="true">?</span>
+    <span data-i="help.btn">Come funziona l'app</span>
+    <span class="hs-go" aria-hidden="true">›</span>
+  </button>
+
+  <div id="homeView">
+  <div class="top-utility">
+    <button id="installBtn" class="btn ghost sm" type="button" data-i="home.install">Scarica l'app</button>
+  </div>
+  <section class="hero">
+    <div class="hero-top">
+      <p class="kicker" id="heroHi">Ciao</p>
+      <button class="hero-zone" id="heroZone" type="button" title="Aggiorna la posizione" aria-label="Aggiorna la posizione" hidden></button>
+    </div>
+    <h1 data-i="hero.title">Cosa ti va di fare oggi?</h1>
+    <p class="sub" id="heroSub"></p>
+  <div class="hand-row pills-hero">
+    <img class="pills-photo" data-nozoom src="/hero-hands-photo.webp?v=560" alt="Due mani vere aperte, una accanto all'altra" loading="eager" decoding="async">
+    <span class="pills-glow" aria-hidden="true"></span>
+    <button id="heroFind" class="hand-pill blue pill-right" type="button">
+      <span class="hp-main" data-i="hero.pillTake">Partecipa a un evento</span>
+      <span class="hp-sub" data-i="hero.pillTakeSub">guarda cosa c'è</span>
+    </button>
+    <button id="heroCreate" class="hand-pill red pill-left" type="button">
+      <span class="hp-main" data-i="hero.pillMake">Crea il tuo evento</span>
+      <span class="hp-sub" data-i="hero.pillMakeSub">prima guarda cosa ti va</span>
+    </button>
+  </div>
+    <div class="hero-social">
+      <button class="hero-share" id="heroShareBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.4 15.4 6.6M8.6 13.6l6.8 3.8"/></svg>
+        <span data-i="hero.share">Condividi con un amico</span>
+      </button>
+      <button class="hero-share hero-feedback" id="feedbackBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L18 10a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg>
+        <span data-i="home.feedback">Lascia un parere</span>
+      </button>
+    </div>
+  </section>
+
+
+
+  <section class="mood-card" id="moodCard">
+    <h2 class="mood-q" data-i="mood.q">Come ti senti oggi?</h2>
+    <p class="mood-sub" data-i="mood.sub"></p>
+    <p class="tiny mood-where" id="moodWhere"></p>
+    <div class="mood-chips" id="moodChips"></div>
+    <button class="mood-other" id="moodOther" type="button"><span data-i="mood.other">Valuta altro</span><span aria-hidden="true">↓</span></button>
+    <div class="mood-ideas" id="moodIdeas" hidden></div>
+  </section>
+
+  <section class="tools tools-radius">
+    <div class="radius-box">
+      <div class="radius-top">
+        <label class="radius-lbl" for="radiusRange" data-i="radius.pick">Quanto lontano vuoi cercare?</label>
+        <b class="radius-val" id="radiusVal"></b>
+      </div>
+      <input id="radiusRange" class="range" type="range" min="0" max="300" step="10" value="0" aria-label="Raggio">
+      <p class="hint" id="radiusNote"></p>
+    </div>
+  </section>
+
+  <section class="matrix-wrap">
+    <p class="kicker" data-i="matrix.title">Cosa ti va di fare?</p>
+    <div id="catMatrix" class="matrix"></div>
+    <button id="mapBtn" class="map-btn big" type="button">
+      <span class="map-ico" aria-hidden="true">🗺</span>
+      <span data-i="map.explore">Esplora la mappa</span>
+      <span class="map-go" aria-hidden="true">›</span>
+    </button>
+    <p class="wx" id="wxLine" hidden></p>
+    <p class="hint" id="forYouNote" hidden></p>
+    <button id="actJump" class="act-jump" type="button">
+      <span class="aj-main" data-i="actList.jump">Vuoi qualche idea?</span>
+      <small class="aj-sub" data-i="actList.jumpSub">Scegli l'attività che preferisci</small>
+      <span class="aj-go" aria-hidden="true">↓</span>
+    </button>
+  </section>
+
+  <section class="events-wrap">
+    <p class="kicker" data-i="actList.title">Ecco le attività in programma</p>
+    <p class="hint act-index-sub" data-i="actList.sub">Gli eventi già creati, vicino a te. Tocca uno per vedere chi c'è.</p>
+    <div class="ord-row">
+      <label class="ord-lbl" for="ordineSel" data-i="ord.label">Ordina per</label>
+      <select id="ordineSel" class="ord-sel">
+        <option value="prima" data-i="ord.prima">Per data (prima)</option>
+        <option value="nuovi" data-i="ord.nuovi">Pubblicati di recente</option>
+      </select>
+    </div>
+    <main id="list" class="list" aria-live="polite"></main>
+    <button id="moreBtn" class="more" type="button" hidden data-i="home.more">Mostra altri</button>
+  </section>
+
+  <section class="act-index-wrap" id="actIndexWrap" hidden>
+    <p class="kicker" data-i="actList.actsTitle">Tutte le attività</p>
+    <p class="hint act-index-sub" data-i="actList.actsSub">L'elenco completo, diviso per categoria. Tocca un'attività per creare l'evento.</p>
+    <div id="actIndex" class="act-index"></div>
+  </section>
+  <footer class="foot">
+    <div class="foot-row">
+      <button id="privacyBtn" class="tiny" type="button" data-i="privacy.title">Dati e privacy</button>
+      <span class="dot">·</span>
+      <span class="tiny" data-i="rights.short">© 2026 FUORI · Tutti i diritti riservati</span>
+    </div>
+    <p class="foot-rights tiny" data-i="rights.long">Contenuti, testi e marchio protetti: vietata la copia.</p>
+    <div class="foot-row" id="ownerBox">
+      <span class="dot" id="verDot" hidden>·</span>
+      <span class="tiny" id="version" hidden>v9</span>
+      <span class="tiny owner-line" id="ownerLine" hidden>Christian Guarrera · christianguarrera@gmail.com</span>
+    </div>
+  </footer>
+  </div>
+
+  <section id="feedView" class="feed-view" hidden>
+    <div class="feed-head">
+      <div>
+        <p class="kicker" data-i="feed.kicker">Community</p>
+        <h1 class="feed-title" data-i="feed.title">Quello che succede fuori</h1>
+      </div>
+      <button id="newPostBtn" class="btn primary feed-new" type="button" data-i="feed.new">Pubblica</button>
+    </div>
+    <p class="hint feed-hint" data-i="feed.hint">Foto vere, di persone vere. Metti il like, commenta, o pubblica tu.</p>
+    <div id="pastBox" class="past-box" hidden></div>
+    <div id="feedList" class="feed-list"></div>
+    <p class="hint" id="feedEmpty" hidden data-i="feed.empty">Ancora nessun post. Puoi essere il primo: una foto e due righe.</p>
+    <button id="feedMore" class="more" type="button" hidden data-i="feed.more">Mostra altri</button>
+  </section>
+
+  <div class="dock-space"></div>
+</div>
+
+<nav class="dock" id="dock" aria-label="Menu">
+  <button class="tab on" data-view="home" type="button" aria-label="Home">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2"/><path d="M6.2 10v9.2h11.6V10"/></svg>
+    <span data-i="tab.home">Home</span>
+  </button>
+  <button class="tab" data-view="feed" type="button" aria-label="Community">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.6" y="4.6" width="16.8" height="14.8" rx="3.2"/><circle cx="8.8" cy="9.4" r="1.6"/><path d="m6 17 4.2-4.2 3 3 2.2-2.2L20 17"/></svg>
+    <span data-i="tab.feed">Community</span>
+  </button>
+  <button id="createBtn" class="dock-plus" type="button" aria-label="Nuovo evento">+</button>
+  <button id="favBtn" class="tab dock-fav" type="button" aria-label="Preferiti">
+    <svg class="favHeart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.6C9.1 18.6 2.8 13.9 2.8 8.9c0-3 2.2-5.1 4.9-5.1 1.8 0 3.5 1 4.3 2.6.8-1.6 2.5-2.6 4.3-2.6 2.7 0 4.9 2.1 4.9 5.1 0 5-6.3 9.7-9.2 11.7z"/></svg>
+    <span id="favCount" class="favcount" hidden></span>
+    <span data-i="tab.fav">Preferiti</span>
+  </button>
+  <button class="tab" data-view="profile" type="button" aria-label="Profilo">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.6" r="3.6"/><path d="M4.8 20c1.3-3.4 4.1-5 7.2-5s5.9 1.6 7.2 5"/></svg>
+    <span data-i="tab.profile">Profilo</span>
+  </button>
+</nav>
+<button id="aiBtn" class="ai-bubble" type="button" aria-label="Assistente">AI</button>
+
+<div class="sheet" id="photoSheet" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="photo.title">Aggiungi una foto</h2>
+    <p class="muted" data-i="photo.sub">Scattala adesso o sceglila dalla galleria.</p>
+    <div class="photo-opts">
+      <button class="photo-opt" id="photoCam" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.4"/></svg>
+        <span data-i="post.camera">Scatta una foto</span>
+      </button>
+      <button class="photo-opt" id="photoLib" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="m4 17 5-5 4 4 3-3 4 4"/></svg>
+        <span data-i="post.gallery">Dalla galleria</span>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="sheet" id="post" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="post.title">Pubblica qualcosa</h2>
+    <p class="muted" data-i="post.sub">Una foto, due righe. Quello che ti va.</p>
+    <button class="post-photo" id="postPick" type="button">
+      <img id="postPreview" alt="" hidden>
+      <span class="post-plus" id="postPlus" aria-hidden="true">+</span>
+      <span class="post-photo-t" data-i="post.photoAdd">Carica o scatta una foto</span>
+    </button>
+    <input id="postInput" type="file" accept="image/*" hidden>
+    <input id="postCamInput" type="file" accept="image/*" capture="environment" hidden>
+    <label class="field" id="postEventWrap" hidden><span data-i="post.eventLabel">Da quale evento?</span>
+      <select id="postEvent"></select>
+    </label>
+    <label class="field"><span data-i="post.caption">Scrivi qualcosa</span>
+      <textarea id="postCaption" rows="3" maxlength="400" data-ph="post.captionPh"></textarea>
+    </label>
+    <p class="err" id="postError" hidden></p>
+    <button class="btn primary wide" id="postSend" type="button" data-i="post.send">Pubblica</button>
+  </div>
+</div>
+
+<div class="sheet" id="pcomments" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="cm.title">Commenti</h2>
+    <div id="cmList" class="cm-list"></div>
+    <form id="cmForm" class="cm-form" novalidate>
+      <input id="cmText" type="text" maxlength="300" data-ph="cm.ph" autocomplete="off">
+      <button class="btn primary" id="cmSend" type="submit" data-i="cm.send">Invia</button>
+    </form>
+    <p class="err" id="cmError" hidden></p>
+  </div>
+</div>
+
+<div class="sheet" id="fav" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="fav.title">I tuoi preferiti</h2>
+    <p class="muted" id="favSub" data-i="fav.sub"></p>
+    <div class="chips fav-filtri" id="favFiltri"></div>
+    <div id="favList" class="list"></div>
+  </div>
+</div>
+
+<div class="sheet" id="detail" hidden><div class="sheet-in"><div id="detailBody" class="sheet-body"></div></div></div>
+
+<div class="sheet" id="catSheet" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <div class="cs-head">
+      <span class="cs-emoji" id="csEmoji" aria-hidden="true"></span>
+      <div class="cs-txt"><h2 id="csTitle"></h2><p class="muted" id="csSub"></p></div>
+    </div>
+    <div id="csList" class="cs-list"></div>
+  </div>
+</div>
+
+<div class="sheet" id="moodSheet" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <div class="cs-head">
+      <span class="cs-emoji" id="msEmoji" aria-hidden="true"></span>
+      <div class="cs-txt"><h2 id="msTitle"></h2><p class="muted" id="msSub"></p></div>
+    </div>
+    <div id="msList" class="cs-list"></div>
+    <button class="btn primary wide" id="msCreate" type="button"></button>
+  </div>
+</div>
+
+<div class="sheet" id="passati" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="past.tuttiTitolo">Tutti gli eventi passati</h2>
+    <p class="muted" data-i="past.tuttiSub">Tutti i ricordi della community: puoi ordinarli e filtrare.</p>
+    <div class="chips past-filtri" id="passatiFiltri"></div>
+    <div id="passatiList" class="pcards"></div>
+  </div>
+</div>
+
+<div class="sheet" id="pastDetail" hidden><div class="sheet-in"><div id="pastDetailBody" class="sheet-body"></div></div></div>
+
+<div class="sheet" id="pastEdit" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2>Modifica il ricordo</h2>
+    <form id="pastEditForm" novalidate>
+      <label class="field"><span>Titolo</span><input name="title" maxlength="90" required></label>
+      <label class="field"><span>Descrizione</span><textarea name="description" rows="4" maxlength="500"></textarea></label>
+      <div class="field">
+        <span data-i="create.photos"></span>
+        <div class="evphotos" id="pastPhotos"></div>
+        <input type="file" id="pastPhotoInput" accept="image/*" multiple hidden>
+        <input type="file" id="pastPhotoCamInput" accept="image/*" capture="environment" hidden>
+        <button class="photopick" type="button" id="pastPhotoAdd"></button>
+        <span class="hint" data-i="create.photoHint"></span>
+      </div>
+      <label class="field"><span>Posto</span><input name="place" maxlength="90"></label>
+      <label class="field"><span>Città</span><input name="city" maxlength="40"></label>
+      <label class="field"><span>Attività</span><input name="activity" maxlength="40"></label>
+      <div class="row">
+        <label class="field"><span>Categoria</span><select name="category"></select></label>
+        <label class="field"><span>Quando</span><input name="when" type="datetime-local"></label>
+      </div>
+      <label class="field"><span>Organizza</span><input name="host" maxlength="60"></label>
+      <p class="err" id="pastEditErr" hidden></p>
+      <button class="btn primary wide" type="submit">Salva</button>
+    </form>
+  </div>
+</div>
+
+<div class="sheet" id="create" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 id="createTitle" data-i="create.title">Nuovo evento</h2>
+    <p class="muted" id="createSub" data-i="create.sub"></p>
+    <form id="createForm" novalidate>
+      <label class="field"><span data-i="create.name"></span><input name="title" maxlength="80" data-ph="create.namePh" required></label>
+      <div class="field" id="evPhotosField">
+        <span data-i="create.photos"></span>
+        <div class="evphotos" id="evPhotos"></div>
+        <input type="file" id="evPhotoInput" accept="image/*" multiple hidden>
+        <input type="file" id="evPhotoCamInput" accept="image/*" capture="environment" hidden>
+        <button class="photopick" type="button" id="evPhotoAdd"></button>
+        <span class="hint" data-i="create.photoHint"></span>
+      </div>
+      <div class="row">
+        <label class="field"><span data-i="create.cat"></span><select name="category" id="catSelect"></select></label>
+        <label class="field"><span data-i="create.activity"></span>
+          <input name="activity" id="activityInput" list="activityList" maxlength="40" autocomplete="off" data-ph="create.activityPh">
+          <datalist id="activityList"></datalist>
+          <span class="hint" data-i="create.activityHint"></span>
+        </label>
+      </div>
+      <label class="field"><span data-i="create.when"></span><input name="when" type="datetime-local" required></label>
+      <div class="rep-box">
+        <label class="field"><span data-i="create.repTitle"></span>
+          <select name="mode" id="repMode">
+            <option value="single" data-i="create.repSingle"></option>
+            <option value="range" data-i="create.repRange"></option>
+            <option value="days" data-i="create.repDays"></option>
+            <option value="weekly" data-i="create.repWeekly"></option>
+          </select>
+        </label>
+        <label class="field" id="repEndWrap" hidden><span data-i="create.repEnd"></span><input name="endWhen" type="datetime-local">
+          <label class="tiny check"><input type="checkbox" id="repVaryTimes"> <span data-i="create.repVary"></span></label>
+        </label>
+        <div class="field" id="repRangeRows" hidden></div>
+        <div class="field" id="repDaysWrap" hidden>
+          <span data-i="create.repDaysList"></span>
+          <div class="pos"><input name="dayPick" id="dayPick" type="date"><input name="timePick" id="timePick" type="time"><button class="tiny" type="button" id="dayAdd" data-i="create.dayAdd"></button></div>
+          <div class="chips" id="dayChips"></div>
+        </div>
+        <div class="field" id="repWeekWrap" hidden>
+          <span data-i="create.repWeekday"></span>
+          <div class="pos"><select name="weekday" id="weekdaySel">
+            <option value="1" data-i="day.lun"></option>
+            <option value="2" data-i="day.mar"></option>
+            <option value="3" data-i="day.mer"></option>
+            <option value="4" data-i="day.gio"></option>
+            <option value="5" data-i="day.ven"></option>
+            <option value="6" data-i="day.sab"></option>
+            <option value="0" data-i="day.dom"></option>
+          </select><input name="weekdayTime" id="weekdayTime" type="time"><button class="tiny" type="button" id="weekdayAdd" data-i="create.dayAdd"></button></div>
+          <div class="chips" id="weekdayChips"></div>
+          <label class="field"><span data-i="create.repUntil"></span><input name="repeatUntil" type="date"></label>
+        </div>
+      </div>
+      <label class="field"><span data-i="create.where"></span>
+        <div class="pos">
+          <input name="place" id="placeInput" maxlength="90" data-ph="create.wherePh" autocomplete="off" required>
+          <div class="sugg" id="placeSugg" hidden></div>
+        </div>
+        <button class="tiny left" id="createNearBtn" type="button" data-i="place.near"></button>
+      </label>
+      <label class="field"><span data-i="create.desc"></span><textarea name="description" rows="3" maxlength="500" data-ph="create.descPh"></textarea></label>
+      <div class="row">
+        <label class="field"><span data-i="create.capacity"></span><input name="capacity" type="number" min="2" max="500" value="12" inputmode="numeric"></label>
+        <label class="field"><span data-i="create.host"></span><input name="host" maxlength="40" data-ph="create.host"></label>
+      </div>
+      <label class="field"><span data-i="create.age"></span>
+        <div class="ageslide" id="ageSlide">
+          <div class="ageslide-track"><b id="ageFill"></b></div>
+          <input type="range" id="ageMin" min="18" max="90" step="1" value="18" aria-label="Età minima">
+          <input type="range" id="ageMax" min="18" max="90" step="1" value="90" aria-label="Età massima">
+        </div>
+        <span class="hint" id="ageHint" data-i="create.ageHint"></span>
+      </label>
+      <label class="field"><span data-i="create.access"></span>
+        <select name="access">
+
+          <option value="photo" data-i="create.accessPhoto"></option>
+          <option value="verified" data-i="create.accessVerified"></option>
+          <option value="invite" data-i="create.accessInvite"></option>
+        </select>
+      </label>
+      <label class="field"><span data-i="create.approval"></span>
+        <select name="approval">
+          <option value="0" data-i="create.approvalAll"></option>
+          <option value="1" data-i="create.approvalMine"></option>
+        </select>
+      </label>
+      <label class="field"><span data-i="create.deadline"></span>
+        <select name="signupHours">
+          <option value="0" data-i="create.deadline0"></option>
+          <option value="2" data-i="create.deadline2"></option>
+          <option value="12" data-i="create.deadline12"></option>
+          <option value="24" data-i="create.deadline24"></option>
+        </select>
+      </label>
+      <p class="err" id="formError" hidden></p>
+      <button class="btn primary wide" id="publishBtn" type="submit" data-i="create.publish"></button>
+    </form>
+  </div>
+</div>
+
+<div class="sheet" id="register" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="reg.title">Chi sei</h2>
+    <p class="muted" data-i="reg.sub"></p>
+    <form id="regForm" novalidate>
+      <div class="row">
+        <label class="field"><span data-i="reg.first"></span><input name="firstName" maxlength="40" autocomplete="given-name" required></label>
+        <label class="field"><span data-i="reg.last"></span><input name="lastName" maxlength="40" autocomplete="family-name" required></label>
+      </div>
+      <label class="field"><span data-i="reg.email"></span><input name="email" type="email" inputmode="email" autocomplete="email" required></label>
+      <label class="field"><span data-i="reg.phone"></span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" data-ph="+39 333 123 4567" required></label>
+      <div class="row">
+        <label class="field"><span data-i="reg.age"></span><input name="age" type="number" min="18" max="99" inputmode="numeric" required></label>
+        <label class="field"><span data-i="reg.sex"></span>
+          <select name="sex">
+            <option value="f" data-i="reg.sexF"></option>
+            <option value="m" data-i="reg.sexC"></option>
+            <option value="n" data-i="reg.sexN"></option>
+          </select>
+        </label>
+      </div>
+      <label class="field"><span data-i="reg.city"></span>
+        <div class="pos">
+          <input name="city" id="regCity" maxlength="40" value="Catania" autocomplete="address-level2" required>
+          <div class="sugg" id="regCitySugg" hidden></div>
+        </div>
+      </label>
+      <label class="field"><span data-i="reg.password"></span><input name="password" type="password" minlength="8" autocomplete="new-password" required><span class="hint" data-i="reg.passwordHint"></span></label>
+      <p class="hint" data-i="reg.real"></p>
+      <label class="check"><input type="checkbox" name="consent" checked><span data-i="reg.consent"></span></label>
+      <p class="err" id="regError" hidden></p>
+      <button class="btn primary wide" id="regBtn" type="submit" data-i="reg.submit"></button>
+      <button class="tiny center" id="toLogin" type="button" data-i="login.haveAccount"></button>
+      <button class="tiny center" id="privacyFromReg" type="button" data-i="reg.privacy"></button>
+    </form>
+  </div>
+</div>
+
+<div class="sheet" id="crop" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="crop.title"></h2>
+    <p class="muted" data-i="crop.sub"></p>
+    <div class="crop-box" id="cropBox">
+      <canvas id="cropCanvas" width="600" height="600"></canvas>
+      <div class="crop-guide" aria-hidden="true"></div>
+    </div>
+    <label class="crop-slider"><span data-i="crop.zoom"></span><input id="cropZoom" type="range" min="1" max="3" step="0.01" value="1"></label>
+    <button class="btn primary wide" id="cropOk" type="button" data-i="crop.ok"></button>
+    <button class="tiny center" id="cropCancel" type="button" data-i="common.cancel"></button>
+  </div>
+</div>
+
+<div class="sheet" id="lang" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="lang.title"></h2>
+    <p class="muted" data-i="lang.hint"></p>
+    <div class="langs" id="langs"></div>
+  </div>
+</div>
+
+<div class="sheet" id="help" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="help.title"></h2>
+    <p class="muted" data-i="help.sub"></p>
+    <div class="help-body">
+      <div class="help-sec">
+        <h3 data-i="help.f1t">A cosa serve</h3>
+        <p class="body" data-i="help.f1p"></p>
+      </div>
+      <div class="help-sec">
+        <h3 data-i="help.f2t">Foto profilo e verifica</h3>
+        <p class="body" data-i="help.f2p"></p>
+      </div>
+      <div class="help-sec">
+        <h3 data-i="help.f3t">Partecipare e creare</h3>
+        <p class="body" data-i="help.f3p"></p>
+      </div>
+    </div>
+    <button class="btn ghost wide" id="helpLang" type="button" data-i="help.lang"></button>
+    <button class="btn primary wide" id="helpAccount" type="button" data-i="help.account"></button>
+  </div>
+</div>
+
+<div class="sheet" id="login" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="login.title">Bentornato</h2>
+    <p class="muted" data-i="login.sub"></p>
+    <form id="loginForm" novalidate>
+      <label class="field"><span data-i="reg.email"></span><input name="email" type="email" inputmode="email" autocomplete="email" required></label>
+      <label class="field"><span data-i="reg.password"></span><input name="password" type="password" autocomplete="current-password" required></label>
+      <p class="err" id="loginError" hidden></p>
+      <button class="btn primary wide" id="loginSubmit" type="submit" data-i="login.enter"></button>
+      <button class="tiny center" id="toRegister" type="button" data-i="login.noAccount"></button>
+      <button class="tiny center" id="toForgot" type="button" data-i="login.forgot"></button>
+    </form>
+  </div>
+</div>
+
+<div class="sheet" id="forgot" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="forgot.title"></h2>
+    <p class="muted" data-i="forgot.sub"></p>
+    <form id="forgotForm" novalidate>
+      <label class="field"><span data-i="reg.email"></span><input name="email" type="email" inputmode="email" autocomplete="email" required></label>
+      <p class="err" id="forgotError" hidden></p>
+      <button class="btn primary wide" id="forgotSubmit" type="submit" data-i="forgot.send"></button>
+      <p class="tiny" id="forgotDone" hidden></p>
+    </form>
+  </div>
+</div>
+
+<div class="sheet" id="reset" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="reset.title"></h2>
+    <p class="muted" data-i="reset.sub"></p>
+    <form id="resetForm" novalidate>
+      <label class="field"><span data-i="reset.password"></span><input name="password" type="password" minlength="8" autocomplete="new-password" required></label>
+      <label class="field"><span data-i="reset.repeat"></span><input name="password2" type="password" minlength="8" autocomplete="new-password" required></label>
+      <p class="err" id="resetError" hidden></p>
+      <button class="btn primary wide" id="resetSubmit" type="submit" data-i="reset.send"></button>
+    </form>
+  </div>
+</div>
+
+<div class="sheet" id="profile" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="prof.title">Il tuo profilo</h2>
+    <div class="prof-top">
+      <label class="avatar" id="photoPick">
+        <img id="profilePhoto" alt="">
+        <span class="cam">+</span>
+        <input id="photoInput" type="file" accept="image/*" hidden>
+      </label>
+      <div class="prof-id">
+        <p class="prof-name" id="profileName"></p>
+        <div class="badges" id="profileBadges"></div>
+        <p class="hint" data-i="prof.realHint"></p>
+        <p class="warn-red" id="photoBadBox" hidden>Questa foto non va bene: qui serve una foto vera del tuo viso, scattata a te. Caricala e verifica il viso per creare o partecipare agli eventi.</p>
+        <button class="tiny" id="groupsBtn" type="button" data-i="mute.groupsBtn"></button>
+      </div>
+    </div>
+    <div class="row">
+      <label class="field"><span data-i="prof.age"></span><input id="profileAge" type="number" min="18" max="99" inputmode="numeric"></label>
+      <label class="field"><span data-i="prof.sex"></span><select id="profileSex"><option value="f" data-i="reg.sexF"></option><option value="m" data-i="reg.sexC"></option><option value="n" data-i="reg.sexN"></option></select></label>
+    </div>
+    <label class="field"><span data-i="prof.bio"></span><textarea id="profileBio" rows="3" maxlength="280" data-ph="prof.bioPh"></textarea></label>
+    <label class="field"><span data-i="prof.looking"></span><textarea id="profileLooking" rows="2" maxlength="200" data-ph="prof.lookingPh"></textarea></label>
+    <label class="field"><span data-i="prof.done"></span><textarea id="profileDone" rows="2" maxlength="300" data-ph="prof.donePh"></textarea></label>
+    <button class="btn primary wide" id="profileSave" type="button" data-i="prof.save">Salva</button>
+    <button class="btn ghost wide" id="interestsBtn" type="button" data-i="prof.interests">Cosa ti interessa</button>
+    <button class="btn ghost wide" id="verifyBtn" type="button" hidden>Verifica il tuo viso</button>
+    <button class="btn ghost wide" id="statsBtn" type="button" hidden>Statistiche</button>
+    <button class="btn ghost wide" id="permsBtn" type="button" data-i="perm.open">Autorizzazioni</button>
+    <button class="btn ghost wide" id="logoutBtn" type="button" data-i="prof.logout">Esci</button>
+  </div>
+</div>
+
+<div id="fotoBig" hidden>
+  <button class="x" type="button" aria-label="Chiudi">×</button>
+  <img alt="">
+  <button class="fb-nav fb-prev" type="button" aria-label="Foto prima">‹</button>
+  <button class="fb-nav fb-next" type="button" aria-label="Foto dopo">›</button>
+  <span class="fb-n" aria-live="polite"></span>
+</div>
+
+<div class="sheet" id="foto" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2>Foto da verificare</h2>
+    <p class="muted">Solo le foto che aspettano ancora la verifica del viso. Quelle già verificate non compaiono.</p>
+    <div id="fotoList" class="foto-grid"></div>
+  </div>
+</div>
+
+<div class="sheet" id="person" hidden><div class="sheet-in"><button class="x" data-close type="button" aria-label="Chiudi">×</button><div id="personBody"></div></div></div>
+
+<div class="sheet" id="feedback" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="fb.title">Cosa non funziona?</h2>
+    <p class="muted" data-i="fb.sub"></p>
+    <form id="fbForm" novalidate>
+      <label class="field"><span data-i="fb.kind"></span><select id="fbKind"><option value="bug" data-i="fb.kindBug"></option><option value="idea" data-i="fb.kindIdea"></option><option value="event" data-i="fb.kindEvent"></option></select></label>
+      <label class="field"><textarea id="fbText" rows="4" maxlength="800" data-ph="fb.ph"></textarea></label>
+      <label class="field"><input id="fbEmail" type="email" inputmode="email" data-ph="fb.emailPh"></label>
+      <p class="err" id="fbError" hidden></p>
+      <button class="btn primary wide" id="fbBtn" type="submit" data-i="fb.send"></button>
+    </form>
+  </div>
+</div>
+
+<div class="sheet" id="verify" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="verify.title">Verifica il tuo viso</h2>
+    <p class="muted" data-i="verify.sub"></p>
+    <div class="vshot">
+      <video id="vVideo" playsinline autoplay muted hidden></video>
+      <img id="vShot" alt="" hidden>
+    </div>
+    <p class="hint" id="vState"></p>
+    <button class="btn ghost wide" id="vOpen" type="button">Apri la fotocamera</button>
+    <button class="btn primary wide" id="vDone" type="button" hidden>Invia per la verifica</button>
+  </div>
+</div>
+
+<div class="sheet" id="stats" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2>I numeri di FUORI</h2>
+    <p class="muted">Solo tu li vedi. Ogni persona conta una volta sola, anche se ricarica o reinstalla.</p>
+    <p class="muted" id="statsOwn"></p>
+    <div id="statsLive"></div>
+    <div class="seg" id="statsRange">
+      <button type="button" data-d="7" class="on">7 giorni</button>
+      <button type="button" data-d="30">30 giorni</button>
+    </div>
+    <div id="statsLetture"></div>
+    <div class="nums" id="statsNums"></div>
+    <div id="statsSerie"></div>
+    <div id="statsTrend"></div>
+    <div id="statsFunnel"></div>
+    <div id="faceBox"></div>
+    <div id="pushBox"></div>
+    <div id="addioBox"></div>
+    <div id="segnalazioniBox"></div>
+    <button class="btn ghost wide" id="fotoDaVerificare" type="button" hidden>Foto da verificare</button>
+    <div id="statsCharts"></div>
+    <h3 class="stat-block-t">Chi c'è</h3>
+    <p class="muted">Tutte le persone in un posto solo: dentro puoi ordinarle e filtrare per foto e verifica.</p>
+    <div id="statsPeople"></div>
+    <div id="statsFriction"></div>
+    <button class="btn ghost wide" id="statsRefresh" type="button">Aggiorna</button>
+  </div>
+</div>
+
+<div class="sheet" id="permFix" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 id="permFixTitle">Come si riattiva</h2>
+    <p class="muted" id="permFixSub"></p>
+    <ol class="steps" id="permFixSteps"></ol>
+    <button class="btn primary wide" id="permFixRetry" type="button">Ho riattivato, riprova</button>
+    <button class="btn ghost wide" id="permFixClose" type="button">Chiudi</button>
+  </div>
+</div>
+
+<div class="sheet" id="perms" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="perm.title">Cosa serve per usarla bene</h2>
+    <p class="muted" data-i="perm.sub"></p>
+    <p class="hint" data-i="perm.androidHint"></p>
+    <div class="perms">
+      <div class="perm-row">
+        <div class="perm-txt"><b data-i="perm.geo"></b><span class="perm-state" id="perm-geo-state"></span></div>
+        <button class="btn ghost sm" type="button" id="perm-geo-btn"></button>
+      </div>
+      <div class="perm-row">
+        <div class="perm-txt"><b data-i="perm.mic"></b><span class="perm-state" id="perm-mic-state"></span></div>
+        <button class="btn ghost sm" type="button" id="perm-mic-btn"></button>
+      </div>
+      <div class="perm-row">
+        <div class="perm-txt"><b data-i="perm.cam"></b><span class="perm-state" id="perm-cam-state"></span></div>
+        <button class="btn ghost sm" type="button" id="perm-cam-btn"></button>
+      </div>
+      <div class="perm-row">
+        <div class="perm-txt"><b data-i="perm.gallery"></b><span class="perm-state" id="perm-gallery-state"></span></div>
+        <button class="btn ghost sm" type="button" id="perm-gallery-btn"></button>
+      </div>
+      <div class="perm-row">
+        <div class="perm-txt"><b data-i="perm.push"></b><span class="perm-state" id="perm-push-state"></span></div>
+        <button class="btn ghost sm" type="button" id="perm-push-btn"></button>
+      </div>
+    </div>
+    <p class="hint" id="permHint" hidden data-i="perm.hint"></p>
+    <input id="permGalPick" type="file" accept="image/*" hidden>
+    <button class="btn ghost wide" id="permTestBtn" type="button" hidden data-i="perm.testBtn"></button>
+    <button class="btn primary wide" id="permsDone" type="button" data-i="perm.done">Fatto</button>
+  </div>
+</div>
+
+<div class="sheet" id="gloss" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 id="glossTitle"></h2>
+    <p class="muted" id="glossText"></p>
+    <button class="btn primary wide" data-close type="button" data-i="common.close"></button>
+  </div>
+</div>
+
+<div class="sheet" id="quick" hidden>
+  <div class="sheet-in">
+    <div class="onb-top">
+      <div class="onb-track"><i id="quickBar"></i></div>
+      <button id="quickSkip" class="tiny" type="button" data-i="common.skip"></button>
+    </div>
+    <h2 id="quickTitle"></h2>
+    <p class="muted" id="quickSub"></p>
+    <div id="quickBody" class="onb-body"></div>
+    <button class="btn primary wide" id="quickNext" type="button" data-i="common.next"></button>
+  </div>
+</div>
+
+<div class="sheet onb" id="onboarding" hidden>
+  <div class="sheet-in">
+    <div class="onb-top">
+      <button id="onbBack" class="onb-back" type="button" aria-label="Indietro">‹</button>
+      <div class="onb-track"><i id="onbBar"></i></div>
+      <button id="onbSkip" class="tiny" type="button" data-i="common.skip"></button>
+    </div>
+    <h2 id="onbTitle"></h2>
+    <p class="muted" id="onbSub"></p>
+    <div id="onbBody" class="onb-body"></div>
+    <p class="err" id="onbErr" hidden></p>
+    <button class="btn primary wide" id="onbNext" type="button" data-i="common.next"></button>
+  </div>
+</div>
+
+<div class="sheet chat-sheet" id="chat" hidden>
+  <div class="sheet-in">
+    <div class="chat-head">
+      <button class="x inline" data-close type="button" aria-label="Chiudi">×</button>
+      <div><p id="chatTitle"></p><span class="tiny" id="chatMembers"></span></div>
+      <button class="iconbtn bell" id="muteBtn" type="button" aria-label="Notifiche">🔔</button>
+    </div>
+    <div id="chatList" class="chat-list"></div>
+    <p class="typing" id="chatTyping" hidden></p>
+    <div id="stickerPad" class="sticker-pad" hidden>
+      <div class="sticker-grid" id="stickerGrid"></div>
+    </div>
+    <form id="chatForm" class="chat-form">
+      <button class="iconbtn chat-extra" id="stickerBtn" type="button" aria-label="Figurine">😊</button>
+      <input id="chatInput" maxlength="500" autocomplete="off" data-ph="chat.ph">
+      <button class="btn primary sm" type="submit" data-i="chat.send"></button>
+    </form>
+  </div>
+</div>
+
+<div class="pushbar" id="twaBar" hidden>
+  <span data-i="twa.bar"></span>
+  <button class="btn primary sm" id="twaBarBtn" type="button" data-i="twa.btn"></button>
+  <button class="iconbtn" id="twaBarNo" type="button" aria-label="Chiudi">×</button>
+</div>
+
+<div class="sheet" id="howInstall" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="twa.title"></h2>
+    <p class="muted" data-i="twa.sub"></p>
+    <ol class="steps">
+      <li data-i="twa.s1"></li>
+      <li data-i="twa.s2"></li>
+      <li data-i="twa.s3"></li>
+    </ol>
+    <button class="btn primary wide" id="twaOpen" type="button">fuori.fuori-catania.workers.dev</button>
+  </div>
+</div>
+
+<div class="pushbar" id="pushAsk" hidden>
+  <span data-i="push.barText"></span>
+  <button class="btn primary sm" id="pushAskBtn" type="button" data-i="push.barBtn"></button>
+  <button class="iconbtn" id="pushAskNo" type="button" aria-label="Chiudi">×</button>
+</div>
+
+<div class="sheet" id="mute" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 id="muteTitle"></h2>
+    <p class="muted" id="muteSub"></p>
+    <p class="mute-state" id="muteState"></p>
+    <button class="btn ghost wide" type="button" data-mute="1" data-i="mute.d1"></button>
+    <button class="btn ghost wide" type="button" data-mute="2" data-i="mute.d2"></button>
+    <button class="btn ghost wide" type="button" data-mute="0" data-i="mute.forever"></button>
+    <button class="btn primary wide" type="button" data-mute="off" data-i="mute.on" hidden></button>
+  </div>
+</div>
+
+<div class="sheet" id="assistant" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="ai.title">Assistente</h2>
+    <p class="muted" data-i="ai.sub"></p>
+    <div id="aiList" class="chat-list ai-list"></div>
+    <button class="btn ghost wide" id="aiStop" type="button" hidden>■ Ferma la voce</button>
+    <div id="aiSuggest" class="suggest"></div>
+    <div class="seg ai-modes" id="aiModes">
+      <button type="button" data-m="scrivi" class="on"><span aria-hidden="true">✍️</span> Scrivi</button>
+      <button type="button" data-m="conversa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></svg> Conversa</button>
+    </div>
+    <div id="aiConv" hidden>
+      <button id="aiConvBtn" class="ai-bigbtn" type="button" aria-label="Conversa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></svg>
+      </button>
+      <p class="dialog-state" id="aiConvState">Tocca per iniziare: ti ascolto, rispondo e resto in ascolto.</p>
+      <p class="hint" id="aiConvHelp" data-i="ai.convHelp">Come funziona: tocchi il pulsante e diventa rosso, così parli tu. Lo tocchi di nuovo: mi fermo e rispondo io. Quando ho finito la parola torna a te.</p>
+    </div>
+    <button id="aiVoice" class="ai-toggle wide" type="button"><span class="spk" aria-hidden="true">🔈</span><span id="aiVoiceLabel" data-i="ai.voice"></span></button>
+    <form id="aiForm" class="chat-form">
+      <input id="aiInput" maxlength="400" autocomplete="off" data-ph="ai.ph">
+      <button class="btn primary sm" type="submit" data-i="chat.send"></button>
+    </form>
+  </div>
+</div>
+
+<div class="sheet map-sheet" id="mapSheet" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="map.title"></h2>
+    <p class="muted" data-i="map.sub"></p>
+    <label class="map-share"><input type="checkbox" id="mapShare"> <span data-i="map.share"></span></label>
+    <p class="tiny" data-i="map.shareHint"></p>
+    <div class="chips map-filt" id="mapFiltro">
+      <button type="button" class="chip on" data-mf="tutti" data-i="map.filtTutti">Tutti gli eventi</button>
+      <button type="button" class="chip" data-mf="preferiti" data-i="map.filtPreferiti">Solo i miei preferiti</button>
+      <button type="button" class="chip" data-mf="scelti" data-i="map.filtScelti">Scegli quali…</button>
+      <button type="button" class="chip" data-mf="interessi" data-i="map.filtInteressi">Solo per i miei interessi</button>
+    </div>
+    <p class="tiny" id="mapConta"></p>
+    <div id="mapCanvas" class="map-canvas"></div>
+    <div class="map-legend">
+      <span class="lg"><i class="dot me"></i><span data-i="map.you"></span></span>
+      <span class="lg"><i class="dot ppl"></i><span data-i="map.legendPeople"></span></span>
+      <span class="lg"><i class="dot ev"></i><span data-i="map.legendEvents"></span></span>
+    </div>
+    <p class="hint" data-i="map.privacy"></p>
+  </div>
+</div>
+
+<div class="sheet" id="mapScelta" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="map.sceltaTitolo">Quali eventi sulla mappa</h2>
+    <p class="muted" data-i="map.sceltaSub">Tocca quelli che vuoi vedere: sulla mappa restano solo questi.</p>
+    <div id="mapSceltaList"></div>
+    <button class="btn primary wide" type="button" id="mapSceltaOk" data-i="map.sceltaOk">Mostra questi</button>
+  </div>
+</div>
+
+<div class="sheet" id="directions" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="dir.title"></h2>
+    <p class="muted" data-i="dir.sub"></p>
+    <p class="hint" id="dirWhere"></p>
+    <div class="dir-list" id="dirList"></div>
+  </div>
+</div>
+
+<div class="sheet" id="roster" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 id="rosterTitle"></h2>
+    <p class="muted" id="rosterSub"></p>
+    <div id="rosterBody" class="roster"></div>
+    <button class="btn primary wide" id="rosterOpen" type="button" data-i="map.open"></button>
+  </div>
+</div>
+
+<div class="sheet" id="install" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 id="installTitle" data-i="install.title">Portala con te</h2>
+    <p class="muted" id="installBody" data-i="install.body"></p>
+    <p class="muted" id="installHow"></p>
+    <button class="btn primary wide" id="installPwa" type="button" data-i="install.pwa" hidden>Installa dalla schermata home</button>
+    <button class="btn ghost wide" id="installApk" type="button" data-i="install.apkdl" hidden>Scarica il file APK</button>
+    <p class="muted" id="installNote" data-i="install.apkNote" hidden></p>
+  </div>
+</div>
+
+<div class="sheet" id="segnalazioni" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="segnalazioni.titolo">Segnalazioni</h2>
+    <p class="muted" data-i="segnalazioni.sub"></p>
+    <div id="segnalazioniList"></div>
+  </div>
+</div>
+
+<div class="sheet" id="persone" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="persone.titolo">Chi c'è</h2>
+    <p class="muted" id="personeSub" data-i="persone.sub"></p>
+    <div class="seg" id="personeOrdina">
+      <button type="button" data-o="nuovi" class="on" data-i="persone.nuovi">Ultimi arrivi</button>
+      <button type="button" data-o="vecchi" data-i="persone.vecchi">Primi</button>
+      <button type="button" data-o="giovani" data-i="persone.giovani">Età ↑</button>
+      <button type="button" data-o="grandi" data-i="persone.grandi">Età ↓</button>
+    </div>
+    <div class="chips" id="personeFiltro">
+      <button type="button" class="chip on" data-f="tutti" data-i="persone.tutti">Tutti</button>
+      <button type="button" class="chip" data-f="foto" data-i="persone.confoto">Con foto</button>
+      <button type="button" class="chip" data-f="senzafoto" data-i="persone.senzafoto">Senza foto</button>
+      <button type="button" class="chip" data-f="viso" data-i="persone.viso">Viso verificato</button>
+      <button type="button" class="chip" data-f="visono" data-i="persone.visono">Viso non verificato</button>
+      <button type="button" class="chip" data-f="posizione" data-i="persone.posizione">Con posizione</button>
+      <button type="button" class="chip" data-f="senzaposizione" data-i="persone.senzaposizione">Senza posizione</button>
+    </div>
+    <div id="personeList"></div>
+  </div>
+</div>
+
+<div class="sheet" id="revisione" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="revisione">Revisione</h2>
+    <p class="muted" data-i="revisione.sub"></p>
+    <div class="seg" id="revisioneFiltro" hidden></div>
+    <div id="revisioneList"></div>
+  </div>
+</div>
+
+<div class="sheet" id="pushHelp" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="pushHelp.title"></h2>
+    <p class="muted" data-i="pushHelp.sub"></p>
+    <div id="pushHelpState"></div>
+    <button class="btn primary wide" id="pushHelpRetry" type="button" data-i="pushHelp.retry"></button>
+    <button class="btn ghost wide" data-close type="button" data-i="pushHelp.close">Chiudi</button>
+  </div>
+</div>
+
+<div class="sheet" id="privacy" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="privacy.title">Dati e privacy</h2>
+    <p class="body" data-i="privacy.body"></p>
+    <p class="body" data-i="privacy.ip"></p>
+    <button class="btn ghost wide" id="privacyFeedback" type="button" data-i="home.feedback"></button>
+  </div>
+</div>
+
+<div class="veil cookieveil" id="cookieVeil" hidden>
+  <div class="vcard" id="cookieBar">
+    <h3 data-i="cookie.title"></h3>
+    <p data-i="cookie.text"></p>
+    <p class="veil-fine" data-i="cookie.fine"></p>
+    <div class="cookie-actions">
+      <button class="btn ghost sm" id="cookieOnly" type="button" data-i="cookie.only"></button>
+      <button class="btn primary sm" id="cookieAll" type="button" data-i="cookie.all"></button>
+    </div>
+  </div>
+</div>
+
+<div class="veil" id="welcome" hidden>
+  <div class="vcard">
+    <h3 data-i="wel.title"></h3>
+    <p data-i="wel.sub"></p>
+    <ul class="wlist">
+      <li><b data-i="wel.geo"></b><span data-i="wel.geoWhy"></span></li>
+      <li><b data-i="wel.notif"></b><span data-i="wel.notifWhy"></span></li>
+      <li><b data-i="wel.cam"></b><span data-i="wel.camWhy"></span></li>
+      <li><b data-i="wel.cookie"></b><span data-i="wel.cookieWhy"></span></li>
+    </ul>
+    <p class="veil-fine" data-i="wel.fine"></p>
+    <p class="veil-now" id="welNow" hidden></p>
+    <button class="btn primary wide" id="welAll" type="button" data-i="wel.all"></button>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+<script src="/app.min.js?v=560" defer></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+/icons/*
+  Cache-Control: public, max-age=604800
+
+/og.png
+  Cache-Control: public, max-age=604800
+
+/activities.json
+  Cache-Control: public, max-age=3600
+
+/zones.json
+  Cache-Control: public, max-age=3600
+
+/glossario.json
+  Cache-Control: public, max-age=3600
+
+/lang/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/app.min.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/styles.css
+  Cache-Control: public, max-age=31536000, immutable
+
+/boot.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/sw.js
+  Cache-Control: no-cache

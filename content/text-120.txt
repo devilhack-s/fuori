@@ -1,0 +1,4 @@
+post.camera|Scatta una foto|Take a photo|Haz una foto|Tire uma foto
+post.gallery|Dalla galleria|From your gallery|Desde la galería|Da galeria
+post.eventLabel|Da quale evento?|From which event?|¿De qué evento?|De qual evento?
+post.eventNone|Nessun evento|No event|Ningún evento|Nenhum evento

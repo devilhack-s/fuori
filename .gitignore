@@ -1,0 +1,21 @@
+# ⚠️ SEGRETI: non devono mai finire su GitHub
+.cf-token
+.admin-key
+.vapid-private.b64
+.apk-signing.env
+.fuori.keystore
+*.keystore
+*.jks
+.dev.vars
+.env
+.env.*
+
+# cache e build
+.wrangler/
+node_modules/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+*.log
+backups/

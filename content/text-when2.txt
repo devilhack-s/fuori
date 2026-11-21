@@ -1,0 +1,2 @@
+create.repVary|Gli orari cambiano nei vari giorni|The times change from day to day|Los horarios cambian según el día|Os horários mudam de dia para dia
+create.repTime|Ora|Time|Hora|Hora

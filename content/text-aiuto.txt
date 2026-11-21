@@ -1,0 +1,45 @@
+# Le novità: matrice, raggio, mappa, meteo, preferiti, aiuto, umori
+lang.word|Lingua|Language|Idioma|Idioma
+help.btn|Come funziona l'app|How the app works|Cómo funciona la app|Como funciona o app
+help.sub|Quattro passi e sei dentro. Guarda, scegli, partecipa: se non c'è, crea tu.|Four steps and you're in. Look, choose, join: if it's not there, make it.|Cuatro pasos y estás dentro. Mira, elige, participa: si no hay nada, crea tú.|Quatro passos e estás dentro. Olha, escolhe, participa: se não houver nada, cria tu.
+help.f1t|Quattro passi|Four steps|Cuatro pasos|Quatro passos
+help.f2t|La foto e il selfie|Your photo and selfie|La foto y el selfie|A foto e o selfie
+help.f2p|La foto mostra la tua faccia. Il selfie dice «sono proprio io». Restano tra te e l'evento: non le vede chi sta fuori.|Your photo shows your face. The selfie says «it's really me». They stay between you and the event: people outside can't see them.|La foto enseña tu cara. El selfie dice «soy yo». Quedan entre tú y el evento: no las ve quien está fuera.|A foto mostra a tua cara. O selfie diz «sou mesmo eu». Ficam entre ti e o evento: não as vê quem está fora.
+help.f3t|La chat|The chat|El chat|O chat
+help.f3p|Dentro l'evento c'è una chat. Serve per chiedere: «a che ora?», «dove?», «cosa porto?».|Every event has a chat. Ask: «what time?», «where?», «what should I bring?».|Cada evento tiene un chat. Pregunta: «¿a qué hora?», «¿dónde?», «¿qué llevo?».|Cada evento tem um chat. Pergunta: «a que horas?», «onde?», «o que levo?».
+help.f4t|Community e ricordi|Community and memories|Comunidad y recuerdos|Comunidade e memórias
+help.f4p|Nella Community vedi le foto degli altri: puoi mettere un cuore o pubblicare la tua. Nei Ricordi trovi gli eventi già passati.|In Community you see other people's photos: leave a heart or post your own. Memories are past events.|En la Comunidad ves las fotos de los demás: pon un corazón o publica la tuya. En Recuerdos están los eventos pasados.|Na Comunidade vês as fotos dos outros: põe um coração ou publica a tua. Nas Memórias estão os eventos passados.
+help.f5t|Se ti perdi|If you get lost|Si te pierdes|Se te perderes
+help.f5p|Tocca «Lascia un parere» e scrivi cosa non hai capito. Te lo spiego io, con parole semplici. I tuoi dati servono solo per gli eventi: niente pubblicità.|Tap «Leave feedback» and tell me what you don't understand. I'll explain it simply. Your data is only used for events: no ads.|Toca «Deja tu opinión» y escribe qué no entiendes. Te lo explico con palabras sencillas. Tus datos solo sirven para los eventos: sin publicidad.|Toca «Deixa a tua opinião» e escreve o que não entendeste. Explico-te com palavras simples. Os teus dados servem só para os eventos: sem publicidade.
+help.f6t|Lingua e privacy|Language and privacy|Idioma y privacidad|Idioma e privacidade
+help.f6p|Lingua in alto a destra. I tuoi dati servono solo per gli eventi: niente pubblicità, niente vendite. Per cancellare i tuoi dati scrivi sempre da «Lascia un parere».|Language at the top right. Your data is only used for events: no ads, nothing sold. To delete your data, write from 'Send feedback' too.|Idioma arriba a la derecha. Tus datos solo se usan para los eventos: sin publicidad, nada vendido. Para borrar tus datos, escribe también desde «Deja tu opinión».|Idioma no canto direito. Seus dados só servem para os eventos: sem publicidade, nada vendido. Para apagar os seus dados, escreva também em «Deixe sua opinião».
+matrix.open|Apri|Open|Abrir|Abrir
+matrix.openFav|Vedi|See|Ver|Ver
+matrix.favHint|Solo quello che hai salvato|Only what you saved|Solo lo que guardaste|Só o que você salvou
+matrix.none|Nessun evento|No events|Sin eventos|Sem eventos
+matrix.favEmpty|Non ci sono eventi al momento fra i preferiti.|There are no events among your favourites right now.|No hay eventos entre tus favoritos ahora mismo.|Não há eventos entre os favoritos agora.
+cat.all|Tutta la categoria|Whole category|Toda la categoría|Toda a categoria
+cat.clear|Togli il filtro|Clear the filter|Quitar el filtro|Tirar o filtro
+cat.sheetSub|{n} eventi adesso|{n} events right now|{n} eventos ahora|{n} eventos agora
+cat.empty|Qui non c'è ancora niente. Puoi crearlo tu: due minuti.|Nothing here yet. You can create it: two minutes.|Aquí no hay nada todavía. Puedes crearlo tú: dos minutos.|Aqui ainda não há nada. Você pode criar: dois minutos.
+radius.pick|Quanto lontano vuoi cercare?|How far do you want to search?|¿Hasta dónde quieres buscar?|Até onde você quer buscar?
+radius.all|Tutta la Sicilia|All Sicily|Toda Sicilia|Toda a Sicília
+map.explore|Esplora la mappa|Explore the map|Explora el mapa|Explore o mapa
+wx.pillTitle|Meteo adesso in questa zona|Weather right now in this area|Tiempo ahora en esta zona|Clima agora nesta zona
+fav.ordRecenti|Aggiunti di recente|Recently added|Añadidos hace poco|Adicionados recentemente
+fav.ordPresto|Prima in programma|Starting soonest|Primero en el programa|Primeiro na agenda
+fav.ordVoto|Più votati|Best rated|Mejor valorados|Mais votados
+fav.allCats|Tutte|All|Todas|Todas
+fav.filterEmpty|Con questo filtro non c'è niente.|Nothing with this filter.|Con este filtro no hay nada.|Com esse filtro não há nada.
+past.privato|Privato|Private|Privado|Privado
+past.privatoNota|Evento privato: chi non c'era vede solo che è successo, non dove né con chi.|Private event: who wasn't there only sees it happened, not where or with whom.|Evento privado: quien no estuvo solo ve que pasó, no dónde ni con quién.|Evento privado: quem não estava só vê que aconteceu, não onde nem com quem.
+past.descrizione|Com'era|What it was like|Cómo era|Como era
+voti.annullato|Recensione annullata.|Review removed.|Reseña anulada.|Avaliação anulada.
+mood.compagnia|Voglio compagnia|I want company|Quiero compañía|Quero companhia
+mood.romanticismo|Voglio coccole|Something romantic|Quiero mimos|Quero carinho
+perm.testRetry|Inviata, ma il telefono non l'ha mostrata: controlla le notifiche di Chrome o di FUORI nelle impostazioni.|Sent, but the phone didn't show it: check Chrome or FUORI notifications in settings.|Enviada, pero el teléfono no la mostró: revisa las notificaciones de Chrome o de FUORI.|Enviada, mas o celular não mostrou: veja as notificações do Chrome ou do FUORI.
+
+help.f7t|Chat e condividi|Chat and sharing|Chat y compartir|Chat e partilhar
+help.f7p|Dentro ogni evento c'è la chat del gruppo: serve per accordarsi su orario, posto e cosa portare. Il tasto Condividi manda il link dell'evento a chi vuoi; se l'evento è tuo, il link fa entrare anche nei privati.|Every event has a group chat: it's for agreeing on time, place and what to bring. The Share button sends the event link to whoever you want; if the event is yours, the link also lets people into private events.|Cada evento tiene un chat de grupo: sirve para acordar hora, sitio y qué llevar. El botón Compartir manda el enlace del evento a quien quieras; si el evento es tuyo, el enlace también deja entrar en los privados.|Cada evento tem um chat de grupo: serve para combinar hora, lugar e o que levar. O botão Partilhar envia o link do evento a quem quiser; se o evento for seu, o link também deixa entrar nos privados.
+help.f8t|Il profilo|Your profile|Tu perfil|O seu perfil
+help.f8p|Compilarlo serve a farti trovare gli eventi giusti: età, interessi e due righe su di te aiutano a proporti cose adatte e a farti riconoscere. La foto è obbligatoria per partecipare.|Filling it in helps you find the right events: age, interests and a couple of lines about you help me suggest suitable things and help others recognise you. A photo is required to take part.|Rellenarlo sirve para encontrar los eventos adecuados: edad, intereses y dos líneas sobre ti ayudan a proponerte cosas adecuadas y a que los demás te reconozcan. La foto es obligatoria para participar.|Preenchê-lo ajuda a encontrar os eventos certos: idade, interesses e duas linhas sobre você ajudam a propor coisas adequadas e a que os outros o reconheçam. A foto é obrigatória para participar.

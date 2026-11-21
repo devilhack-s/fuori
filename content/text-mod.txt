@@ -1,0 +1,3 @@
+feed.edit|Modifica|Edit|Editar|Editar
+feed.save|Salva|Save|Guardar|Salvar
+feed.modera|Modera|Moderate|Moderar|Moderar

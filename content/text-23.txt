@@ -1,0 +1,33 @@
+wx.line|{z} · {t}° · {sky}|{z} · {t}° · {sky}|{z} · {t}° · {sky}|{z} · {t}° · {sky}
+wx.here|qui|here|aquí|aqui
+wx.sky.sereno|sereno|clear|despejado|limpo
+wx.sky.poco nuvoloso|poco nuvoloso|partly cloudy|poco nuboso|pouco nublado
+wx.sky.nuvoloso|nuvoloso|cloudy|nuboso|nublado
+wx.sky.nebbia|nebbia|fog|niebla|nevoeiro
+wx.sky.pioggia|pioggia|rain|lluvia|chuva
+wx.sky.neve|neve|snow|nieve|neve
+wx.sky.rovesci|rovesci|showers|chubascos|aguaceiros
+wx.sky.temporale|temporale|storm|tormenta|trovoada
+perm.cam|Fotocamera|Camera|Cámara|Câmera
+perm.gallery|Foto e galleria|Photos and gallery|Fotos y galería|Fotos e galeria
+perm.galleryHint|Scegli tu|You choose|Tú eliges|Você escolhe
+perm.galleryBtn|Apri|Open|Abrir|Abrir
+perm.camOk|Fotocamera pronta.|Camera ready.|Cámara lista.|Câmera pronta.
+perm.galleryOk|Foto scelta.|Photo picked.|Foto elegida.|Foto escolhida.
+badge.verified|Verificato|Verified|Verificado|Verificado
+verify.title|Verifica il tuo viso|Verify your face|Verifica tu cara|Verifique seu rosto
+verify.sub|Scatta un selfie adesso, con la faccia scoperta e senza filtri. Lo guardo io: se sei la persona della foto, ti metto la spunta blu.|Take a selfie now, face clear, no filters. I look at it myself: if you are the person in the photo, you get the blue check.|Hazte un selfi ahora, con la cara despejada y sin filtros. Lo miro yo: si eres la persona de la foto, te pongo la marca azul.|Tire uma selfie agora, com o rosto à mostra e sem filtros. Eu mesmo olho: se você é a pessoa da foto, ganha o selo azul.
+verify.open|Apri la fotocamera|Open the camera|Abre la cámara|Abra a câmera
+verify.take|Scatta|Take it|Haz la foto|Tirar
+verify.again|Rifai|Retake|Repetir|Refazer
+verify.send|Invia per la verifica|Send for verification|Enviar para verificar|Enviar para verificação
+verify.sending|Invio…|Sending…|Enviando…|Enviando…
+verify.sent|Ricevuto. Ti faccio sapere appena la guardo.|Got it. I'll check it soon.|Recibido. Te aviso en cuanto lo mire.|Recebido. Aviso assim que olhar.
+verify.pending|In attesa della verifica|Waiting for verification|Esperando verificación|Aguardando verificação
+verify.hint|Il selfie serve solo a capire che sei tu: non finisce sul profilo.|The selfie is only to check it's you: it never appears on your profile.|El selfi solo sirve para comprobar que eres tú: no aparece en tu perfil.|A selfie só serve para confirmar que é você: ela não aparece no seu perfil.
+verify.already|Sei verificato. Spunta blu attiva.|You're verified. Blue check on.|Estás verificado. Marca azul activa.|Você está verificado. Selo azul ativo.
+verify.needLogin|Per verificarti devi entrare con la tua mail.|To get verified, log in with your email.|Para verificarte tienes que entrar con tu correo.|Para se verificar, entre com seu e-mail.
+verify.noCam|Non riesco ad aprire la fotocamera. Controlla il permesso.|I can't open the camera. Check the permission.|No puedo abrir la cámara. Revisa el permiso.|Não consigo abrir a câmera. Verifique a permissão.
+rights.short|© 2026 FUORI · Tutti i diritti riservati|© 2026 FUORI · All rights reserved|© 2026 FUORI · Todos los derechos reservados|© 2026 FUORI · Todos os direitos reservados
+rights.long|Testi, grafica e marchio sono protetti: vietata la copia e il riuso.|Text, graphics and brand are protected: copying and reuse are not allowed.|Textos, gráficos y marca están protegidos: prohibida la copia y el reuso.|Textos, gráficos e marca são protegidos: proibida a cópia e o reuso.
+privacy.ip|Testi, grafica, nome e marchio FUORI sono miei: non si possono copiare né riusare senza il mio permesso. Il codice e le immagini restano protetti anche dopo la chiusura dell'app.|The text, graphics, name and brand FUORI are mine: they cannot be copied or reused without my permission. The code and images stay protected even after the app is closed.|Los textos, gráficos, el nombre y la marca FUORI son míos: no se pueden copiar ni reutilizar sin mi permiso. El código y las imágenes siguen protegidos aunque la app se cierre.|Os textos, gráficos, o nome e a marca FUORI são meus: não podem ser copiados nem reutilizados sem a minha permissão. O código e as imagens continuam protegidos mesmo após fechar o app.

@@ -1,0 +1,31 @@
+tab.home|Home|Home|Inicio|Início
+tab.feed|Community|Community|Comunidad|Comunidade
+tab.fav|Preferiti|Saved|Favoritos|Favoritos
+tab.profile|Profilo|Profile|Perfil|Perfil
+feed.kicker|Community|Community|Comunidad|Comunidade
+feed.title|Quello che succede fuori|What's happening out there|Lo que pasa ahí fuera|O que acontece lá fora
+feed.hint|Foto vere di persone vere. Metti il like, commenta, o pubblica tu.|Real photos from real people. Like, comment, or post your own.|Fotos reales de personas reales. Da like, comenta o publica tú.|Fotos reais de pessoas reais. Dê like, comente ou publique você.
+feed.empty|Ancora nessun post. Puoi essere il primo: una foto e due righe.|No posts yet. You can be the first: one photo, two lines.|Aún no hay posts. Puedes ser el primero: una foto y dos líneas.|Ainda não há posts. Você pode ser o primeiro: uma foto e duas linhas.
+feed.more|Mostra altri|Show more|Mostrar más|Mostrar mais
+feed.new|Pubblica|Post|Publicar|Publicar
+feed.now|adesso|now|ahora|agora
+feed.min|{n} min|{n} min|{n} min|{n} min
+feed.hour|{n} ore|{n} h|{n} h|{n} h
+feed.day|{n} giorni|{n} d|{n} d|{n} d
+feed.like|Mi piace|Like|Me gusta|Curtir
+feed.delete|Elimina|Delete|Eliminar|Excluir
+feed.deleted|Post eliminato.|Post deleted.|Post eliminado.|Post excluído.
+feed.needLogin|Per fare questo devi entrare con la tua mail.|To do this, log in with your email.|Para esto tienes que entrar con tu correo.|Para isso tem de entrar com seu e-mail.
+post.title|Pubblica qualcosa|Post something|Publica algo|Publique algo
+post.sub|Una foto, due righe. Quello che ti va.|One photo, two lines. Whatever you like.|Una foto, dos líneas. Lo que quieras.|Uma foto, duas linhas. O que quiser.
+post.caption|Scrivi qualcosa|Say something|Escribe algo|Escreva algo
+post.captionPh|Es. Stasera si gioca a padel a Catania, chi si unisce?|e.g. Padel tonight in Catania, who's in?|Ej. Esta noche padel en Catania, ¿quién se apunta?|Ex. Hoje tem padel em Catania, quem entra?
+post.send|Pubblica|Post|Publicar|Publicar
+post.sending|Pubblico…|Posting…|Publicando…|Publicando…
+post.done|Pubblicato. Lo vedono tutti.|Posted. Everyone can see it.|Publicado. Lo ven todos.|Publicado. Todos veem.
+post.needPhoto|Scegli una foto da pubblicare.|Pick a photo to post.|Elige una foto para publicar.|Escolha uma foto para publicar.
+cm.title|Commenti|Comments|Comentarios|Comentários
+cm.loading|Carico i commenti…|Loading comments…|Cargando comentarios…|Carregando comentários…
+cm.none|Ancora nessun commento. Scrivi il primo.|No comments yet. Write the first one.|Sin comentarios aún. Escribe el primero.|Ainda sem comentários. Escreva o primeiro.
+cm.ph|Scrivi un commento|Write a comment|Escribe un comentario|Escreva um comentário
+cm.send|Invia|Send|Enviar|Enviar

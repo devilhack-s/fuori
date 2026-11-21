@@ -1,0 +1,2 @@
+prof.photoVerify|Foto aggiornata. Adesso la verifica va rifatta su questa foto.|Photo updated. Verification now runs against this photo.|Foto actualizada. Ahora la verificación se hace con esta foto.|Foto atualizada. Agora a verificação é feita com esta foto.
+people.age|{n} anni|{n} years old|{n} años|{n} anos

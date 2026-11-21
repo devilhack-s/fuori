@@ -1,0 +1,13 @@
+create.photos|Foto dell'evento|Event photos|Fotos del evento|Fotos do evento
+create.photoAdd|Aggiungi foto (fino a 3)|Add photos (up to 3)|Añadir fotos (hasta 3)|Adicionar fotos (até 3)
+create.photoHint|Mostra com'è il posto: le foto si vedono nella scheda e nella community.|Show what it looks like: photos appear in the card and in the community.|Muestra cómo es el lugar: las fotos se ven en la ficha y en la comunidad.|Mostre como é o lugar: as fotos aparecem na ficha e na comunidade.
+create.photoMax|Puoi mettere al massimo 3 foto.|You can add up to 3 photos.|Puedes poner como máximo 3 fotos.|Você pode adicionar no máximo 3 fotos.
+detail.photos|Foto|Photos|Fotos|Fotos
+dir.big|Portami lì|Take me there|Llévame allí|Leve-me lá
+create.photoAdd2|Carica o scatta una foto|Load or take a photo|Carga o haz una foto|Carregue ou tire uma foto
+create.photoMore|Aggiungi un'altra foto|Add another photo|Añadir otra foto|Adicionar outra foto
+create.photoSub|Tocca e scegli: fotocamera o galleria · {n} di 3|Tap and choose: camera or gallery · {n} of 3|Toca y elige: cámara o galería · {n} de 3|Toque e escolha: câmera ou galeria · {n} de 3
+create.photoRemove|Togli questa foto|Remove this photo|Quitar esta foto|Remover esta foto
+post.photoAdd|Carica o scatta una foto|Load or take a photo|Carga o haz una foto|Carregue ou tire uma foto
+photo.title|Aggiungi una foto|Add a photo|Añade una foto|Adicionar uma foto
+photo.sub|Scattala adesso o sceglila dalla galleria.|Take it now or pick one from your gallery.|Hazla ahora o elígela de la galería.|Tire agora ou escolha na galeria.

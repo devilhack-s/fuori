@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<title>FUORI</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1200px; height: 630px; }
+  body {
+    background: #070707;
+    color: #fff;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .glow {
+    position: absolute; width: 900px; height: 900px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,255,46,.18), rgba(200,255,46,0) 62%);
+    top: -320px; right: -200px;
+  }
+  .glow2 {
+    position: absolute; width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,255,46,.10), rgba(200,255,46,0) 65%);
+    bottom: -380px; left: -160px;
+  }
+  .mark { display: flex; align-items: center; gap: 22px; margin-bottom: 44px; }
+  .mark svg { width: 104px; height: 104px; }
+  .mark b { font-size: 66px; letter-spacing: 5px; font-weight: 800; }
+  h1 { font-size: 76px; line-height: 1.04; text-align: center; font-weight: 800; letter-spacing: -1.5px; }
+  h1 em { color: #c8ff2e; font-style: normal; }
+  p { margin-top: 30px; font-size: 30px; color: #9d9d9d; text-align: center; max-width: 900px; line-height: 1.4; }
+  .url { position: absolute; bottom: 40px; font-size: 20px; color: #6f6f6f; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="glow2"></div>
+  <div class="mark">
+    <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
+      <path d="M82 54A32 32 0 1 1 50 22" stroke="#c8ff2e" stroke-width="9"/>
+      <path d="M96 10 56.8 29.7 70.8 32.1Z" fill="#c8ff2e"/>
+      <path d="M96 10 70.8 32.1 71.2 46.3Z" fill="#c8ff2e" fill-opacity=".72"/>
+    </svg>
+    <b>FUORI</b>
+  </div>
+  <h1>Sei ancora <em>in tempo.</em></h1>
+  <p>Eventi, persone e idee per uscire. In Sicilia, a due passi da dove sei.</p>
+  <div class="url">fuori.fuori-catania.workers.dev</div>
+</body>
+</html>

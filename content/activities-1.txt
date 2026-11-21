@@ -1,0 +1,108 @@
+# Formato: nome in italiano | categoria | inglese | spagnolo | portoghese
+# Se le traduzioni mancano, si usa l'italiano.
+Padel|sport|Padel|Pádel|Padel
+Calcio|sport|Football|Fútbol|Futebol
+Calcio a 5|sport|Five-a-side|Fútbol sala|Futebol de salão
+Calcetto|sport|Five-a-side|Fútbol sala|Futebol de salão
+Basket|sport|Basketball|Baloncesto|Basquete
+Pallavolo|sport|Volleyball|Voleibol|Vôlei
+Beach volley|sport|Beach volleyball|Vóley playa|Vôlei de praia
+Tennis|sport|Tennis|Tenis|Tênis
+Tennis tavolo|sport|Table tennis|Tenis de mesa|Tênis de mesa
+Ping pong|sport|Ping pong|Ping pong|Pingue-pongue
+Badminton|sport|Badminton|Bádminton|Badminton
+Squash|sport|Squash|Squash|Squash
+Golf|sport|Golf|Golf|Golfe
+Mini golf|sport|Mini golf|Minigolf|Minigolfe
+Rugby|sport|Rugby|Rugby|Rugby
+Baseball|sport|Baseball|Béisbol|Beisebol
+Hockey|sport|Hockey|Hockey|Hóquei
+Hockey su prato|sport|Field hockey|Hockey hierba|Hóquei em campo
+Pallamano|sport|Handball|Balonmano|Handebol
+Pallanuoto|sport|Water polo|Waterpolo|Polo aquático
+Nuoto|sport|Swimming|Natación|Natação
+Nuoto in acque libere|sport|Open water swimming|Aguas abiertas|Águas abertas
+Immersioni sub|sport|Scuba diving|Buceo|Mergulho
+Snorkeling|sport|Snorkelling|Esnórquel|Snorkel
+Apnea|sport|Freediving|Apnea|Apneia
+Surf|sport|Surfing|Surf|Surfe
+Windsurf|sport|Windsurfing|Windsurf|Windsurf
+Kitesurf|sport|Kitesurfing|Kitesurf|Kitesurf
+Sup|sport|Paddleboarding|Paddle surf|Stand up paddle
+Vela|sport|Sailing|Vela|Vela
+Canottaggio|sport|Rowing|Remo|Remo
+Kayak|sport|Kayaking|Kayak|Caiaque
+Canoa|sport|Canoeing|Piragüismo|Canoagem
+Barca a vela|sport|Sailing boat|Velero|Barco à vela
+Pesca|sport|Fishing|Pesca|Pesca
+Pesca sportiva|sport|Sport fishing|Pesca deportiva|Pesca esportiva
+Arrampicata|sport|Climbing|Escalada|Escalada
+Boulder|sport|Bouldering|Boulder|Boulder
+Palestra di roccia|sport|Climbing gym|Rocódromo|Academia de escalada
+Trekking|sport|Hiking|Senderismo|Trilha
+Escursioni|sport|Day hikes|Excursiones|Excursões
+Camminate in città|sport|City walks|Paseos urbanos|Caminhadas na cidade
+Corsa|sport|Running|Correr|Corrida
+Corsa al parco|sport|Park run|Carrera en el parque|Corrida no parque
+Trail running|sport|Trail running|Trail|Trail run
+Ciclismo|sport|Cycling|Ciclismo|Ciclismo
+Mountain bike|sport|Mountain biking|Bicicleta de montaña|Mountain bike
+Gravel|sport|Gravel biking|Gravel|Gravel
+Skateboard|sport|Skateboarding|Skate|Skate
+Pattini|sport|Skating|Patinaje|Patinação
+Pattinaggio su ghiaccio|sport|Ice skating|Patinaje sobre hielo|Patinação no gelo
+Hockey su ghiaccio|sport|Ice hockey|Hockey hielo|Hóquei no gelo
+Sci|sport|Skiing|Esquí|Esqui
+Snowboard|sport|Snowboarding|Snowboard|Snowboard
+Ciaspole|sport|Snowshoeing|Raquetas de nieve|Raquetes de neve
+Slittino|sport|Sledding|Trineo|Trenó
+Equitazione|sport|Horse riding|Equitación|Equitação
+Tiro con l'arco|sport|Archery|Tiro con arco|Tiro com arco
+Tiro a segno|sport|Target shooting|Tiro al blanco|Tiro ao alvo
+Poligono|sport|Shooting range|Galería de tiro|Estande de tiro
+Paintball|sport|Paintball|Paintball|Paintball
+Softair|sport|Airsoft|Airsoft|Airsoft
+Laser game|sport|Laser tag|Láser tag|Laser tag
+Go kart|sport|Go-karting|Karting|Kart
+Quad|sport|Quad biking|Quad|Quadriciclo
+Motociclismo|sport|Motorcycling|Motociclismo|Motociclismo
+Moto d'epoca|sport|Classic bikes|Motos clásicas|Motos antigas
+Automobilismo|sport|Motorsport|Automovilismo|Automobilismo
+Rally|sport|Rally|Rally|Rally
+Parapendio|sport|Paragliding|Parapente|Parapente
+Deltaplano|sport|Hang gliding|Ala delta|Asa delta
+Volo in mongolfiera|sport|Hot air balloon|Globo aerostático|Balão de ar quente
+Paracadutismo|sport|Skydiving|Paracaidismo|Paraquedismo
+Bungee jumping|sport|Bungee jumping|Puénting|Bungee jump
+Zip line|sport|Zip line|Tirolina|Tirolesa
+Parco avventura|sport|Adventure park|Parque de aventura|Parque de aventura
+Orienteering|sport|Orienteering|Orientación|Orientacão
+Geocaching|sport|Geocaching|Geocaching|Geocaching
+Fitwalking|sport|Power walking|Marcha rápida|Caminhada rápida
+Yoga|sport|Yoga|Yoga|Ioga
+Yoga all'aperto|sport|Outdoor yoga|Yoga al aire libre|Ioga ao ar livre
+Pilates|sport|Pilates|Pilates|Pilates
+Functional training|sport|Functional training|Entrenamiento funcional|Treino funcional
+Crossfit|sport|CrossFit|CrossFit|CrossFit
+Calisthenics|sport|Calisthenics|Calistenia|Calistenia
+Arti marziali|sport|Martial arts|Artes marciales|Artes marciais
+Boxe|sport|Boxing|Boxeo|Boxe
+Kickboxing|sport|Kickboxing|Kickboxing|Kickboxing
+Judo|sport|Judo|Judo|Judô
+Karate|sport|Karate|Kárate|Caratê
+Jiu jitsu brasiliano|sport|Brazilian jiu-jitsu|Jiu-jitsu brasileño|Jiu-jítsu brasileiro
+Muay thai|sport|Muay Thai|Muay thai|Muay thai
+Scherma|sport|Fencing|Esgrima|Esgrima
+Danza|sport|Dance|Baile|Dança
+Salsa|sport|Salsa|Salsa|Salsa
+Bachata|sport|Bachata|Bachata|Bachata
+Tango|sport|Tango|Tango|Tango
+Swing|sport|Swing dance|Swing|Swing
+Hip hop|sport|Hip hop dance|Hip hop|Hip hop
+Danza contemporanea|sport|Contemporary dance|Danza contemporánea|Dança contemporânea
+Breakdance|sport|Breakdance|Breakdance|Breakdance
+Ginnastica artistica|sport|Gymnastics|Gimnasia|Ginástica
+Acrobatica|sport|Acrobatics|Acrobacias|Acrobacia
+Parkour|sport|Parkour|Parkour|Parkour
+Forest bathing|sport|Forest bathing|Baño de bosque|Banho de floresta
+Caccia al tesoro|sport|Treasure hunt|Búsqueda del tesoro|Caça ao tesouro

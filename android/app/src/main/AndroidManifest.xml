@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+  <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+  <uses-feature android:name="android.hardware.camera" android:required="false" />
+  <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+
+  <application
+    android:label="@string/app_name"
+    android:icon="@mipmap/ic_launcher"
+    android:roundIcon="@mipmap/ic_launcher"
+    android:supportsRtl="true"
+    android:theme="@style/Theme.Fuori">
+
+    <meta-data android:name="asset_statements" android:resource="@string/asset_statements" />
+
+    <activity
+      android:name=".Launcher"
+      android:exported="true"
+      android:theme="@style/Theme.Fuori"
+      android:launchMode="singleTask">
+
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+
+      <meta-data
+        android:name="android.support.customtabs.trusted.DEFAULT_URL"
+        android:value="https://fuori.fuori-catania.workers.dev/" />
+    </activity>
+
+    <!-- Questa è la parte che lega permessi e notifiche all'app invece che a Chrome:
+         posizione e avvisi passano dall'app, così compaiono nelle sue autorizzazioni
+         e le notifiche arrivano con il nome e l'icona di FUORI. -->
+    <service
+      android:name=".FuoriDelegationService"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="androidx.browser.trusted.spi.DelegationService" />
+        <action android:name="android.support.customtabs.trusted.TRUSTED_WEB_ACTIVITY_SERVICE" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </service>
+
+    <activity
+      android:name="com.google.androidbrowserhelper.locationdelegation.PermissionRequestActivity"
+      android:exported="false" />
+
+    <!-- gli avvisi dell'app: un controllo ogni quarto d'ora, anche ad app chiusa -->
+    <receiver
+      android:name=".NotifCheck"
+      android:exported="false" />
+
+    <receiver
+      android:name=".Boot"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+      </intent-filter>
+    </receiver>
+  </application>
+</manifest>

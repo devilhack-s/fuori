@@ -1,0 +1,4 @@
+fav.remindTitolo|Il tuo evento «{t}» si avvicina|Your event «{t}» is coming up|Tu evento «{t}» se acerca|O seu evento «{t}» está a chegar
+fav.remindOggi|comincia oggi alle {o}|starts today at {o}|empieza hoy a las {o}|começa hoje às {o}
+fav.remindDomani|è domani alle {o}|is tomorrow at {o}|es mañana a las {o}|é amanhã às {o}
+fav.remindTra|è tra {n} giorni|is in {n} days|es dentro de {n} días|é daqui a {n} dias

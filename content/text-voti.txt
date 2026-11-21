@@ -1,0 +1,31 @@
+cat.saved|Preferiti|Favourites|Favoritos|Favoritos
+cat.actsAll|Tutte ({n})|All ({n})|Todas ({n})|Todas ({n})
+voti.passati|Com'è andata|How did it go|Qué tal fue|Como foi
+voti.hint|Tutti gli eventi passati, dal voto più alto in giù. Se c'eri, dai le stelle e il tuo parere.|Every past event, best rated first. If you were there, give stars and your opinion.|Todos los eventos pasados, del mejor votado al peor. Si estuviste, da estrellas y tu opinión.|Todos os eventos passados, do mais bem votado ao pior. Se você estava, dê estrelas e sua opinião.
+voti.media|{m} su 5 · {n} voti|{m} of 5 · {n} votes|{m} de 5 · {n} votos|{m} de 5 · {n} votos
+voti.nessuno|Ancora nessun voto|No votes yet|Aún sin votos|Ainda sem votos
+voti.like|Mi è piaciuto|I liked it|Me gustó|Eu gostei
+voti.dislike|Non mi è piaciuto|I didn't like it|No me gustó|Não gostei
+voti.meno|Va bene: non te lo ripropongo più|Okay: I won't suggest it again|Vale: no te lo volveré a proponer|Certo: não vou mais sugerir
+matrix.title|Cosa ti va di fare?|What do you feel like doing?|¿Qué te apetece hacer?|O que você quer fazer?
+matrix.hint|Tocca una categoria o un'attività: vedi solo quello. Tocca di nuovo per togliere.|Tap a category or an activity to see just that. Tap again to clear.|Toca una categoría o una actividad: ves solo eso. Toca de nuevo para quitar.|Toque numa categoria ou atividade: vê só isso. Toque de novo para tirar.
+matrix.new|New|New|Nuevo|Novo
+matrix.favEmpty|Non ci sono eventi al momento fra i preferiti.|There are no events among your favourites right now.|No hay eventos entre tus favoritos ahora mismo.|Não há eventos entre os favoritos agora.
+mood.prefilled|Ho già messo la categoria e l'attività: aggiungi il resto e pubblicalo.|I already set the category and activity: add the rest and publish.|Ya puse la categoría y la actividad: añade el resto y publícalo.|Já coloquei a categoria e a atividade: adicione o resto e publique.
+past.folder|Eventi passati|Past events|Eventos pasados|Eventos passados
+past.folderSub|Com'è andata: le foto, chi c'era, le stelle.|How it went: the photos, who was there, the stars.|Cómo fue: las fotos, quién estuvo, las estrellas.|Como foi: as fotos, quem estava, as estrelas.
+past.vediTutti|Vedi tutti|See all|Ver todos|Ver todos
+past.tuttiTitolo|Tutti gli eventi passati|All past events|Todos los eventos pasados|Todos os eventos passados
+past.tuttiSub|Tutti i ricordi della community. Filtra per categoria, per i tuoi preferiti o per le tue passioni.|All the community's memories. Filter by category, by your favourites or by your passions.|Todos los recuerdos de la comunidad. Filtra por categoría, por tus favoritos o por tus pasiones.|Todas as memórias da comunidade. Filtre por categoria, pelos favoritos ou pelas suas paixões.
+past.filtroRecenti|Più recenti|Most recent|Más recientes|Mais recentes
+past.filtroVoto|Voto più alto|Best rated|Mejor valorados|Melhor avaliados
+past.filtroFav|Preferiti|Favourites|Favoritos|Favoritos
+past.filtroPassioni|Le mie passioni|My passions|Mis pasiones|Minhas paixões
+past.favEmpty|Non ci sono eventi passati fra i preferiti.|No past events among your favourites.|No hay eventos pasados entre tus favoritos.|Não há eventos passados entre os favoritos.
+past.passEmpty|Con questo filtro non c'è niente.|Nothing with this filter.|Nada con este filtro.|Nada com este filtro.
+past.eventoPassato|Evento passato|Past event|Evento pasado|Evento passado
+past.recensioni|Recensioni evento|Event reviews|Reseñas del evento|Avaliações do evento
+past.recensioniNota|Le stelle sono di tutti: il numero è la media di chi c'era. Il pollice invece è solo tuo: serve a far capire all'app se mostrarti ancora eventi di questo tipo da questa persona.|Stars belong to everyone: the number is the average of those who were there. The thumb is just yours: it tells the app whether to show you this kind of event by this person again.|Las estrellas son de todos: el número es la media de los que estuvieron. El pulgar es solo tuyo: sirve para decirle a la app si mostrarte más eventos de este tipo de esta persona.|As estrelas são de todos: o número é a média de quem estava. O polegar é só seu: serve para dizer ao app se te mostrar mais eventos deste tipo desta pessoa.
+past.soloChi|Solo chi c'era può mettere le stelle e il pollice.|Only those who were there can give stars and vote.|Solo quien estuvo puede poner estrellas y votar.|Só quem estava pode dar estrelas e votar.
+voti.su5|{n} voti su 5|{n} votes of 5|{n} votos de 5|{n} votos de 5
+radius.none|Nessun evento qui. Allarga il raggio.|No events in this radius. Widen it.|Ningún evento en este radio. Amplíalo.|Nenhum evento neste raio. Amplie.

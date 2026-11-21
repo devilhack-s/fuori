@@ -1,0 +1,115 @@
+Cena fuori|sociale|Dinner out|Cena fuera|Jantar fora
+Cena tra sconosciuti|sociale|Dinner with strangers|Cena con desconocidos|Jantar com desconhecidos
+Aperitivo|sociale|Aperitivo|Aperitivo|Aperitivo
+Brunch|sociale|Brunch|Brunch|Brunch
+Pizza in compagnia|sociale|Pizza together|Pizza en compañía|Pizza em grupo
+Street food|sociale|Street food|Comida callejera|Comida de rua
+Food tour|sociale|Food tour|Ruta gastronómica|Tour gastronômico
+Cucinare insieme|creativita|Cook together|Cocinar juntos|Cozinhar juntos
+Corso di cucina|creativita|Cooking class|Clase de cocina|Aula de culinária
+Pasta fatta in casa|creativita|Fresh pasta|Pasta fresca|Massa fresca
+Pizza fatta in casa|creativita|Homemade pizza|Pizza casera|Pizza caseira
+Pasticceria|creativita|Baking|Repostería|Confeitaria
+Pane e lievito madre|creativita|Sourdough bread|Pan de masa madre|Pão de fermentação natural
+Vino e degustazione|sociale|Wine tasting|Cata de vinos|Degustação de vinhos
+Birra artigianale|sociale|Craft beer|Cerveza artesanal|Cerveja artesanal
+Cocktail|sociale|Cocktails|Cócteles|Coquetéis
+Caffè e conversazione|sociale|Coffee and talk|Café y charla|Café e conversa
+Tè pomeridiano|sociale|Afternoon tea|Té de la tarde|Chá da tarde
+Mercato rionale|sociale|Local market|Mercado de barrio|Feira de bairro
+Sagra|sociale|Food festival|Fiesta gastronómica|Festa gastronômica
+Picnic|sociale|Picnic|Pícnic|Piquenique
+Barbecue|sociale|Barbecue|Barbacoa|Churrasco
+Cena etnica|sociale|World food night|Cena del mundo|Jantar do mundo
+Vegetariano e vegano|sociale|Veggie and vegan|Vegetariano y vegano|Vegetariano e vegano
+Cinema|cinema|Cinema|Cine|Cinema
+Cinema all'aperto|cinema|Open-air cinema|Cine al aire libre|Cinema ao ar livre
+Cineforum|cinema|Film club|Cinefórum|Cineclube
+Documentari|cinema|Documentaries|Documentales|Documentários
+Teatro|cinema|Theatre|Teatro|Teatro
+Teatro d'improvvisazione|cinema|Improv theatre|Teatro improvisado|Teatro de improviso
+Spettacolo di stand up|cinema|Stand-up comedy|Monólogos|Stand-up comedy
+Cabaret|cinema|Cabaret|Cabaret|Cabaret
+Musical|cinema|Musical|Musical|Musical
+Opera|cinema|Opera|Ópera|Ópera
+Balletto|cinema|Ballet|Ballet|Balé
+Concerto|musica|Concert|Concierto|Show
+Musica dal vivo|musica|Live music|Música en vivo|Música ao vivo
+Jazz|musica|Jazz|Jazz|Jazz
+Blues|musica|Blues|Blues|Blues
+Rock|musica|Rock|Rock|Rock
+Indie|musica|Indie|Indie|Indie
+Elettronica|musica|Electronic|Electrónica|Eletrônica
+Techno|musica|Techno|Techno|Techno
+House|musica|House|House|House
+Hip hop live|musica|Hip hop live|Hip hop en vivo|Hip hop ao vivo
+Reggae|musica|Reggae|Reggae|Reggae
+Latino americana|musica|Latin|Latina|Latina
+Musica popolare|musica|Folk music|Música popular|Música popular
+Coro|musica|Choir|Coro|Coral
+Karaoke|musica|Karaoke|Karaoke|Karaoke
+Jam session|musica|Jam session|Jam session|Jam session
+Suonare insieme|musica|Play together|Tocar juntos|Tocar juntos
+Imparare uno strumento|musica|Learn an instrument|Aprender un instrumento|Aprender um instrumento
+Vinili e dischi|musica|Vinyl and records|Vinilos y discos|Vinis e discos
+Festival musicale|musica|Music festival|Festival de música|Festival de música
+Rave|musica|Rave|Rave|Rave
+Silent disco|musica|Silent disco|Disco silenciosa|Silent disco
+Serata in discoteca|serate|Club night|Noche de discoteca|Noite de balada
+Serata in un pub|serate|Pub night|Noche de pub|Noite no pub
+Serata giochi da tavolo|giochi|Board game night|Noche de juegos de mesa|Noite de jogos de tabuleiro
+Giochi di carte|giochi|Card games|Juegos de cartas|Jogos de cartas
+Risiko e strategia|giochi|Strategy games|Juegos de estrategia|Jogos de estratégia
+RPG e Dungeons|giochi|Tabletop RPG|Rol de mesa|RPG de mesa
+Scacchi|giochi|Chess|Ajedrez|Xadrez
+Dama|giochi|Draughts|Damas|Damas
+Burraco|giochi|Burraco|Burraco|Burraco
+Poker|giochi|Poker|Póker|Pôquer
+Tombola|giochi|Tombola|Bingo|Bingo
+Videogiochi|giochi|Video games|Videojuegos|Videogames
+Retrogaming|giochi|Retro gaming|Retrogaming|Retrogame
+Torneo di videogiochi|giochi|Gaming tournament|Torneo de videojuegos|Torneio de games
+Escape room|giochi|Escape room|Escape room|Escape room
+Caccia al tesoro urbana|giochi|Urban treasure hunt|Búsqueda del tesoro urbana|Caça ao tesouro urbana
+Quiz e trivia|giochi|Quiz night|Noche de trivia|Noite de quiz
+Bingo|giochi|Bingo|Bingo|Bingo
+Bowling|giochi|Bowling|Bolos|Boliche
+Biliardo|giochi|Pool|Billar|Sinuca
+Freccette|giochi|Darts|Dardos|Dardos
+Flipper e sala giochi|giochi|Arcade|Salón de juegos|Fliperama
+Lego e costruzioni|creativita|Lego and building|Lego y construcciones|Lego e construções
+Origami e bricolage|creativita|Origami and crafts|Origami y manualidades|Origami e trabalhos manuais
+Ceramica|creativita|Pottery|Cerámica|Cerâmica
+Fotografia|creativita|Photography|Fotografía|Fotografia
+Fotografia di strada|creativita|Street photography|Fotografía urbana|Fotografia de rua
+Disegno dal vivo|creativita|Life drawing|Dibujo del natural|Desenho ao vivo
+Acquerello|creativita|Watercolour|Acuarela|Aquarela
+Pittura|creativita|Painting|Pintura|Pintura
+Scultura|creativita|Sculpture|Escultura|Escultura
+Scrittura creativa|creativita|Creative writing|Escritura creativa|Escrita criativa
+Poesia|creativita|Poetry|Poesía|Poesia
+Book club|creativita|Book club|Club de lectura|Clube do livro
+Sartoria e cucito|creativita|Sewing|Costura|Costura
+Lavorare a maglia|creativita|Knitting|Tejer|Tricô
+Uncinetto|creativita|Crochet|Ganchillo|Crochê
+Falegnameria|creativita|Woodworking|Carpintería|Marcenaria
+Restauro mobili|creativita|Furniture restoration|Restauración de muebles|Restauração de móveis
+Giardinaggio|natura|Gardening|Jardinería|Jardinagem
+Orto urbano|natura|Urban garden|Huerto urbano|Horta urbana
+Piante e talee|natura|Plants and cuttings|Plantas y esquejes|Plantas e mudas
+Birdwatching|natura|Birdwatching|Observación de aves|Observação de aves
+Astronomia|natura|Astronomy|Astronomía|Astronomia
+Osservare le stelle|natura|Stargazing|Mirar las estrellas|Observar estrelas
+Falò e tramonti|natura|Bonfires and sunsets|Hogueras y atardeceres|Fogueiras e pores do sol
+Campeggio con tende|natura|Tent camping|Acampada con tienda|Acampamento com barraca
+Glamping|natura|Glamping|Glamping|Glamping
+Escursione all'alba|natura|Sunrise hike|Senderismo al amanecer|Trilha ao amanhecer
+Volcano trekking|natura|Volcano hike|Volcán|Vulcão
+Grotte e speleologia|natura|Caves and caving|Cuevas y espeleología|Cavernas e espeleologia
+Fiume e cascate|natura|Rivers and waterfalls|Ríos y cascadas|Rios e cachoeiras
+Mare e snorkeling|natura|Sea and snorkelling|Mar y esnórquel|Mar e snorkel
+Barca e gommone|natura|Boat trip|Paseo en barco|Passeio de barco
+Festa in barca|serate|Boat party|Fiesta en barco|Festa no barco
+Sci nautico|natura|Water skiing|Esquí acuático|Esqui aquático
+Wakeboard|natura|Wakeboarding|Wakeboard|Wakeboard
+Pesca in barca|natura|Boat fishing|Pesca en barco|Pesca de barco

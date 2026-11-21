@@ -1,0 +1,40 @@
+plugins { id 'com.android.application' }
+
+android {
+  namespace 'it.fuori.app'
+  compileSdk 34
+
+  defaultConfig {
+    applicationId 'it.fuori.app'
+    minSdk 21
+    targetSdk 34
+    versionCode 8
+    versionName '1.7'
+  }
+
+  signingConfigs {
+    release {
+      storeFile file(System.getenv('FUORI_KEYSTORE'))
+      storePassword System.getenv('FUORI_STORE_PASS')
+      keyAlias System.getenv('FUORI_KEY_ALIAS')
+      keyPassword System.getenv('FUORI_KEY_PASS')
+    }
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      signingConfig signingConfigs.release
+    }
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_17
+    targetCompatibility JavaVersion.VERSION_17
+  }
+}
+
+dependencies {
+  implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.5.0'
+  implementation 'com.google.androidbrowserhelper:locationdelegation:1.0.1'
+}

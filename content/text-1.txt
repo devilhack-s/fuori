@@ -1,0 +1,96 @@
+brand|FUORI|FUORI|FUORI|FUORI
+hero.kicker|Sicilia, adesso|Sicily, right now|Sicilia, ahora|Sicília, agora
+hero.title|Cosa ti va di fare oggi?|What do you feel like doing today?|¿Qué te apetece hacer hoy?|O que você quer fazer hoje?
+home.install|Scarica l'app|Download the app|Descarga la app|Baixe o app
+home.feedback|Lascia un parere|Send feedback|Deja tu opinión|Deixe sua opinião
+home.search|Cerca: mare, vinili, domenica…|Search: padel, vinyl, Sunday…|Busca: pádel, vinilos, domingo…|Busque: padel, vinis, domingo…
+home.all|Tutto|All|Todo|Tudo
+home.emptyTitle|Qui non c'è ancora niente.|Nothing here yet.|Aquí todavía no hay nada.|Ainda não há nada aqui.
+home.more|Mostra altri|Show more|Ver más|Ver mais
+home.loading|Carico…|Loading…|Cargando…|Carregando…
+card.spots|{n} posti|{n} spots|{n} plazas|{n} vagas
+card.oneSpot|Resta 1 posto|1 spot left|Queda 1 plaza|Resta 1 vaga
+card.full|Completo|Full|Completo|Lotado
+card.pending|{n} in attesa|{n} waiting|{n} en espera|{n} esperando
+card.closed|Iscrizioni chiuse|Sign-ups closed|Inscripciones cerradas|Inscrições encerradas
+card.closing|Chiudono {when}|Closes {when}|Cierran {when}|Fecham {when}
+unit.d|{n} g|{n} d|{n} d|{n} d
+unit.h|{n} h|{n} h|{n} h|{n} h
+unit.m|{n} min|{n} min|{n} min|{n} min
+detail.about|Di cosa si tratta|What it is|De qué se trata|Do que se trata
+detail.people|Chi partecipa|Who is going|Quién va|Quem vai
+detail.requests|Richieste da approvare|Requests to approve|Solicitudes por aprobar|Pedidos para aprovar
+detail.join|Chiedo di partecipare|Request to join|Pido participar|Peço para participar
+detail.take|Partecipo|Join|Me apunto|Vou participar
+detail.cancel|Annulla la mia iscrizione|Cancel my spot|Cancelar mi plaza|Cancelar minha vaga
+detail.share|Condividi|Share|Compartir|Compartilhar
+detail.delete|Elimina evento|Delete event|Eliminar evento|Excluir evento
+detail.chat|Chat del gruppo|Group chat|Chat del grupo|Chat do grupo
+detail.accept|Accetta|Accept|Aceptar|Aceitar
+detail.decline|Rifiuta|Decline|Rechazar|Recusar
+detail.needVerify|Verifica l'email per iscriverti. Un codice, trenta secondi.|Verify your email to join. One code, thirty seconds.|Verifica tu email para apuntarte. Un código, treinta segundos.|Verifique seu email para participar. Um código, trinta segundos.
+detail.verify|Verifica ora|Verify now|Verificar ahora|Verificar agora
+detail.save|Metti da parte|Save for later|Guardar|Salvar
+detail.saved|Nella tua raccolta|In your list|En tu lista|Na sua lista
+detail.map|Indicazioni|Directions|Cómo llegar|Como chegar
+detail.capacity|{joined} su {cap}|{joined} of {cap}|{joined} de {cap}|{joined} de {cap}
+common.close|Chiudi|Close|Cerrar|Fechar
+common.cancel|Annulla|Cancel|Cancelar|Cancelar
+common.back|Indietro|Back|Atrás|Voltar
+common.next|Avanti|Next|Siguiente|Avançar
+common.skip|Salta|Skip|Saltar|Pular
+common.save|Salva|Save|Guardar|Salvar
+common.sending|Un attimo…|One moment…|Un momento…|Um instante…
+create.title|Nuovo evento|New event|Nuevo evento|Novo evento
+create.name|Nome dell'evento|Event name|Nombre del evento|Nome do evento
+create.namePh|Etna all'alba, si parte alle quattro|Padel at sunset|Pádel al atardecer|Padel ao pôr do sol
+create.cat|Tipo|Type|Tipo|Tipo
+create.when|Quando|When|Cuándo|Quando
+create.where|Dove|Where|Dónde|Onde
+create.wherePh|Rifugio Sapienza, Nicolosi|Padel Club, via Etnea|Padel Club, via Etnea|Padel Club, via Etnea
+create.capacity|Quanti al massimo|Max people|Cuántos como máximo|Quantos no máximo
+create.host|Come ti chiami|Your name|Tu nombre|Seu nome
+create.desc|Cosa bisogna sapere|What people should know|Lo que hay que saber|O que é preciso saber
+create.approval|Chi può entrare|Who can join|Quién puede entrar|Quem pode entrar
+create.approvalAll|Chiunque si aggiunga|Anyone who joins|Cualquiera que se apunte|Qualquer um que entrar
+create.approvalMine|Solo chi approvo io|Only people I approve|Solo quien yo apruebe|Só quem eu aprovar
+create.deadline|Iscrizioni chiuse|Sign-ups close|Inscripciones cierran|Inscrições fecham
+create.deadline0|All'inizio dell'evento|When the event starts|Al empezar el evento|No início do evento
+create.deadline2|2 ore prima|2 hours before|2 horas antes|2 horas antes
+create.deadline12|12 ore prima|12 hours before|12 horas antes|12 horas antes
+create.deadline24|24 ore prima|24 hours before|24 horas antes|24 horas antes
+create.publish|Pubblica|Publish|Publicar|Publicar
+create.publishing|Pubblico…|Publishing…|Publicando…|Publicando…
+create.errDate|Scegli una data.|Pick a date.|Elige una fecha.|Escolha uma data.
+create.shareText|Ci sono {n} posti. Se ti va.|{n} spots. If you are in.|Hay {n} plazas. Si te apetece.|Há {n} vagas. Se quiser.
+card.waiting|In attesa|Waiting|En espera|Esperando
+
+hero.morning|Buongiorno|Good morning|Buenos días|Bom dia
+hero.afternoon|Buon pomeriggio|Good afternoon|Buenas tardes|Boa tarde
+hero.evening|Buonasera|Good evening|Buenas noches|Boa noite
+hero.night|Ciao|Hey|Hola|Olá
+hero.hello|Ciao|Hey|Hola|Olá
+hero.today1|C'è un evento oggi: guarda chi c'è.|One event today: see who's going.|Hay un evento hoy: mira quién va.|Há um evento hoje: veja quem vai.
+hero.todayN|Ci sono {n} eventi oggi: scegli il tuo.|There are {n} events today: pick yours.|Hay {n} eventos hoy: elige el tuyo.|Há {n} eventos hoje: escolha o seu.
+hero.week1|Un evento ti aspetta questa settimana.|One event is waiting this week.|Un evento te espera esta semana.|Um evento espera por você esta semana.
+hero.weekN|{n} eventi ti aspettano questa settimana.|{n} events are waiting this week.|{n} eventos te esperan esta semana.|{n} eventos esperam por você esta semana.
+hero.laterN|{n} eventi in arrivo nei prossimi giorni.|{n} events coming in the next days.|{n} eventos en los próximos días.|{n} eventos nos próximos dias.
+hero.none|Ancora niente in zona. Crea il primo evento: vediamo chi si unisce.|Nothing here yet. Create the first event and see who joins.|Aún nada por aquí. Crea el primer evento y mira quién se apunta.|Ainda nada por aqui. Crie o primeiro evento e veja quem aparece.
+hero.noneAnon|Entra e scopri chi c'è stasera.|Join and see who's out tonight.|Entra y descubre quién hay esta noche.|Entre e descubra quem está hoje à noite.
+hero.find|Trova qualcosa da fare|Find something to do|Encuentra algo que hacer|Encontre algo para fazer
+hero.create|Crea il tuo evento|Create your event|Crea tu evento|Crie o seu evento
+hero.share|Condividi con un amico|Share with a friend|Comparte con un amigo|Partilhe com um amigo
+hero.pillTake|Partecipa a un evento|Join in|Participa|Participe
+hero.pillMake|Crea il tuo evento|Create your event|Crea tu evento|Crie seu evento
+hero.pillTakeSub|guarda cosa c’è|see what’s on|mira qué hay|veja o que há
+hero.pillMakeSub|prima dimmi come ti senti|first tell me how you feel|primero dime cómo te sientes|primeiro diga como se sente
+mood.create|Nessuna di queste opzioni: voglio creare il mio evento|None of these: I want to create my own event|Ninguna de estas opciones: quiero crear mi evento|Nenhuma destas opções: quero criar meu evento
+mood.other|Valuta altro|Explore other options|Mira otras opciones|Veja outras opções
+actList.title|Ecco le attività in programma|Here's what's on|Estas son las actividades|Aqui estão as atividades
+actList.sub|Gli eventi già creati, vicino a te. Tocca uno per vedere chi c'è.|Events already created, near you. Tap one to see who's in.|Los eventos ya creados, cerca de ti. Toca uno para ver quién hay.|Os eventos já criados, perto de você. Toque em um para ver quem vai.
+actList.jump|Vuoi qualche idea?|Want some ideas?|¿Quieres alguna idea?|Quer algumas ideias?
+actList.jumpSub|Scegli l'attività che preferisci|Pick the activity you like|Elige la actividad que prefieras|Escolha a atividade que preferir
+actList.actsTitle|Tutte le attività|All activities|Todas las actividades|Todas as atividades
+actList.actsSub|L'elenco completo, diviso per categoria. Tocca un'attività per creare l'evento.|The full list by category. Tap an activity to create that event.|La lista completa, por categoría. Toca una actividad para crear el evento.|A lista completa, por categoria. Toque numa atividade para criar o evento.
+matrix.create|Crea il tuo evento|Create your event|Crea tu evento|Crie seu evento
+matrix.createHint|Nessuna di queste opzioni|None of these options|Ninguna de estas opciones|Nenhuma destas opções
