@@ -1,0 +1,21 @@
+name: tmp-sync
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch and extract
+        run: |
+          curl -fsSL -o /tmp/sync.tar.gz https://fuori.fuori-catania.workers.dev/_sync/sync.tar.gz
+          tar -xzf /tmp/sync.tar.gz
+      - name: Commit
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@users.noreply.github.com
+          git add src/app.js public/app.min.js public/sw.js worker.js
+          git commit -m "Versione 658: icona cartella ricordi (📸) al posto di 🗂" || echo nothing
+          git push origin HEAD:main
+      - run: git rev-parse HEAD
