@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "643";
+const VERSION = "644";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -11041,7 +11041,8 @@ function mascotCiclo(attivo) {
   const passo = () => {
     const posa = mascotProssima();
     mascotPosa(posa);
-    mascotExprTimer = setTimeout(passo, posa.ms + Math.floor(Math.random() * 700));
+    // v644: le espressioni restano piu' a lungo, cosi' si leggono
+    mascotExprTimer = setTimeout(passo, Math.round(posa.ms * 2.6) + Math.floor(Math.random() * 1200));
   };
   passo();
 }
