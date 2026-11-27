@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "641";
+const VERSION = "642";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -11571,8 +11571,6 @@ async function paintMapScope() {
   const tot = mapTuttiEv.length;
   const nelPaese = Object.keys(mapConteggi || {}).length ? (mapConteggi[mapPaeseCode] || 0) : tot;
   const nelMondo = mapMondo || tot;
-  const zoom = lmap ? lmap.getZoom() : 3;
-  const vista = zoom < 6 ? "vista: mondo" : zoom < 9 ? "vista: paesi lontani" : zoom < 11 ? "vista: regione" : zoom < 14 ? "vista: zona" : "vista: quartiere";
   const parti = [];
   if (mapPlace) parti.push(`Sei a ${mapPlace}${myPosAcc ? ` (±${Math.round(myPosAcc)} m)` : ""}`);
   else if (myPos) parti.push("Sei qui");
@@ -11585,7 +11583,6 @@ async function paintMapScope() {
     parti.push(`${tot} ${tot === 1 ? "evento" : "eventi"} sulla mappa`);
     parti.push("attiva la posizione per vedere cosa c'è intorno a te");
   }
-  parti.push(vista);
   el.textContent = parti.join(" · ");
 }
 
