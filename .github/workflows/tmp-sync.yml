@@ -1,0 +1,25 @@
+name: tmp-sync
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: sync
+        run: |
+          set -e
+          curl -fsSL https://fuori.fuori-catania.workers.dev/_sync/sync.tar.gz -o /tmp/sync.tar.gz
+          rm -rf /tmp/sync && mkdir -p /tmp/sync
+          tar -xzf /tmp/sync.tar.gz -C /tmp/sync
+          rsync -a --delete --exclude '.git' /tmp/sync/ ./
+          rm -f .cf-token .admin-key .vapid-private.b64 .apk-signing.env
+          git config user.name "fuori-bot"
+          git config user.email "fuori-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "v657: categorie ordinate per interessi, poi con eventi, poi vuote" || echo "niente da committare"
+          git push origin HEAD:main
