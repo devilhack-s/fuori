@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "654";
+const VERSION = "655";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -483,7 +483,7 @@ function show(id) {
   // v639: la mascotte si affaccia sul pannello appena aperto e dice cosa si fa
   mascotteSegui();
   mfHint(id);
-  setTimeout(() => mascotteSegui(false), 320);
+  setTimeout(mascotteSegui, 320);
 }
 function hide(id, daIndietro) {
   if (id === "assistant" || id === "permFix" || id === "perms") stopVoce();
@@ -11408,15 +11408,11 @@ async function mascotteAvvia() {
   mascotTimer = setTimeout(() => { mascotTimer = 0; mascotteMostra(b); }, 3000);
 }
 
-/* ---------- v639: la mascotte gira per l'app ----------
-   Prima stava inchiodata in basso a destra e spariva dietro i pannelli.
-   Adesso il JS le dice dove andare (--mx/--my): si affaccia sul bordo del
-   pannello che apri, torna sopra la barra quando lo chiudi, si scansa se
-   tocchi altrove e, se resti fermo, ogni tanto ti dice qualcosa. */
+/* ---------- v655: la mascotte sta ferma in basso a destra ----------
+   Il JS le dice solo dove parcheggiarsi (--mx/--my): all'avvio e quando apri
+   o chiudi la chat. Per il resto non si muove piu' mentre navighi l'app. */
 let mfX = 0;
 let mfY = 0;
-let mfLatoSu = true;
-let mfUltimoSalto = 0;
 let mfBollaT = 0;
 let mfPosaT = 0;
 let mfIdleT = 0;
@@ -11511,14 +11507,6 @@ function mfDici(testo, ms, tipo, tieniPosa) {
   mfBollaT = setTimeout(() => { mfBollaT = 0; chiudiBolla(); }, ms || 5200);
 }
 
-// il sospiro: occhi chiusi, sorriso, guance e la goccia
-function mfSollievo() {
-  if (mfPosaT) clearTimeout(mfPosaT);
-  mascotCiclo(false);
-  mascotPosa({ n: "sollievo", e: "closed", m: "smile", h: "cheek", x: "sweat" });
-  mfPosaT = setTimeout(() => { mfPosaT = 0; mascotteUmore(""); }, 2400);
-}
-
 function mfDentro(id) {
   const el = document.getElementById(id);
   if (!el || el.hidden) return null;
@@ -11535,80 +11523,24 @@ function mfBaseBasso() {
   return dr && dr.top > 0 && dr.top < vh ? dr.top : vh - 96;
 }
 
-// cambia lato a ogni giro, cosi' il movimento si vede
-function mfLatoProssimo(vw, lato) {
-  mfLatoSu = !mfLatoSu;
-  return mfLatoSu ? vw - lato - 10 : 10;
-}
-
-function mascotteSegui(cambiaLato) {
+/* v655: la mascotte non gira piu' per l'app.
+   Sta ferma in basso a destra; si sposta solo quando la tocchi e si apre
+   la chat, e allora si affaccia sul bordo del pannello finche' lo chiudi. */
+function mascotteSegui() {
   const btn = $("#aiBtn");
   if (!btn) return;
   btn.classList.add("mf-mobile");
   const lato = mfLato();
   const vw = window.innerWidth || 360;
-  const r = strati.length ? mfDentro(strati[strati.length - 1]) : null;
-  const x = cambiaLato === false && mfX ? mfX : mfLatoProssimo(vw, lato);
-  // con un pannello aperto si mette sul suo bordo alto, senza coprire i comandi
+  const sopra = strati[strati.length - 1];
+  const r = sopra === "assistant" ? mfDentro(sopra) : null;
+  const x = vw - lato - 12;
   const y = r ? Math.max(6, r.top - lato - 8) : Math.max(6, mfBaseBasso() - lato - 12);
   mfVai(x, y);
 }
 
-// toccare altrove la fa scattare via, con la faccia del "fiu"
-function mfScansa(e) {
-  const lato = mfLato();
-  const vw = window.innerWidth || 360;
-  const vh = window.innerHeight || 640;
-  const px = e && e.clientX ? e.clientX : vw / 2;
-  const py = e && e.clientY ? e.clientY : vh / 2;
-  const r = strati.length ? mfDentro(strati[strati.length - 1]) : null;
-  const cand = [];
-  if (r) {
-    const alto = Math.max(6, r.top - lato - 8);
-    const basso = Math.min(vh - lato - 6, r.bottom + 8);
-    cand.push({ x: 10, y: alto }, { x: vw - lato - 10, y: alto }, { x: 10, y: basso }, { x: vw - lato - 10, y: basso });
-  } else {
-    const basso = Math.max(6, mfBaseBasso() - lato - 12);
-    cand.push(
-      { x: 10, y: basso },
-      { x: vw - lato - 10, y: basso },
-      { x: Math.round(vw / 2 - lato / 2), y: basso },
-      { x: 10, y: Math.round(vh * 0.46) },
-      { x: vw - lato - 10, y: Math.round(vh * 0.46) },
-    );
-  }
-  const vicino = Math.min(vw, vh) * 0.24;
-  let scelta = null;
-  let punti = -1;
-  for (const c of cand) {
-    const dTap = Math.hypot(c.x + lato / 2 - px, c.y + lato / 2 - py);
-    const dOra = Math.hypot(c.x - mfX, c.y - mfY);
-    if (dTap < vicino && dOra < vicino) continue;
-    const p = dTap + dOra * 0.75;
-    if (p > punti) { punti = p; scelta = c; }
-  }
-  if (!scelta) scelta = cand[0];
-  mfVai(scelta.x, scelta.y);
-  mfSollievo();
-  mfDici("Fiu… per poco ti ho evitato.", 2600, "info", true);
-}
-
-function mfTocco(e) {
-  const t = e.target;
-  if (!t || !t.closest) return;
-  if (t.closest("#aiBtn") || t.closest("#mascotBubble")) return;
-  const ora = Date.now();
-  if (ora - mfUltimoSalto < 900) return;
-  mfUltimoSalto = ora;
-  mfScansa(e);
-}
-
 function mfRidimensiona() {
-  const lato = mfLato();
-  const vw = window.innerWidth || 360;
-  const r = strati.length ? mfDentro(strati[strati.length - 1]) : null;
-  const y = r ? Math.max(6, r.top - lato - 8) : Math.max(6, mfBaseBasso() - lato - 12);
-  mfVai(mfX || vw - lato - 10, y);
+  mascotteSegui();
 }
 
 // se resti fermo dentro l'app, ogni tanto butta li' una frase
@@ -11646,7 +11578,6 @@ function mfHint(id) {
 
 function mfAvvia() {
   mascotteSegui();
-  document.addEventListener("pointerdown", mfTocco, { passive: true });
   document.addEventListener("pointerdown", mfSveglia, { passive: true });
   document.addEventListener("keydown", mfSveglia);
   document.addEventListener("wheel", mfSveglia, { passive: true });
