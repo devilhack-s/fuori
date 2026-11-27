@@ -2239,3 +2239,14 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
 }
 /* la riga a metà resta, ma più fine: è la "rottura" della compressa */
 .hero-pill.red::after,.hero-pill.blue::after{opacity:.42;height:1px}
+
+/* v656: la mascotte non deve piu' sembrare uscita da un film horror.
+   Le facce si cambiavano con una dissolvenza di 0,26s: per un attimo si
+   vedevano due paia di occhi e due bocche sovrapposti (occhi enormi + ghigno
+   con i denti). Ora il cambio e' netto, una faccia alla volta. Inoltre la bocca
+   "grin" perde la fila di denti bianchi, che a 54px sembrava un ghigno. */
+.mascot-face .mx-eye > *,
+.mascot-face .mx-m,
+.mascot-face .mx-browup,
+.mascot-face .mx-browsad{transition:none}
+.mascot-face .mx-teeth{display:none}
