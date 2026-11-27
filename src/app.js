@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "648";
+const VERSION = "649";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -11205,8 +11205,11 @@ function paintMoodSay() {
   if (em) em.textContent = m ? m.emoji : "✨";
   if (tx) {
     const etichetta = moodPick ? t("mood." + moodPick) : "";
+    // il numero resta sempre attaccato alla sua parola (spazio indistruttibile):
+    // cosi' non va mai a capo da solo lasciando "1" sopra e la frase sotto
+    const conta = `${n}\u00A0${n === 1 ? "evento" : "eventi"}`;
     tx.textContent = n
-      ? `Oggi: ${etichetta}. ${n} ${n === 1 ? "evento ha" : "eventi hanno"} a che fare con questo.`
+      ? `Oggi: ${etichetta}. ${conta}\u00A0${n === 1 ? "ha" : "hanno"} a che fare con questo.`
       : `Oggi: ${etichetta}. In questo momento non c'è niente che ci somigli: puoi crearlo tu.`;
   }
   if (btn) {
