@@ -39,7 +39,7 @@ const SCHEMA_V = 14;
 
 // la versione dell'app: la aggiorna build.sh da sola leggendo src/app.js.
 // I telefoni la chiedono ogni minuto e, se è cambiata, si aggiornano da soli.
-const CLIENT_V = "669";
+const CLIENT_V = "670";
 
 async function initDb(env) {
   if (ready) return;
