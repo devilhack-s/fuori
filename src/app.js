@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "657";
+const VERSION = "658";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -10277,7 +10277,7 @@ function paintPastFolder() {
   }
   box.innerHTML = `<div class="past-folder">
     <div class="past-folder-top">
-      <span class="pf-ico" aria-hidden="true">🗂</span>
+      <span class="pf-ico" aria-hidden="true">📸</span>
       <span class="pf-txt"><b>${esc(t("past.folder"))}</b><i>${esc(t("past.folderSub"))}</i></span>
       <span class="pf-n">${passatiVoti.length}</span>
     </div>
