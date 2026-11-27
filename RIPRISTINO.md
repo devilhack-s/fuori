@@ -4,7 +4,7 @@ Questo file serve a chi (persona o assistente) riprende il progetto senza avere 
 
 ## 1. Cosa hai in mano
 
-- Il **codice completo** in questo repository (sito + server + contenuti + progetto Android).
+- Il **codice completo** in questo repository (sito + server + contenuti + progetto Android + progetto iPhone).
 - Un archivio separato `accessi-fuori-PRIVATO.zip` con le chiavi e un **backup del database**.
 - Il sito online su Cloudflare: https://fuori.fuori-catania.workers.dev
 

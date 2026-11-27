@@ -1,5 +1,13 @@
 plugins { id 'com.android.application' }
 
+// La firma si attiva solo se GitHub (o il computer) passa la chiave.
+// Così il progetto compila anche senza keystore (per esempio in una prova).
+def hasSigning = System.getenv('FUORI_KEYSTORE') != null
+
+// La versione può arrivare da GitHub (tag v1.8 -> nome 1.8, codice sempre crescente).
+def appVersionCode = (System.getenv('FUORI_VERSION_CODE') ?: '8').toInteger()
+def appVersionName = System.getenv('FUORI_VERSION_NAME') ?: '1.7'
+
 android {
   namespace 'it.fuori.app'
   compileSdk 34
@@ -8,23 +16,25 @@ android {
     applicationId 'it.fuori.app'
     minSdk 21
     targetSdk 34
-    versionCode 8
-    versionName '1.7'
+    versionCode appVersionCode
+    versionName appVersionName
   }
 
   signingConfigs {
-    release {
-      storeFile file(System.getenv('FUORI_KEYSTORE'))
-      storePassword System.getenv('FUORI_STORE_PASS')
-      keyAlias System.getenv('FUORI_KEY_ALIAS')
-      keyPassword System.getenv('FUORI_KEY_PASS')
+    if (hasSigning) {
+      release {
+        storeFile file(System.getenv('FUORI_KEYSTORE'))
+        storePassword System.getenv('FUORI_STORE_PASS')
+        keyAlias System.getenv('FUORI_KEY_ALIAS')
+        keyPassword System.getenv('FUORI_KEY_PASS')
+      }
     }
   }
 
   buildTypes {
     release {
       minifyEnabled false
-      signingConfig signingConfigs.release
+      if (hasSigning) signingConfig signingConfigs.release
     }
   }
 

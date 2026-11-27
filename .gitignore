@@ -19,3 +19,15 @@ android/app/build/
 android/local.properties
 *.log
 backups/
+
+# iOS (generati da Capacitor o da Xcode)
+ios/App/Pods/
+ios/App/build/
+ios/App/output/
+ios/DerivedData/
+ios/App/App/public/
+ios/App/App/capacitor.config.json
+ios/App/App/config.xml
+ios/capacitor-cordova-ios-plugins/
+ios/**/xcuserdata/
+.DS_Store

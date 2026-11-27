@@ -1,0 +1,23 @@
+{
+  "name": "fuori",
+  "version": "1.7.0",
+  "private": true,
+  "description": "FUORI — sito/app web, server Cloudflare, app Android e iOS",
+  "license": "SEE LICENSE IN LICENSE",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devilhack-s/fuori.git"
+  },
+  "homepage": "https://fuori.fuori-catania.workers.dev",
+  "scripts": {
+    "build": "./build.sh",
+    "contenuti": "node tools/build-content.js",
+    "ios:sync": "cap sync ios",
+    "ios:apri": "cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/cli": "7.6.11",
+    "@capacitor/core": "7.6.11",
+    "@capacitor/ios": "7.6.11"
+  }
+}

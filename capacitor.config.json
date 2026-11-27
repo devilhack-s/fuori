@@ -1,0 +1,15 @@
+{
+  "appId": "it.fuori.app",
+  "appName": "FUORI",
+  "webDir": "capacitor-web",
+  "server": {
+    "url": "https://fuori.fuori-catania.workers.dev",
+    "allowNavigation": [
+      "fuori.fuori-catania.workers.dev"
+    ]
+  },
+  "ios": {
+    "contentInset": "never",
+    "scrollEnabled": true
+  }
+}

@@ -16,7 +16,11 @@ Versione attuale del client: **560**.
 | `content/` | I testi dell'app e delle attività (file `.txt` con campi separati da `|`). |
 | `public/` | Quello che viene pubblicato: `index.html`, `styles.css`, icone, immagini, traduzioni (`lang/`), APK, mappa (Leaflet). |
 | `tools/` | Script di build: `build-content.js` (testi → JSON), regole di stagione/umore, generazione icone. |
-| `android/` | Progetto Android (WebView + notifiche) per generare l'APK. |
+| `android/` | App Android nativa (Trusted Web Activity + notifiche e posizione) per generare l'APK. |
+| `ios/` | App iPhone (Capacitor 7, apre lo stesso sito). Nuova: non ancora compilata. |
+| `.github/workflows/` | Pubblicazione automatica: sito su Cloudflare, app Android su Google Play, app iPhone su TestFlight. |
+| `PUBBLICARE.md` | Guida completa: tecnologie, account store, segreti GitHub, come si pubblica. |
+| `LAVORA-AL-PROGETTO.md` | Testo pronto da incollare in Claude o Google AI Studio per far lavorare un'altra IA sul progetto. |
 | `build.sh` | Build: rigenera i contenuti, minifica `src/app.js` in `public/app.min.js` e allinea i numeri di versione. |
 | `wrangler.toml` | Configurazione Cloudflare: database D1 `fuori`, sito statico, cron giornaliero. |
 | `deploy.json` | Manifest usato dal deploy (worker + cartella `public/`). |
@@ -38,6 +42,24 @@ export CLOUDFLARE_API_TOKEN=...        # oppure metti il token in .cf-token
 ```
 
 In alternativa: `tools/deploy-cloudflare.sh` fa build + deploy e, se serve, crea il database.
+
+Per l'app iPhone servono Node.js e CocoaPods su un Mac:
+
+```bash
+npm ci
+npx cap sync ios
+npm run ios:apri      # apre il progetto in Xcode
+```
+
+## Pubblicare su GitHub e sugli store
+
+Il repository include tre workflow in `.github/workflows/`:
+
+- `deploy-web.yml` — pubblica sito e server a ogni push su `main`;
+- `android.yml` — con un tag `v1.8` compila APK firmato + AAB, carica su Google Play e aggiorna `fuori.apk` sul sito;
+- `ios.yml` — con un tag compila l'app iPhone e la carica su TestFlight.
+
+I segreti da impostare, i costi degli account e i passaggi una volta sola sono in [`PUBBLICARE.md`](PUBBLICARE.md).
 
 Database D1: nome `fuori`, id `4c79ee68-51de-4ee7-8af6-22a7d1e85280`.
 Le tabelle le crea il worker al primo avvio: non serve lanciare SQL a mano.
@@ -64,4 +86,5 @@ Sono custoditi a parte (archivio `accessi-fuori-PRIVATO.zip` consegnato insieme 
 - Le foto profilo e delle attività sono salvate nel database D1 (tabella `blobs`), non su R2 (disattivato).
 - Il numero di versione (`src/app.js` → `const VERSION`, e `worker.js` → `CLIENT_V`) viene allineato automaticamente da `build.sh`: i telefoni si aggiornano da soli quando cambia.
 - Il cron in `wrangler.toml` manda un promemoria al giorno alle 9.
+- L'app iPhone apre lo stesso sito: le modifiche al sito si vedono subito anche su iPhone, senza ripubblicare l'app. Le notifiche push però funzionano solo su Android.
 - Licenza: vedi `LICENSE` e `NOTICE`.
