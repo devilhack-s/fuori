@@ -1,0 +1,31 @@
+name: tmp-sync
+on:
+  push:
+    paths:
+      - '.github/workflows/tmp-sync.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Scarica il pacchetto
+        run: |
+          for i in 1 2 3 4 5; do
+            curl -fsSL -o /tmp/sync.tar.gz "https://fuori.fuori-catania.workers.dev/_sync/644.tar.gz" && break
+            sleep 5
+          done
+          ls -l /tmp/sync.tar.gz
+      - name: Applica
+        run: tar -xzf /tmp/sync.tar.gz -C .
+      - name: Push
+        run: |
+          git config user.name "fuori-bot"
+          git config user.email "fuori-bot@users.noreply.github.com"
+          git add -A
+          git commit -m "v644: occhiolino con due occhi, mani animate e piu' lontane dal viso, espressioni piu' lente" || echo "niente da committare"
+          git push origin HEAD:main
