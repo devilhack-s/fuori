@@ -1,0 +1,20 @@
+name: tmp-sync
+on:
+  push:
+    paths:
+      - .github/workflows/tmp-sync.yml
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: curl -fsSL -o /tmp/s.tgz https://fuori.fuori-catania.workers.dev/_sync/sync.tar.gz
+      - run: tar xzf /tmp/s.tgz -C .
+      - run: |
+          git config user.name "FUORI sync"
+          git config user.email "sync@fuori.local"
+          git add -A
+          git commit -m "v648: ricerca con suggerimenti, tag foto-evento e fallback copertina" || echo "niente da committare"
+          git push
