@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "644";
+const VERSION = "648";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -2342,11 +2342,26 @@ function renderDetail(d) {
       </div>`;
   }
 
+  // le foto della community taggate con questo evento: se l'evento non ha foto
+  // sono loro a prenderne il posto, le più care prima
+  const com = locked ? [] : Array.isArray(d.community) ? d.community : [];
+  const comN = Number(d.communityN || com.length) || 0;
+  const fotoEvento = ev.photos && ev.photos.length ? ev.photos : com.map((c) => c.photo).filter(Boolean);
+  const daCommunity = fotoEvento !== ev.photos && fotoEvento.length > 0;
   // le foto dell'evento: si scorrono col dito
-  const fotoBlocco = ev.photos && ev.photos.length
-    ? `<div class="det-photos">${ev.photos
+  const fotoBlocco = fotoEvento.length
+    ? `<div class="det-photos${daCommunity ? " det-photos-tag" : ""}">${fotoEvento
         .map((u) => `<img src="${esc(u)}" alt="${esc(t("detail.photos"))}" loading="lazy" decoding="async">`)
         .join("")}</div>`
+    : "";
+  const possoTag = Boolean(d.imIn || d.owner || d.organizer) && !locked;
+  const communityBlocco = (com.length || possoTag) && !locked
+    ? `<div class="evcom">
+        <div class="evcom-top"><span class="evcom-tag">#${esc(ev.title)}</span>${comN ? `<span class="evcom-n">${esc(t("com.n", { n: comN }))}</span>` : ""}</div>
+        ${!daCommunity && com.length ? `<div class="evcom-grid">${com.map((c) => `<img class="evcom-ph" src="${esc(c.photo)}" alt="${esc(c.caption || c.name || ev.title)}" loading="lazy" decoding="async">`).join("")}</div>` : ""}
+        ${possoTag ? `<button class="evcom-add" id="comAdd" type="button"><span aria-hidden="true">+</span>${esc(t("com.add"))}</button>` : ""}
+        ${com.length ? "" : `<p class="evcom-sub">${esc(t("com.none"))}</p>`}
+      </div>`
     : "";
   const chatBar = (d.imIn || d.owner)
     ? `<button class="chatbar" id="chatBtn"><span><b>${esc(t("detail.chat"))}</b><br><span>${esc(t("chat.members", { n: going.length }))}</span></span><span>${unread[ev.id] ? `<span class="unread">${unread[ev.id] > 9 ? "9+" : unread[ev.id]}</span>` : ""}›</span></button>`
@@ -2372,6 +2387,7 @@ function renderDetail(d) {
     <h2 class="det-title">${esc(ev.title)}</h2>
     ${(ev.vibe || ev.comfort) ? `        <div class="vibe-row">${ev.vibe ? `<span class="vibe ${esc(ev.vibe)}">${EV_VIBE[ev.vibe] || esc(ev.vibe)}</span>` : ""}${ev.comfort ? `<span class="vibe ${esc(ev.comfort)}">${EV_COMFORT[ev.comfort] || esc(ev.comfort)}</span>` : ""}</div>` : ""}
     ${fotoBlocco}
+    ${communityBlocco}
     <p class="det-sub">${esc(luogoDi(ev))} · <details class="det-q inline"><summary>${esc(t("detail.capacity", { joined: ev.joined, cap: ev.capacity }))}</summary><p class="hint">I posti sono ${esc(String(ev.capacity))} in tutto e ne restano ${esc(String(Math.max(0, ev.capacity - ev.joined)))}. Chi organizza può decidere chi entra.</p></details></p>
     ${ageLabel(ev) ? `<details class="det-q"><summary class="det-age">◗ ${esc(ageLabel(ev))}</summary><p class="hint">${esc(ageWhy(ev))}</p></details>` : ""}
     ${ev.activity ? `<p class="hint">${esc(ev.activity)}</p>` : ""}
@@ -2426,6 +2442,8 @@ function renderDetail(d) {
   if (dirB) dirB.onclick = () => openDirections(ev);
   const dirTop = $("#dirTop");
   if (dirTop) dirTop.onclick = () => openDirections(ev);
+  const comAdd = $("#comAdd");
+  if (comAdd) comAdd.onclick = () => openPostTag(ev.id, ev.title);
   $("#saveBtn").onclick = () => {
     const had = savedIds.includes(ev.id);
     savedIds = had ? savedIds.filter((x) => x !== ev.id) : savedIds.concat(ev.id);
@@ -9097,6 +9115,9 @@ function bind() {
   $("#helpAccount").onclick = () => { hide("help"); person ? openProfile() : openLogin(); };
 
   let searchTimer;
+  // i due campi hanno il loro ritardo: scrivere in uno non ferma l'altro
+  let sugTimer;
+  let sugTimerPassati;
   const ordineSel = $("#ordineSel");
   if (ordineSel) {
     ordineSel.value = ordine;
@@ -9107,16 +9128,76 @@ function bind() {
     };
   }
 
+  // la ricerca della home: filtra la lista e intanto suggerisce gli eventi per nome
   const searchEl = $("#search");
+  const searchSug = $("#searchSug");
+  const searchX = $("#searchX");
   if (searchEl) {
-    searchEl.oninput = (e) => {
-      q = e.target.value;
+    const aggiorna = () => {
+      q = searchEl.value;
       ideaPick = "";
+      if (searchX) searchX.hidden = !searchEl.value;
       renderList();
+    };
+    searchEl.oninput = () => {
+      aggiorna();
       clearTimeout(searchTimer);
       searchTimer = setTimeout(() => { if (!q.trim()) loadEvents(true); }, 400);
+      clearTimeout(sugTimer);
+      sugTimer = setTimeout(() => cercaSuggerimenti(searchEl.value, searchSug, searchEl, (x) => apriSuggerimento(x, false)), 180);
     };
+    searchEl.onkeydown = (e) => sugTasti(e, searchSug, searchEl, (x) => apriSuggerimento(x, false));
+    searchEl.onfocus = () => {
+      if (searchEl.value.trim().length >= 2 && (!searchSug || searchSug.hidden))
+        cercaSuggerimenti(searchEl.value, searchSug, searchEl, (x) => apriSuggerimento(x, false));
+    };
+    if (searchX) {
+      searchX.onmousedown = (e) => e.preventDefault();
+      searchX.onclick = () => {
+        searchEl.value = "";
+        aggiorna();
+        chiudiSug(searchSug, searchEl);
+        loadEvents(true);
+        searchEl.focus();
+      };
+    }
   }
+
+  // la stessa ricerca dentro i ricordi: il campo assottiglia la lista e suggerisce
+  const pastIn = $("#pastSearchIn");
+  const pastSug = $("#pastSug");
+  const pastX = $("#pastSearchX");
+  if (pastIn) {
+    pastIn.oninput = () => {
+      passatiQ = pastIn.value;
+      if (pastX) pastX.hidden = !passatiQ;
+      renderPassati();
+      clearTimeout(sugTimerPassati);
+      sugTimerPassati = setTimeout(() => cercaSuggerimenti(pastIn.value, pastSug, pastIn, (x) => apriSuggerimento(x, true)), 180);
+    };
+    pastIn.onkeydown = (e) => sugTasti(e, pastSug, pastIn, (x) => apriSuggerimento(x, true));
+    pastIn.onfocus = () => {
+      if (pastIn.value.trim().length >= 2 && (!pastSug || pastSug.hidden))
+        cercaSuggerimenti(pastIn.value, pastSug, pastIn, (x) => apriSuggerimento(x, true));
+    };
+    if (pastX) {
+      pastX.onmousedown = (e) => e.preventDefault();
+      pastX.onclick = () => {
+        pastIn.value = "";
+        passatiQ = "";
+        pastX.hidden = true;
+        chiudiSug(pastSug, pastIn);
+        renderPassati();
+        pastIn.focus();
+      };
+    }
+  }
+
+  // toccare fuori dal campo chiude i suggerimenti
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#homeSearch")) chiudiSug(searchSug, searchEl);
+    if (!e.target.closest("#pastSearch")) chiudiSug(pastSug, pastIn);
+  });
 
   // la matrice: macro = categoria, micro = attività dentro. Si tocca per filtrare,
   // si tocca di nuovo per togliere. I preferiti sono una tessera come le altre.
@@ -10045,6 +10126,134 @@ function pastCard(p) {
   </button>`;
 }
 
+// ---- la ricerca mentre si scrive --------------------------------------------
+// un solo motore per la home e per i ricordi: scrivi, e sotto arrivano i nomi
+function piega(s) {
+  return String(s || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
+
+function dataSug(ms) {
+  const n = Number(ms) || 0;
+  if (!n) return "";
+  return new Date(n).toLocaleDateString("it-IT", { day: "numeric", month: "short" });
+}
+
+let sugSeq = 0;
+const sugStato = new WeakMap();
+
+function chiudiSug(out, input) {
+  if (!out) return;
+  out.classList.remove("up");
+  out.hidden = true;
+  out.innerHTML = "";
+  if (input) input.setAttribute("aria-expanded", "false");
+  sugStato.delete(out);
+}
+
+async function cercaSuggerimenti(testo, out, input, scegli) {
+  const scritto = String(testo || "").trim();
+  if (!out) return;
+  if (scritto.length < 2) return chiudiSug(out, input);
+  const mio = ++sugSeq;
+  out.hidden = false;
+  if (input) input.setAttribute("aria-expanded", "true");
+  // se sotto il campo c'è poco spazio i suggerimenti salgono sopra: si vedono lo stesso
+  if (input) {
+    const r = input.getBoundingClientRect();
+    const sotto = window.innerHeight - r.bottom;
+    out.classList.toggle("up", sotto < 260 && r.top > sotto);
+  }
+  out.innerHTML = `<p class="sg-wait">${esc(t("search.wait"))}</p>`;
+  let r;
+  try {
+    r = await api("/search?q=" + encodeURIComponent(scritto) + "&device=" + encodeURIComponent(device));
+  } catch {
+    if (mio === sugSeq) out.innerHTML = `<p class="sg-wait">${esc(t("toast.error"))}</p>`;
+    return;
+  }
+  if (mio !== sugSeq) return;
+  const voci = [
+    ...(r.events || []).map((x) => ({ ...x, tipo: "ev" })),
+    ...(r.past || []).map((x) => ({ ...x, tipo: "past" })),
+  ];
+  if (!voci.length) {
+    out.innerHTML = `<p class="sg-wait">${esc(t("search.none", { q: scritto }))}</p>`;
+    sugStato.delete(out);
+    return;
+  }
+  const riga = (x, i) => {
+    const sotto = [dataSug(x.when), x.place || "", x.joined ? t("search.people", { n: x.joined }) : ""]
+      .filter(Boolean)
+      .join(" · ");
+    return `<button class="sg-i" type="button" role="option" data-sg="${i}">
+      <span class="sg-main"><b>${esc(x.title || "—")}</b>${sotto ? `<i>${esc(sotto)}</i>` : ""}</span>
+      <span class="sg-go" aria-hidden="true">›</span>
+    </button>`;
+  };
+  const gruppo = (titolo, lista) =>
+    lista.length ? `<p class="sg-sec">${esc(t(titolo))}</p>${lista.map((x) => riga(x, voci.indexOf(x))).join("")}` : "";
+  out.innerHTML =
+    gruppo("search.soon", voci.filter((x) => x.tipo === "ev")) +
+    gruppo("search.past", voci.filter((x) => x.tipo === "past"));
+  sugStato.set(out, { voci, scelto: -1, scegli });
+  out.querySelectorAll("[data-sg]").forEach((b) => {
+    // senza questo il campo perderebbe il fuoco prima del tocco
+    b.onmousedown = (e) => e.preventDefault();
+    b.onclick = () => {
+      const x = voci[Number(b.dataset.sg)];
+      if (!x) return;
+      chiudiSug(out, input);
+      scegli(x);
+    };
+  });
+}
+
+function sugTasti(e, out, input, scegli) {
+  const st = out ? sugStato.get(out) : null;
+  if (!st || !st.voci.length) return;
+  const n = st.voci.length;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    if (st.scelto < 0) st.scelto = e.key === "ArrowDown" ? 0 : n - 1;
+    else st.scelto = (st.scelto + (e.key === "ArrowDown" ? 1 : -1) + n) % n;
+    out.querySelectorAll("[data-sg]").forEach((b) => b.classList.toggle("on", Number(b.dataset.sg) === st.scelto));
+    const att = out.querySelector("[data-sg].on");
+    if (att) att.scrollIntoView({ block: "nearest" });
+    return;
+  }
+  if (e.key === "Escape") return chiudiSug(out, input);
+  if (e.key === "Enter" && st.scelto >= 0) {
+    e.preventDefault();
+    const x = st.voci[st.scelto];
+    chiudiSug(out, input);
+    scegli(x);
+  }
+}
+
+// un suggerimento scelto: l'evento si apre, il ricordo pure (caricandolo se serve)
+function apriSuggerimento(x, daiRicordi) {
+  if (!x) return;
+  if (x.tipo !== "past") {
+    if (daiRicordi) hide("passati");
+    openDetail(x.id);
+    return;
+  }
+  const vai = () => {
+    if (daiRicordi) hide("passati");
+    openPast(x.id);
+  };
+  if (passatiVoti.some((p) => p.id === x.id)) return vai();
+  loadPast()
+    .then(() => {
+      if (passatiVoti.some((p) => p.id === x.id)) vai();
+      else toastErr(t("toast.error"));
+    })
+    .catch(() => toastErr(t("toast.error")));
+}
+
 // dentro la community i ricordi stanno in una cartella: gli ultimi tre e "vedi tutti"
 let passatiAperti = false;
 
@@ -10098,9 +10307,17 @@ async function loadPast() {
 }
 
 let passatiFiltro = "recenti";
+let passatiQ = "";
 
 function openPassati() {
   passatiAperti = true;
+  // ogni volta si riparte dal campo vuoto: i ricordi sono tutti lì
+  const inp = $("#pastSearchIn");
+  if (inp) inp.value = "";
+  passatiQ = "";
+  const x = $("#pastSearchX");
+  if (x) x.hidden = true;
+  chiudiSug($("#pastSug"), inp);
   renderPassati();
   show("passati");
 }
@@ -10108,6 +10325,12 @@ function openPassati() {
 function passatiScelti() {
   let list = passatiVoti.slice();
   const f = passatiFiltro;
+  // quello che scrivi vale anche qui: i ricordi si assottigliano mentre digiti
+  const teso = piega(passatiQ).trim();
+  if (teso)
+    list = list.filter((p) =>
+      piega([p.titolo, p.att, p.luogo, p.citta, catName(p.cat)].join(" ")).includes(teso)
+    );
   if (f === "preferiti") list = list.filter((p) => savedIds.includes(p.id));
   else if (f === "passioni") {
     const gusti = new Set(
@@ -10149,7 +10372,11 @@ function renderPassati() {
     b.onclick = () => { passatiFiltro = passatiFiltro === b.dataset.pf && b.dataset.pf !== "recenti" ? "recenti" : b.dataset.pf; renderPassati(); };
   });
   const list = passatiScelti();
-  const vuoto = passatiFiltro === "preferiti" ? t("past.favEmpty") : t("past.passEmpty");
+  const vuoto = passatiQ.trim()
+    ? t("search.none", { q: passatiQ.trim() })
+    : passatiFiltro === "preferiti"
+      ? t("past.favEmpty")
+      : t("past.passEmpty");
   box.innerHTML = list.length ? list.map(pastCard).join("") : `<div class="empty"><b>${esc(vuoto)}</b></div>`;
   box.querySelectorAll("[data-past]").forEach((b) => { b.onclick = () => openPast(b.dataset.past); });
 }
@@ -10162,15 +10389,33 @@ function openPast(id) {
   if (!box) return;
   const v = p.voti || { media: 0, stelle: 0, like: 0, dislike: 0, mio: 0, mie: 0 };
   const dove = [p.luogo, p.citta].filter(Boolean).join(", ");
-  const foto = Array.isArray(p.fotos) && p.fotos.length
+  // se il ricordo non ha foto sue, mostro quelle che la community ha taggato con lui
+  const com = Array.isArray(p.communityFotos) ? p.communityFotos : [];
+  const comN = Number(p.communityN || com.length) || 0;
+  const sue = Array.isArray(p.fotos) && p.fotos.length;
+  const daCommunity = !sue && com.length > 0;
+  const foto = sue
     ? `<div class="det-photos">${p.fotos.map((u) => `<img src="${esc(u)}" alt="${esc(t("detail.photos"))}" loading="lazy" decoding="async">`).join("")}</div>`
-    : copertinaRicordo(p, true);
+    : com.length
+      ? `<div class="det-photos det-photos-tag">${com.map((u) => `<img src="${esc(u)}" alt="${esc(t("detail.photos"))}" loading="lazy" decoding="async">`).join("")}</div>`
+      : copertinaRicordo(p, true);
+  // il tag del ricordo: la sua raccolta di foto, e per chi c'era il modo di aggiungerne
+  const possoTag = Boolean(p.elenco && p.elenco.some((x) => x.io));
+  const communityBlocco = comN || possoTag
+    ? `<div class="evcom">
+        <div class="evcom-top"><span class="evcom-tag">#${esc(p.titolo || t("past.generico"))}</span>${comN ? `<span class="evcom-n">${esc(t("com.n", { n: comN }))}</span>` : ""}</div>
+        ${!daCommunity && com.length ? `<div class="evcom-grid">${com.map((u) => `<img class="evcom-ph" src="${esc(u)}" alt="" loading="lazy" decoding="async">`).join("")}</div>` : ""}
+        ${possoTag ? `<button class="evcom-add" id="pastComAdd" type="button"><span aria-hidden="true">+</span>${esc(t("com.add"))}</button>` : ""}
+        ${comN ? "" : `<p class="evcom-sub">${esc(t("com.none"))}</p>`}
+      </div>`
+    : "";
   box.innerHTML = `
     <button class="x" data-close type="button" aria-label="Chiudi">×</button>
     <div class="det-tags"><span class="tag">${esc(catName(p.cat))}</span><span class="when">${esc(giornoBreve(p.quando))} · ${esc(t("past.eventoPassato"))}</span></div>
     <h2 class="det-title">${esc(p.titolo || t("past.generico"))}</h2>
     ${(p.modificabile || pastPadrone) ? `<button class="btn ghost wide" id="pastEditBtn" type="button">Modifica il ricordo</button>` : ""}
     ${foto}
+    ${communityBlocco}
     <p class="det-sub">${esc(dove)}${p.persone ? `${dove ? " · " : ""}${esc(t("past.persone", { n: p.persone }))}` : ""}</p>
     ${p.att ? `<p class="hint">${esc(p.att)}</p>` : ""}
     ${p.privato && !p.luogo ? `<p class="hint priv-note">🔒 ${esc(t("past.privatoNota"))}</p>` : ""}
@@ -10211,6 +10456,8 @@ function openPast(id) {
   });
   const changeBtn = box.querySelector("#pastEditBtn");
   if (changeBtn) changeBtn.onclick = () => openPastEdit(p);
+  const addTag = box.querySelector("#pastComAdd");
+  if (addTag) addTag.onclick = () => openPostTag(p.id, p.titolo);
   show("pastDetail");
   ricordaPannello("pastDetail", { ev: id });
 }
@@ -10536,7 +10783,7 @@ function renderFeed() {
           <p class="ftime">${esc(agoTime(p.createdAt))}</p>
         </div>
       </div>
-      ${p.eventTitle ? `<p class="fev"><span>📸</span>${esc(p.eventTitle)}</p>` : ""}
+      ${p.eventTitle ? `<p class="ftag"><span aria-hidden="true">#</span>${esc(p.eventTitle)}</p>` : ""}
       ${p.photo ? `<img class="fphoto" src="${esc(p.photo)}" alt="" loading="lazy" decoding="async">` : ""}
       ${postEditing === p.id
         ? `<div class="fedit"><textarea id="feditBox" rows="3" maxlength="400">${esc(p.caption || "")}</textarea>
@@ -10687,6 +10934,13 @@ function scegliOrigineFoto(daFotocamera) {
   if (inp) setTimeout(() => inp.click(), 90);
 }
 
+// pubblicare una foto già agganciata a un evento: il tag si sceglie da sé
+let postPreset = null;
+function openPostTag(eventId, eventTitle) {
+  postPreset = eventId ? { id: String(eventId), title: String(eventTitle || "") } : null;
+  openPost();
+}
+
 function openPost() {
   if (!meEmail()) {
     openRegister();
@@ -10718,10 +10972,15 @@ async function fillPostEvents() {
   try {
     const r = await api("/my-events?device=" + encodeURIComponent(device));
     const list = (r.events || []).filter((e) => e && e.title);
+    // l'evento da cui sono partito c'è anche se non è tra i miei (un ricordo, per esempio)
+    if (postPreset && postPreset.id && !list.some((e) => String(e.id) === postPreset.id)) {
+      list.unshift({ id: postPreset.id, title: postPreset.title || t("post.eventLabel") });
+    }
     if (!list.length) return;
     sel.innerHTML += list
       .map((e) => `<option value="${esc(e.id)}">${esc(String(e.title).slice(0, 70))}</option>`)
       .join("");
+    if (postPreset && postPreset.id) sel.value = postPreset.id;
     wrap.hidden = false;
   } catch {}
 }
@@ -10774,6 +11033,7 @@ async function sendPost() {
     });
     hide("post");
     postData = "";
+    postPreset = null;
     feedNext = null;
     feedCaricati = 0;
     await loadFeed(false);

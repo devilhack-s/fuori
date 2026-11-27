@@ -39,7 +39,7 @@ const SCHEMA_V = 14;
 
 // la versione dell'app: la aggiorna build.sh da sola leggendo src/app.js.
 // I telefoni la chiedono ogni minuto e, se è cambiata, si aggiornano da soli.
-const CLIENT_V = "644";
+const CLIENT_V = "648";
 
 async function initDb(env) {
   if (ready) return;
@@ -1941,7 +1941,29 @@ async function createPost(env, request) {
        WHERE e.id = ? AND p.device = ? AND p.status = 'going'`
     ).bind(eventId, device).first();
     if (ev) eventTitle = String(ev.title).slice(0, 90);
-    else eventId = null;
+    else {
+      // l'evento può essere già passato: allora vive nei ricordi e nella storia di chi c'era
+      await ensureStoria(env).catch(() => {});
+      const ric = await env.DB.prepare(
+        `SELECT pe.title FROM past_events pe JOIN participants p ON p.event_id = pe.id
+          WHERE pe.id = ? AND p.device = ? AND p.status = 'going'`
+      )
+        .bind(eventId, device)
+        .first()
+        .catch(() => null);
+      let titolo = String(ric?.title || "").slice(0, 90);
+      if (!titolo) {
+        const st = await env.DB.prepare(
+          `SELECT MAX(title) AS title FROM storia WHERE event_id = ? AND device = ? AND role <> 'pending'`
+        )
+          .bind(eventId, device)
+          .first()
+          .catch(() => null);
+        titolo = String(st?.title || "").slice(0, 90);
+      }
+      if (titolo) eventTitle = titolo;
+      else eventId = null;
+    }
   }
 
   const key = `p-${crypto.randomUUID()}.${match[2]}`;
@@ -3006,10 +3028,34 @@ async function pastRated(env, url) {
     }
   }
   const numeri = await ratingsDi(env, righe.map((x) => x.id), device);
+  // le foto che la community ha taggato con il ricordo: una query sola per tutti.
+  // Se il ricordo è privato le vede solo chi c'era (o chi amministra).
+  const community = {};
+  const communityN = {};
+  const conTag = righe.filter((x) => x.id && (!x.privato || x.posso)).map((x) => x.id);
+  if (conTag.length) {
+    const segni = conTag.map(() => "?").join(",");
+    const { results: pub } = await env.DB.prepare(
+      `SELECT p.event_id, p.photo, (SELECT COUNT(*) FROM post_likes l WHERE l.post_id = p.id) AS likes
+         FROM posts p WHERE p.event_id IN (${segni})
+        ORDER BY likes DESC, p.created_at DESC`
+    )
+      .bind(...conTag)
+      .all()
+      .catch(() => ({ results: [] }));
+    for (const r of pub || []) {
+      const k = r.event_id;
+      communityN[k] = (communityN[k] || 0) + 1;
+      const b = (community[k] = community[k] || []);
+      if (b.length < 6 && r.photo) b.push(`/api/photo/${r.photo}`);
+    }
+  }
   return json({
     passati: righe.map((x) => ({
       ...x,
       elenco: elenchi[x.id] || [],
+      communityFotos: community[x.id] || [],
+      communityN: communityN[x.id] || 0,
       voti: numeri[x.id] || { media: x.media, stelle: x.stelle, like: 0, dislike: 0, mio: 0, mie: 0 },
     })),
     padrone,
@@ -3251,6 +3297,105 @@ async function bloccoAI(env, now, body, prontiPromise) {
     );
   }
   return righe.join("\n");
+}
+
+// la ricerca mentre si scrive: gli eventi in programma e quelli che restano nei ricordi.
+// Torna poco e diviso in due, quanto basta a riempire i suggerimenti sotto il campo.
+async function cerca(env, url) {
+  const grezzo = String(url.searchParams.get("q") || "").trim().slice(0, 40);
+  const device = (url.searchParams.get("device") || "").slice(0, 64);
+  const q0 = grezzo.replace(/[%_]/g, " ").trim();
+  if (q0.length < 2) return json({ q: grezzo, events: [], past: [] });
+  await ensurePast(env).catch(() => {});
+  await ensureStoria(env).catch(() => {});
+  const like = `%${q0}%`;
+  const adesso = Date.now();
+  const [futuri, ricordi] = await Promise.all([
+    env.DB.prepare(
+      `SELECT e.id, e.title, e.activity, e.category, e.place, e.starts_at, e.weekdays,
+              e.weekly_day, e.repeat_until, e.device, COALESCE(e.access, 'open') AS access,
+              (SELECT COUNT(*) FROM participants p WHERE p.event_id = e.id AND p.status = 'going') AS joined,
+              (SELECT COUNT(*) FROM participants p2 WHERE p2.event_id = e.id AND p2.device = ?) AS mine_in
+         FROM events e
+        WHERE (e.starts_at >= ? OR COALESCE(e.ends_at, e.starts_at) >= ?
+               OR (e.weekly_day IS NOT NULL AND (e.repeat_until IS NULL OR e.repeat_until >= ?)))
+          AND (e.title LIKE ? OR COALESCE(e.activity, '') LIKE ? OR COALESCE(e.place, '') LIKE ?)
+        ORDER BY e.starts_at ASC
+        LIMIT 6`
+    )
+      .bind(device, adesso, adesso, adesso, like, like, like)
+      .all()
+      .catch(() => ({ results: [] })),
+    env.DB.prepare(
+      `WITH passati AS (
+         SELECT p.id, p.title, p.activity, p.starts_at
+           FROM past_events p WHERE p.starts_at <= ?
+         UNION ALL
+         SELECT s.event_id, MAX(s.title), MAX(COALESCE(s.activity, '')), MAX(s.starts_at)
+           FROM storia s
+          WHERE s.starts_at <= ? AND s.event_id NOT IN (SELECT id FROM past_events)
+          GROUP BY s.event_id
+       )
+       SELECT * FROM passati
+        WHERE title LIKE ? OR activity LIKE ?
+        ORDER BY starts_at DESC
+        LIMIT 6`
+    )
+      .bind(adesso, adesso, like, like)
+      .all()
+      .catch(() => ({ results: [] })),
+  ]);
+  return json({
+    q: grezzo,
+    events: (futuri.results || []).map((r) => {
+      const dentro = Number(r.mine_in || 0) > 0;
+      // un evento privato non dice dove: chi non c'è dentro lo scopre solo entrando
+      const nascosto = (r.access || "open") === "invite" && !dentro && r.device !== device;
+      return {
+        id: String(r.id || ""),
+        title: String(r.title || "").slice(0, 90),
+        activity: String(r.activity || "").slice(0, 40),
+        category: String(r.category || "").slice(0, 24),
+        when: Number(prossimaOccorrenza(r, adesso) || r.starts_at) || 0,
+        place: nascosto ? "" : zonaDi(r.place) || String(r.place || "").slice(0, 30),
+        joined: Number(r.joined) || 0,
+      };
+    }),
+    past: (ricordi.results || []).map((r) => ({
+      id: String(r.id || ""),
+      title: String(r.title || "").slice(0, 90),
+      activity: String(r.activity || "").slice(0, 40),
+      when: Number(r.starts_at) || 0,
+    })),
+  });
+}
+
+// le foto che la community ha pubblicato per un evento, le più care prima:
+// sono quelle che prendono il posto delle foto quando l'evento non ne ha
+async function fotoCommunity(env, eventId, limite = 12) {
+  if (!eventId) return { foto: [], n: 0 };
+  const { results } = await env.DB.prepare(
+    `SELECT p.id, p.name, p.caption, p.photo, p.created_at,
+            (SELECT COUNT(*) FROM post_likes l WHERE l.post_id = p.id) AS likes,
+            (SELECT COUNT(*) FROM posts q WHERE q.event_id = p.event_id) AS tot
+       FROM posts p WHERE p.event_id = ?
+      ORDER BY likes DESC, p.created_at DESC
+      LIMIT ?`
+  )
+    .bind(eventId, Math.min(Math.max(Number(limite) || 12, 1), 24))
+    .all()
+    .catch(() => ({ results: [] }));
+  const righe = results || [];
+  return {
+    foto: righe.map((r) => ({
+      id: String(r.id || ""),
+      name: String(r.name || "").slice(0, 40),
+      caption: String(r.caption || "").slice(0, 200),
+      photo: `/api/photo/${r.photo}`,
+      likes: Number(r.likes) || 0,
+    })),
+    n: Number(righe[0]?.tot || 0),
+  };
 }
 
 async function listEvents(env, url) {
@@ -4423,6 +4568,8 @@ async function eventDetail(env, id, url) {
   const ev = shape(row, going, owner, pending, hide);
   ev.media = Number(numeri[id]?.media) || 0;
   ev.stelle = Number(numeri[id]?.stelle) || 0;
+  // chi non può vedere l'evento non vede nemmeno le foto taggate
+  const com = hide || !known ? { foto: [], n: 0 } : await fotoCommunity(env, id).catch(() => ({ foto: [], n: 0 }));
 
   return json({
     event: ev,
@@ -4461,6 +4608,9 @@ async function eventDetail(env, id, url) {
     padrone,
     // chi ha davvero creato l'evento: serve a distinguerlo da chi amministra
     organizer: Boolean(device && row.device === device),
+    // cosa ha pubblicato la community con il tag di questo evento
+    community: com.foto,
+    communityN: com.n,
   });
 }
 
@@ -8184,6 +8334,8 @@ async function api(request, env, url, ctx) {
   }
 
   if (parts[1] === "version" && method === "GET") return json({ v: CLIENT_V });
+
+  if (parts[1] === "search" && method === "GET") return cerca(env, url);
 
   if (parts[1] === "past" && method === "GET")
     return url.searchParams.get("full") ? pastRated(env, url) : pastEvents(env, url);

@@ -1,10 +1,10 @@
 /* FUORI — service worker */
-const CACHE = "fuori-v644";
+const CACHE = "fuori-v648";
 const SHELL = [
   "/",
-  "/app.min.js?v=644",
-  "/styles.css?v=644",
-  "/boot.js?v=644",
+  "/app.min.js?v=648",
+  "/styles.css?v=648",
+  "/boot.js?v=648",
 ];
 
 // se il telefono ha in cache una pagina rotta, questa la sostituisce e ricarica pulito

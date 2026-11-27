@@ -2,3 +2,13 @@ post.camera|Scatta una foto|Take a photo|Haz una foto|Tire uma foto
 post.gallery|Dalla galleria|From your gallery|Desde la galería|Da galeria
 post.eventLabel|Da quale evento?|From which event?|¿De qué evento?|De qual evento?
 post.eventNone|Nessun evento|No event|Ningún evento|Nenhum evento
+search.ph|Cerca un evento: nome, posto, attività…|Search an event: name, place, activity…|Busca un evento: nombre, lugar, actividad…|Procure um evento: nome, lugar, atividade…
+search.pastPh|Cerca tra i ricordi: nome, posto…|Search the memories: name, place…|Busca entre los recuerdos: nombre, lugar…|Procure entre as memórias: nome, lugar…
+search.soon|In programma|Coming up|Próximos|Na agenda
+search.past|Nel passato|In the past|En el pasado|No passado
+search.none|Nessun evento per «{q}»|No events for "{q}"|Ningún evento para «{q}»|Nenhum evento para «{q}»
+search.wait|Cerco…|Searching…|Buscando…|Procurando…
+search.people|{n} dentro|{n} going|{n} dentro|{n} dentro
+com.add|Aggiungi una foto con il tag|Add a photo with the tag|Añade una foto con el tag|Adicione uma foto com a tag
+com.n|{n} foto con il tag|{n} photos with the tag|{n} fotos con el tag|{n} fotos com a tag
+com.none|Ancora nessuna foto con questo tag: aggiungi la tua.|No photos with this tag yet: add yours.|Aún no hay fotos con este tag: añade la tuya.|Ainda não há fotos com esta tag: adicione a sua.
