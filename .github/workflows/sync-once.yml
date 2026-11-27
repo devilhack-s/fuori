@@ -1,0 +1,29 @@
+name: Allinea una volta
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: "URL del pacchetto da applicare"
+        required: true
+        type: string
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Scarica e applica
+        run: |
+          curl -fsSL "${{ inputs.url }}" -o "$RUNNER_TEMP/sync.tar.gz"
+          tar -xzf "$RUNNER_TEMP/sync.tar.gz" -C .
+      - name: Commit e push
+        run: |
+          git config user.name "Buffy (Codebuff)"
+          git config user.email "buffy@codebuff.com"
+          git add -A
+          if git diff --cached --quiet; then echo "niente da fare"; exit 0; fi
+          git commit -m "Allinea il repository all'app v636: mascotte a personaggio e pulsanti della home"
+          git push origin HEAD:main
