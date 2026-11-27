@@ -1746,6 +1746,12 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
 .st-group>*:not(summary):last-child{margin-bottom:12px}
 .live-dot{width:7px;height:7px;border-radius:50%;background:#c8ff3d;box-shadow:0 0 8px #c8ff3d;flex:none}
 
+/* v641: copertina senza foto con l'emoji dell'evento, con un po' di luce sopra */
+.past-cover .pc-emo{position:relative;font-size:26px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45));transform:translateY(-1px)}
+.past-cover--big .pc-emo{font-size:52px}
+.past-cover::after{content:"";position:absolute;left:-20%;top:-40%;width:70%;height:90%;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.16),transparent 70%);pointer-events:none}
+.cs-events .ev-row .past-cover{width:66px;height:66px;border-radius:12px}
+
 /* v618b: nel ricordo piccolo solo l'icona (il nome della categoria starebbe stretto) */
 .past-cover:not(.past-cover--big) i{display:none}
 

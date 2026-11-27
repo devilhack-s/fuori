@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "640";
+const VERSION = "641";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -9967,11 +9967,65 @@ function catDaTesto(txt) {
   return "creativita";
 }
 
-// la copertina di un ricordo senza foto: gradiente + icona del tema, mai vuota
+// emoji per l'evento specifico: prima le cose precise (Natale, Etna), poi il genere
+const EMO_EVENTO = [
+  [/natale|albero|presepe|babbo/, "🎄"],
+  [/autunno/, "🍂"],
+  [/etna|vulcan|crater|lava/, "🌋"],
+  [/tramonto|alba\b/, "🌅"],
+  [/festa|party|compleanno|festegg/, "🥳"],
+  [/fontana|grafica|linguagg/, "🎨"],
+  [/schiena|trek|escursion|sentiero|camminat|passeggi|montagna|trail/, "🥾"],
+  [/mare|spiaggia|snorkel|bagno|bagni/, "🏖️"],
+  [/barca|vela|kayak|\bsup\b/, "⛵"],
+  [/pizza/, "🍕"],
+  [/aperitivo|vino|birra|cocktail|drink/, "🍷"],
+  [/gelato/, "🍦"],
+  [/caff[eè]|colazion|brunch/, "☕"],
+  [/cena|pranzo|ristor|cucin|food|pasta/, "🍽️"],
+  [/karaoke/, "🎤"],
+  [/concerto|live|jazz|band|\bdj\b/, "🎸"],
+  [/musica|coro/, "🎶"],
+  [/cinema|film|cineforum/, "🎬"],
+  [/teatro|cabaret|stand ?up|spettacol/, "🎭"],
+  [/comics|fumett|libro|lettura|book|poesia/, "📚"],
+  [/museo|mostra|arte|galleria/, "🖼️"],
+  [/foto/, "📸"],
+  [/pittura|ceramica|disegno|creativ|scrittura|murales/, "✏️"],
+  [/calcio/, "⚽"],
+  [/padel|tennis/, "🎾"],
+  [/basket/, "🏀"],
+  [/corsa|running|maratona/, "🏃"],
+  [/bici|ciclo/, "🚴"],
+  [/nuoto|piscina/, "🏊"],
+  [/arrampic|boulder/, "🧗"],
+  [/yoga|pilates|medit|palestra|benessere/, "🧘"],
+  [/gioc|quiz|biliardo|bowling|scacchi|escape|laser/, "🎲"],
+  [/cane|gatto|animal|pet/, "🐾"],
+  [/volontari|pulizia|raccolta|donazion/, "🌱"],
+  [/lingu|inglese|spagnolo|conversazione/, "🗣️"],
+  [/viaggi|gita|tour|visita/, "🧳"],
+  [/code|tech|computer|robot|coding/, "💻"],
+  [/picnic|parco|giardin|orto/, "🧺"],
+  [/bosco|campeggio|natura|montagn/, "🌲"],
+  [/incontr|amici|conoscere|community|gruppo|sociale/, "🤝"],
+];
+const EMO_CATEGORIA = {
+  sport: "🏅", musica: "🎶", cinema: "🎬", natura: "🌲", benessere: "🧘", serate: "🍸",
+  sociale: "🤝", viaggi: "🧳", animali: "🐾", creativita: "🎨", giochi: "🎲",
+  volontariato: "🌱", lingue: "🗣️", tech: "💻",
+};
+function emojiRicordo(p, cat) {
+  const txt = `${p.titolo || ""} ${p.att || ""}`.toLowerCase();
+  for (const [re, e] of EMO_EVENTO) if (re.test(txt)) return e;
+  return EMO_CATEGORIA[cat] || "✨";
+}
+
+// la copertina di un ricordo senza foto: gradiente + emoji dell'evento, mai vuota
 function copertinaRicordo(p, grande) {
   const cat = p.cat || catDaTesto((p.att || "") + " " + (p.titolo || ""));
   return `<span class="past-cover${grande ? " past-cover--big" : ""}" data-cat="${esc(cat)}" aria-hidden="true">
-    ${catIcon(cat)}<i>${esc(catName(cat) !== cat ? catName(cat) : "")}</i></span>`;
+    <span class="pc-emo">${emojiRicordo(p, cat)}</span><i>${esc(catName(cat) !== cat ? catName(cat) : "")}</i></span>`;
 }
 
 // una riga di ricordo: si tocca e si apre tutto (foto, voti, com'è andata)
