@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "658";
+const VERSION = "659";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -11440,11 +11440,11 @@ const MF_HINT = {
 };
 
 const MF_IDLE = [
-  "Se resti fermo ti racconto un segreto: c'è sempre qualcosa da fare, basta scegliere.",
-  "Ancora qui? Dimmi che serata ti va e ti trovo qualcosa.",
-  "Se non sai cosa scegliere, scegli di uscire: al resto penso io.",
-  "Ti va un evento qui vicino? Basta chiedere.",
-  "Se ti annoi, tocca Crea e inventati la serata.",
+  "Ho un'idea per stasera: dimmi che aria ti va e ti trovo il posto giusto.",
+  "Qualcosa di nuovo ti aspetta qui vicino. Vuoi che te lo mostri?",
+  "Serata libera o voglia di uscire? Dimmelo e ci penso io.",
+  "Hai un'idea di evento in testa? Creala tu e vediamo chi si unisce.",
+  "Due tap e scopri cosa succede intorno a te. Ti porto alla mappa?",
 ];
 
 function mfLato() {

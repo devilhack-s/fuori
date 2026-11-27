@@ -1832,11 +1832,13 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
 .hero-pill:active{transform:scale(.97)}
 @keyframes mxScan{to{transform:translateY(100%)}}
 
-.mascot-bubble{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:linear-gradient(180deg,rgba(6,14,4,.97),rgba(2,6,2,.98)),repeating-linear-gradient(0deg,rgba(200,255,61,.07) 0 1px,transparent 1px 4px)!important;color:#c8ff3d!important;border:1px solid #c8ff3d!important;text-shadow:0 0 5px rgba(200,255,61,.6)}
-.mascot-bubble .mb-txt{color:#c8ff3d}
-.mascot-bubble .mb-si,.mascot-bubble .mb-no{text-transform:uppercase;letter-spacing:.1em;border-radius:8px!important;padding:8px 0!important;font-family:inherit!important}
-.mascot-bubble .mb-si{background:#c8ff3d!important;color:#020802!important;box-shadow:0 0 14px rgba(200,255,61,.5)}
-.mascot-bubble .mb-no{background:rgba(200,255,61,.06)!important;color:#c8ff3d!important;border:1px solid rgba(200,255,61,.5)!important}
+.mascot-bubble{font-family:inherit;background:linear-gradient(160deg,#fbffef 0%,#eef9d2 100%)!important;color:#1a2410!important;border:2px solid #c8ff3d!important;border-radius:24px 24px 6px 24px!important;padding:14px 34px 14px 16px!important;box-shadow:0 12px 0 rgba(0,0,0,.28),0 18px 34px rgba(0,0,0,.45),0 0 22px rgba(200,255,61,.35)!important;text-shadow:none}
+.mascot-bubble::after{background:#eef9d2!important;border-right:2px solid #c8ff3d!important;border-bottom:2px solid #c8ff3d!important}
+.mascot-bubble .mb-txt{color:#1a2410!important;font-size:14px;line-height:1.45;font-weight:600}
+.mascot-bubble .mb-x{color:#1a2410!important;background:rgba(26,36,16,.08)!important}
+.mascot-bubble .mb-si,.mascot-bubble .mb-no{text-transform:none;letter-spacing:.2px;border-radius:999px!important;padding:8px 0!important;font-size:13px!important;font-weight:800!important;font-family:inherit!important}
+.mascot-bubble .mb-si{background:#c8ff3d!important;color:#0f1a05!important;border-color:#c8ff3d!important;box-shadow:0 4px 0 #8fb81e}
+.mascot-bubble .mb-no{background:#fff!important;color:#1a2410!important;border:2px solid #c8ff3d!important}
 .hand-row.pills-hero{height:auto!important;aspect-ratio:auto!important;max-height:none!important;display:grid!important;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 0!important}
 .hand-row.pills-hero .pills-glow,.hand-row.pills-hero::after{display:none}
 .hero-pill{width:100%}
