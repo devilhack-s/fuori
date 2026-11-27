@@ -2204,3 +2204,38 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
 /* e la foto profilo: alone verde attorno alla foto, sfondo un filo più profondo ma sempre acceso */
 #fotoBig{background:radial-gradient(ellipse 76% 60% at 50% 44%,rgba(198,255,46,.10) 0%,rgba(150,255,60,.04) 34%,rgba(8,9,7,.95) 70%,#050505 100%)}
 #fotoBig::before{background:radial-gradient(circle,rgba(214,255,120,.19) 0%,rgba(198,255,46,.10) 30%,rgba(150,255,60,.035) 50%,transparent 66%)}
+
+/* v654: via la polverina puntinata. Le due scelte sono compresse lisce:
+   superficie compatta con un riflesso morbido in alto, ombra interna in basso
+   e bordo smussato, come una pillola vera presa di lato. */
+.hero-pill.red,.hero-pill.blue{background-repeat:no-repeat;border-width:1px}
+.hero-pill.red{
+  border-color:rgba(255,126,104,.5);
+  background-image:
+    radial-gradient(ellipse 76% 56% at 32% 14%,rgba(255,255,255,.30) 0%,rgba(255,255,255,.09) 46%,rgba(255,255,255,0) 72%),
+    linear-gradient(180deg,rgba(255,110,88,.44) 0%,rgba(178,20,28,.80) 46%,rgba(84,4,12,.94) 100%);
+  background-size:100% 100%,100% 100%;
+  background-position:0 0,0 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255,226,216,.34),
+    inset 0 -12px 20px rgba(58,0,6,.46),
+    inset 0 0 0 1px rgba(255,150,130,.14),
+    0 0 24px rgba(255,62,42,.42),
+    0 10px 22px rgba(0,0,0,.55)
+}
+.hero-pill.blue{
+  border-color:rgba(120,205,255,.5);
+  background-image:
+    radial-gradient(ellipse 76% 56% at 32% 14%,rgba(255,255,255,.30) 0%,rgba(255,255,255,.09) 46%,rgba(255,255,255,0) 72%),
+    linear-gradient(180deg,rgba(74,180,255,.46) 0%,rgba(16,84,190,.82) 46%,rgba(4,26,86,.94) 100%);
+  background-size:100% 100%,100% 100%;
+  background-position:0 0,0 0;
+  box-shadow:
+    inset 0 1px 0 rgba(226,245,255,.34),
+    inset 0 -12px 20px rgba(2,14,52,.48),
+    inset 0 0 0 1px rgba(150,220,255,.14),
+    0 0 24px rgba(44,156,255,.42),
+    0 10px 22px rgba(0,0,0,.55)
+}
+/* la riga a metà resta, ma più fine: è la "rottura" della compressa */
+.hero-pill.red::after,.hero-pill.blue::after{opacity:.42;height:1px}
