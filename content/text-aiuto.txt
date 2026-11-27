@@ -24,6 +24,7 @@ cat.sheetSub|{n} eventi adesso|{n} events right now|{n} eventos ahora|{n} evento
 cat.empty|Qui non c'è ancora niente. Puoi crearlo tu: due minuti.|Nothing here yet. You can create it: two minutes.|Aquí no hay nada todavía. Puedes crearlo tú: dos minutos.|Aqui ainda não há nada. Você pode criar: dois minutos.
 radius.pick|Quanto lontano vuoi cercare?|How far do you want to search?|¿Hasta dónde quieres buscar?|Até onde você quer buscar?
 radius.all|Tutta la Sicilia|All Sicily|Toda Sicilia|Toda a Sicília
+radius.allIt|Tutta l'Italia|All Italy|Toda Italia|Toda a Itália
 map.explore|Esplora la mappa|Explore the map|Explora el mapa|Explore o mapa
 wx.pillTitle|Meteo adesso in questa zona|Weather right now in this area|Tiempo ahora en esta zona|Clima agora nesta zona
 fav.ordRecenti|Aggiunti di recente|Recently added|Añadidos hace poco|Adicionados recentemente

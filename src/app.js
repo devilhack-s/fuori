@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "636";
+const VERSION = "637";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -4745,11 +4745,27 @@ function radiusText() {
   return `${t("radius.upto", { n: radiusKm })} ${t("radius.fromYou")}`;
 }
 
+// A zero km non c'è nessun filtro: la scritta deve dire dove sto cercando
+// davvero, non "Sicilia" per abitudine. Se il GPS dice Milano, niente isola.
+const BOX_SICILIA = { s: 36.5, n: 38.4, w: 12.3, e: 15.8 };
+const BOX_ITALIA = { s: 35.4, n: 47.2, w: 6.5, e: 18.7 };
+
+function dentroBox(p, b) {
+  return !!p && Number.isFinite(p.lat) && Number.isFinite(p.lng) && p.lat >= b.s && p.lat <= b.n && p.lng >= b.w && p.lng <= b.e;
+}
+
+function radiusAllLabel() {
+  const p = myPos || lastPos();
+  if (dentroBox(p, BOX_SICILIA)) return t("radius.all");
+  if (dentroBox(p, BOX_ITALIA)) return t("radius.allIt");
+  return t("radius.any");
+}
+
 function updateRadiusLabel() {
   const n = $("#radiusNote");
   if (n) n.textContent = radiusText();
   const v = $("#radiusVal");
-  if (v) v.textContent = radiusKm > 0 ? radiusKm + " km" : t("radius.all");
+  if (v) v.textContent = radiusKm > 0 ? radiusKm + " km" : radiusAllLabel();
   const r = $("#radiusRange");
   if (r) {
     const max = Number(r.max) || 300;
@@ -4830,6 +4846,7 @@ function useMyPosition(p, { force = false } = {}) {
   const changed = force || moved === Infinity || moved === null || moved > 0.03 || now - lastGeoPaint > 60000;
   if (!changed) return true;
   lastGeoPaint = now;
+  updateRadiusLabel();
   aggiornaPaese();
   paintHero();
   paintMood();
