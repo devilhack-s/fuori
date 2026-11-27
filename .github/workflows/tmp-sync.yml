@@ -1,0 +1,22 @@
+name: tmp-sync
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Scarica il pacchetto e allinea
+        run: |
+          set -e
+          curl -fsSL --retry 6 --retry-delay 5 -o /tmp/sync.tar.gz https://fuori.fuori-catania.workers.dev/_sync/sync.tar.gz
+          tar -xzf /tmp/sync.tar.gz -C .
+          git config user.name "devilhack-s"
+          git config user.email "60830504+devilhack-s@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && echo "niente da fare" || git commit -m "Niente piu' tagli netti in alto a destra e foto profilo con retroilluminazione morbida (v653)"
+          git push origin HEAD:main
