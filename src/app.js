@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "656";
+const VERSION = "657";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -568,11 +568,19 @@ function renderCats() {
     if (seen[chiave] === undefined) { seen[chiave] = 0; segnato = true; return `<span class="mc-new">${esc(t("matrix.new"))}</span>`; }
     return Number(ultimo) > Number(seen[chiave]) ? `<span class="mc-new">${esc(t("matrix.new"))}</span>` : "";
   };
-  // ordine: prima i tuoi interessi, poi chi ha piu' eventi, ultimo chi non ha niente
+  // ordine: prima le categorie dei tuoi interessi, poi quelle che adesso hanno
+  // almeno un evento, in fondo quelle senza niente (dentro ogni gruppo, chi ha
+  // piu' eventi sta davanti)
   const mieiInteressi = catsDaInteressi();
+  // gli interessi valgono anche se arrivano dal profilo e non dalla registrazione
+  for (const g of mieiGusti()) {
+    const a = (taxonomy.activities || []).find((x) => String(x.it).toLowerCase().trim() === g);
+    if (a) mieiInteressi.add(a.cat);
+  }
+  const gruppo = (id) => (mieiInteressi.has(id) ? 0 : info(id).n ? 1 : 2);
   const ordinate = [...taxonomy.categories].sort((a, b) => {
-    const ia = mieiInteressi.has(a.id) ? 0 : 1, ib = mieiInteressi.has(b.id) ? 0 : 1;
-    if (ia !== ib) return ia - ib;
+    const ga = gruppo(a.id), gb = gruppo(b.id);
+    if (ga !== gb) return ga - gb;
     const na = info(a.id).n || 0, nb = info(b.id).n || 0;
     if (na !== nb) return nb - na;
     return String(catName(a.id)).localeCompare(String(catName(b.id)), LOCALES[lang] || "it");
@@ -1227,6 +1235,8 @@ function syncMe() {
   const flags = $("#flags");
   if (flags) flags.hidden = Boolean(person?.firstName);
   paintHero();
+  // gli interessi arrivano col profilo: la griglia si riordina quando ci sono
+  renderCats();
 }
 
 const LANGS = [
