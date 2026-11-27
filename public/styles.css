@@ -1880,3 +1880,131 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
 .ai-bubble.mascot.mf-pensa .mascot-face .mf-cheek{animation:mfCheek636 2.2s ease-in-out infinite}
 @keyframes mfWaveL{0%,100%{transform:rotate(10deg) translate(2px,-2px)}50%{transform:rotate(-18deg) translate(-4px,-7px)}}
 @keyframes mfWaveR{0%,100%{transform:rotate(-10deg) translate(-2px,-2px)}50%{transform:rotate(20deg) translate(4px,-9px)}}
+/* ===== v638: mascotte con bocca, dita e tante espressioni =====
+   Il disegno e' in index.html: occhi, bocche, mani e decori sono pezzi
+   separati che si accendono insieme. Gli attributi data-eyes / data-mouth /
+   data-hands / data-extra sul disegno scelgono la faccia: cosi' ogni
+   espressione ha la sua bocca, la sua occhiata e la sua posa delle mani. */
+.mascot-face{overflow:visible}
+
+/* testa e tratti */
+.mascot-face .mx-plate{fill:#f8fdf2;stroke:rgba(200,255,61,.55);stroke-width:1.1}
+.mascot-face .mx-ring,.mascot-face .mx-plane{color:#c8ff3d}
+.mascot-face .mx-nose{stroke:#1f9d3a;stroke-width:1.6;fill:none;stroke-linecap:round}
+
+/* occhi: ogni variante e' nascosta e si accende solo quella dell'espressione */
+.mascot-face .mx-eopen,.mascot-face .mx-ebig{fill:#1f9d3a;transform-box:fill-box;transform-origin:center}
+.mascot-face .mx-espark{fill:#fff}
+.mascot-face .mx-epupil{fill:#0b3b16}
+.mascot-face .mx-ehappy,.mascot-face .mx-eclosed{fill:none;stroke:#1f9d3a;stroke-width:2.2;stroke-linecap:round}
+.mascot-face .mx-eheart{fill:#ff3d5e}
+.mascot-face .mx-estar{fill:#ffd23f;stroke:#1f9d3a;stroke-width:.6}
+.mascot-face .mx-eye > *{opacity:0;transition:opacity .16s linear}
+.mascot-face .mx-eopen{opacity:1;animation:mxBlink 4.8s infinite}
+.mascot-face .mx-espark{opacity:.95;animation:mxSpark 4.8s infinite}
+.mascot-face .mx-browup,.mascot-face .mx-browsad{fill:none;stroke:#1f9d3a;stroke-width:1.8;stroke-linecap:round;opacity:0;transition:opacity .18s linear}
+[data-eyes="happy"] .mx-eye .mx-eopen,[data-eyes="happy"] .mx-eye .mx-espark,
+[data-eyes="wink"] .mx-eye-l .mx-eopen,[data-eyes="wink"] .mx-eye-l .mx-espark{opacity:0}
+[data-eyes="happy"] .mx-eye .mx-ehappy,[data-eyes="wink"] .mx-eye-r .mx-ehappy{opacity:1}
+[data-eyes="closed"] .mx-eopen{opacity:0}
+[data-eyes="closed"] .mx-eclosed{opacity:1}
+[data-eyes="look"] .mx-epupil{opacity:1}
+[data-eyes="big"] .mx-eopen{opacity:0}
+[data-eyes="big"] .mx-ebig{opacity:1}
+[data-eyes="heart"] .mx-eopen,[data-eyes="heart"] .mx-espark{opacity:0}
+[data-eyes="heart"] .mx-eheart{opacity:1}
+[data-eyes="star"] .mx-eopen,[data-eyes="star"] .mx-espark{opacity:0}
+[data-eyes="star"] .mx-estar{opacity:1}
+[data-eyes="big"] .mx-browup,[data-eyes="look"] .mx-browup{opacity:1}
+[data-eyes="closed"] .mx-browsad{opacity:1}
+
+/* bocche: una per espressione */
+.mascot-face .mx-m{opacity:0;transition:opacity .16s linear}
+.mascot-face .mx-m-smile,.mascot-face .mx-m-small,.mascot-face .mx-m-grin,
+.mascot-face .mx-m-laugh,.mascot-face .mx-m-ooh,.mascot-face .mx-m-yawn{fill:#08331a;stroke:#1f9d3a;stroke-width:1.5;stroke-linejoin:round}
+.mascot-face .mx-m-flat,.mascot-face .mx-m-sad,.mascot-face .mx-m-wavy{fill:none;stroke:#137e2e;stroke-width:2.8;stroke-linecap:round}
+.mascot-face .mx-teeth{fill:#fff;stroke:#137e2e;stroke-width:1.1}
+.mascot-face .mx-tongue{fill:#ff6b81;stroke:none}
+.mascot-face .mx-yawnin{fill:#ff8fa3;stroke:none}
+.mascot-face .mx-lips{fill:#ff8fa3;stroke:#1f9d3a;stroke-width:1.2}
+[data-mouth="smile"] .mx-m-smile,[data-mouth="small"] .mx-m-small,
+[data-mouth="grin"] .mx-m-grin,[data-mouth="laugh"] .mx-m-laugh,
+[data-mouth="ooh"] .mx-m-ooh,[data-mouth="flat"] .mx-m-flat,
+[data-mouth="sad"] .mx-m-sad,[data-mouth="wavy"] .mx-m-wavy,
+[data-mouth="yawn"] .mx-m-yawn,[data-mouth="tongue"] .mx-m-tongue,
+[data-mouth="kiss"] .mx-m-kiss{opacity:1}
+
+/* guance: si accendono quando l'espressione e' calda */
+.mascot-face .mx-cheek{fill:#ff5f7a;opacity:.45;transform-box:fill-box;transform-origin:center;transition:opacity .22s,transform .22s}
+[data-extra="hearts"] .mx-cheek,[data-mouth="kiss"] .mx-cheek{opacity:.95;transform:scale(1.16)}
+[data-eyes="closed"] .mx-cheek{opacity:.28}
+[data-mouth="grin"] .mx-cheek{opacity:.7}
+
+/* mani: palmo, tre dita e pollice, attaccate ai lati del viso */
+.mascot-face .mx-palm,.mascot-face .mx-fingers rect,.mascot-face .mx-thumb{fill:#f8fdf2;stroke:#137e2e;stroke-width:1.5}
+.mascot-face .mx-hand{transform-box:fill-box;transform-origin:50% 82%;transition:transform .34s cubic-bezier(.2,.85,.3,1.15)}
+.mascot-face .mx-handin{transform-box:fill-box;transform-origin:50% 88%;animation:mxIdle 3.6s ease-in-out infinite}
+.mascot-face .mx-fingers{transform-box:fill-box;transform-origin:50% 100%;transition:transform .25s ease}
+.mascot-face .mx-thumb{transform-box:fill-box;transform-origin:50% 20%;transition:transform .25s ease}
+[data-hands="rest"] .mx-l{transform:rotate(6deg)}
+[data-hands="rest"] .mx-r{transform:rotate(-6deg)}
+[data-hands="cheer"] .mx-l{transform:translate(-3px,-7px) rotate(-24deg)}
+[data-hands="cheer"] .mx-r{transform:translate(3px,-7px) rotate(24deg)}
+[data-hands="cheer"] .mx-handin{animation:mxCheer .62s ease-in-out infinite}
+[data-hands="heart"] .mx-l{transform:translate(4px,-3px) rotate(-16deg)}
+[data-hands="heart"] .mx-r{transform:translate(-4px,-3px) rotate(16deg)}
+[data-hands="heart"] .mx-handin{animation:mxCheer 1.5s ease-in-out infinite}
+[data-hands="wave"] .mx-l{transform:rotate(8deg)}
+[data-hands="wave"] .mx-r{transform:translate(4px,-8px) rotate(-30deg)}
+[data-hands="wave"] .mx-r .mx-handin{animation:mxWave .8s ease-in-out infinite}
+[data-hands="up"] .mx-l{transform:translate(-4px,-8px) rotate(-30deg)}
+[data-hands="up"] .mx-r{transform:translate(4px,-8px) rotate(30deg)}
+[data-hands="up"] .mx-handin{animation:mxJitter .5s ease-in-out infinite}
+[data-hands="think"] .mx-l{transform:rotate(8deg) translate(0,2px)}
+[data-hands="think"] .mx-r{transform:translate(-16px,-1px) rotate(38deg)}
+[data-hands="think"] .mx-r .mx-handin{animation:none}
+[data-hands="down"] .mx-l{transform:translate(0,3px) rotate(3deg)}
+[data-hands="down"] .mx-r{transform:translate(0,3px) rotate(-3deg)}
+[data-hands="down"] .mx-handin{animation:mxIdle 5.4s ease-in-out infinite}
+[data-hands="mouth"] .mx-l{transform:rotate(8deg)}
+[data-hands="mouth"] .mx-r{transform:translate(-12px,-4px) rotate(26deg)}
+[data-hands="party"] .mx-l{transform:translate(-4px,-9px) rotate(-34deg)}
+[data-hands="party"] .mx-r{transform:translate(4px,-9px) rotate(34deg)}
+[data-hands="party"] .mx-handin{animation:mxCheer .45s ease-in-out infinite}
+[data-hands="cheek"] .mx-l{transform:translate(6px,-4px) rotate(-22deg)}
+[data-hands="cheek"] .mx-r{transform:translate(-6px,-4px) rotate(22deg)}
+[data-hands="shy"] .mx-l{transform:translate(6px,-2px) rotate(-28deg)}
+[data-hands="shy"] .mx-r{transform:translate(-6px,-2px) rotate(28deg)}
+[data-hands="shrug"] .mx-l{transform:translate(-3px,1px) rotate(-14deg)}
+[data-hands="shrug"] .mx-r{transform:translate(3px,1px) rotate(14deg)}
+[data-hands="thumbs"] .mx-l{transform:rotate(8deg)}
+[data-hands="thumbs"] .mx-r{transform:translate(2px,-5px) rotate(-8deg)}
+[data-hands="thumbs"] .mx-r .mx-fingers{transform:scaleY(.3)}
+[data-hands="thumbs"] .mx-r .mx-thumb{transform:rotate(-46deg) translate(-.4px,-1.4px)}
+
+/* decori: cuori, sonno, festa, pensiero, dubbio */
+.mascot-face .mx-ex{opacity:0;transition:opacity .2s linear;transform-box:fill-box;transform-origin:center}
+.mascot-face .mx-ex-zzz path{fill:none;stroke:#c8ff3d;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.mascot-face .mx-ex-qmark path{fill:none;stroke:#c8ff3d;stroke-width:2.1;stroke-linecap:round}
+.mascot-face .mx-ex-qmark circle{fill:#c8ff3d}
+.mascot-face .mx-ex-confetti circle{fill:#c8ff3d}
+.mascot-face .mx-ex-confetti circle:nth-of-type(2){fill:#ff5f7a}
+.mascot-face .mx-ex-confetti rect{fill:#ffd23f}
+.mascot-face .mx-ex-dots circle{fill:#f4f8ec}
+.mascot-face .mx-ex-hearts path{fill:#ff3d5e}
+[data-extra="hearts"] .mx-ex-hearts{opacity:1;animation:mxFloat 2.6s ease-in-out infinite}
+[data-extra="zzz"] .mx-ex-zzz{opacity:1;animation:mxDrift 3s ease-in-out infinite}
+[data-extra="confetti"] .mx-ex-confetti{opacity:1;animation:mxSpin 2.4s ease-in-out infinite}
+[data-extra="dots"] .mx-ex-dots{opacity:1;animation:mxDots 1.6s ease-in-out infinite}
+[data-extra="qmark"] .mx-ex-qmark{opacity:1;animation:mxWiggle 2.2s ease-in-out infinite}
+@keyframes mxBlink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.12)}}
+@keyframes mxSpark{0%,92%,100%{opacity:1}95%{opacity:0}}
+@keyframes mxIdle{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-1.2px) rotate(2.5deg)}}
+@keyframes mxWave{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(16deg)}}
+@keyframes mxCheer{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-2px) rotate(8deg)}}
+@keyframes mxJitter{0%,100%{transform:translate(0,0)}25%{transform:translate(-.5px,-1.2px)}75%{transform:translate(.5px,-.4px)}}
+@keyframes mxFloat{0%,100%{transform:translateY(1px) scale(.92);opacity:.35}50%{transform:translateY(-2px) scale(1.06);opacity:1}}
+@keyframes mxDrift{0%,100%{transform:translate(0,1px);opacity:.5}50%{transform:translate(1.5px,-1px);opacity:1}}
+@keyframes mxSpin{0%,100%{transform:rotate(-6deg) scale(.94)}50%{transform:rotate(8deg) scale(1.06)}}
+@keyframes mxDots{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes mxWiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}

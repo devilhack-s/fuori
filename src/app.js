@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "637";
+const VERSION = "638";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -9067,6 +9067,7 @@ function bind() {
   const delOk = $("#delOk");
   if (delOk) delOk.onclick = confermaAnnulla;
   mascotteAvvia();
+  mascotteUmore("");
   $("#favBtn").onclick = openFav;
   wireNav();
   $("#moreBtn").onclick = () => loadEvents(false);
@@ -10916,13 +10917,88 @@ function mascotteOra() {
 let mascotTimer = 0;
 let mascotChiusaOra = false;
 
-// v636: la mascotte cambia posa e guance secondo quello che sta facendo
+/* ---------- v638: le espressioni della mascotte ----------
+   Ogni posa sceglie occhi, bocca, mani e decoro: il disegno li mostra
+   insieme, quindi la faccia e le mani sono sempre d'accordo. Per aggiungere
+   un'espressione basta una riga qui dentro. */
+const MASCOT_EXPR = [
+  { n: "sorriso", e: "open", m: "smile", h: "rest", x: "", ms: 2600 },
+  { n: "risata", e: "happy", m: "laugh", h: "cheer", x: "", ms: 2200 },
+  { n: "cuore", e: "heart", m: "kiss", h: "heart", x: "hearts", ms: 2600 },
+  { n: "occhiolino", e: "wink", m: "smile", h: "wave", x: "", ms: 2200 },
+  { n: "sorpresa", e: "big", m: "ooh", h: "up", x: "", ms: 1900 },
+  { n: "pensa", e: "look", m: "flat", h: "think", x: "dots", ms: 2500 },
+  { n: "triste", e: "closed", m: "sad", h: "down", x: "", ms: 2400 },
+  { n: "sonno", e: "closed", m: "yawn", h: "mouth", x: "zzz", ms: 2800 },
+  { n: "festa", e: "star", m: "laugh", h: "party", x: "confetti", ms: 2300 },
+  { n: "bacio", e: "happy", m: "kiss", h: "cheek", x: "hearts", ms: 2400 },
+  { n: "linguaccia", e: "open", m: "tongue", h: "wave", x: "", ms: 2200 },
+  { n: "timido", e: "happy", m: "small", h: "shy", x: "", ms: 2500 },
+  { n: "ok", e: "wink", m: "grin", h: "thumbs", x: "", ms: 2400 },
+  { n: "saluta", e: "happy", m: "smile", h: "wave", x: "", ms: 2400 },
+  { n: "dubbio", e: "look", m: "wavy", h: "shrug", x: "qmark", ms: 2500 },
+];
+
+let mascotExprIdx = -1;
+let mascotExprBag = [];
+let mascotExprTimer = 0;
+
+function mascotPosa(posa) {
+  const faccia = $("#aiBtn .mascot-face");
+  if (!faccia || !posa) return;
+  faccia.dataset.eyes = posa.e;
+  faccia.dataset.mouth = posa.m;
+  faccia.dataset.hands = posa.h;
+  faccia.dataset.extra = posa.x || "";
+  faccia.dataset.posa = posa.n || "";
+}
+
+// giro mescolato: passano tutte, mai la stessa due volte di fila
+function mascotProssima() {
+  if (!mascotExprBag.length) {
+    const ordine = MASCOT_EXPR.map((_, i) => i);
+    for (let i = ordine.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const t = ordine[i]; ordine[i] = ordine[j]; ordine[j] = t;
+    }
+    if (ordine[ordine.length - 1] === mascotExprIdx) {
+      const t = ordine[0]; ordine[0] = ordine[ordine.length - 1]; ordine[ordine.length - 1] = t;
+    }
+    mascotExprBag = ordine;
+  }
+  mascotExprIdx = mascotExprBag.pop();
+  return MASCOT_EXPR[mascotExprIdx];
+}
+
+function mascotCiclo(attivo) {
+  if (mascotExprTimer) { clearTimeout(mascotExprTimer); mascotExprTimer = 0; }
+  if (!attivo) return;
+  const passo = () => {
+    const posa = mascotProssima();
+    mascotPosa(posa);
+    mascotExprTimer = setTimeout(passo, posa.ms + Math.floor(Math.random() * 700));
+  };
+  passo();
+}
+
+// v636/v638: la mascotte cambia posa e guance secondo quello che sta facendo
 // ("chat" = parla e saluta, "pensa" = si tiene il mento, "" = giro di emozioni)
 function mascotteUmore(nome) {
   const btn = $("#aiBtn");
   if (!btn) return;
   btn.classList.toggle("mf-chat", nome === "chat");
   btn.classList.toggle("mf-pensa", nome === "pensa");
+  if (nome === "chat") {
+    mascotCiclo(false);
+    mascotPosa({ n: "chat", e: "happy", m: "smile", h: "wave", x: "" });
+    return;
+  }
+  if (nome === "pensa") {
+    mascotCiclo(false);
+    mascotPosa({ n: "pensa", e: "look", m: "flat", h: "think", x: "dots" });
+    return;
+  }
+  mascotCiclo(true);
 }
 
 function nascondiMascotte() {

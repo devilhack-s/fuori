@@ -22,15 +22,15 @@
 <meta name="twitter:image:alt" content="FUORI — eventi in Sicilia">
 <meta name="theme-color" content="#060606">
 <meta name="color-scheme" content="dark">
-<link rel="manifest" href="/manifest.webmanifest?v=637">
+<link rel="manifest" href="/manifest.webmanifest?v=638">
 <link rel="icon" href="/icons/fuori-favicon-32.png" sizes="32x32">
 <link rel="icon" href="/icons/fuori-favicon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/icons/fuori-app-180.png">
 <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
-<script src="/boot.js?v=637"></script>
-<link rel="stylesheet" href="/styles.css?v=637">
-<link rel="preload" as="script" href="/app.min.js?v=637">
-<link rel="preload" as="image" href="/hand-fingers.svg?v=637" fetchpriority="high">
+<script src="/boot.js?v=638"></script>
+<link rel="stylesheet" href="/styles.css?v=638">
+<link rel="preload" as="script" href="/app.min.js?v=638">
+<link rel="preload" as="image" href="/hand-fingers.svg?v=638" fetchpriority="high">
 </head>
 <body>
 
@@ -201,40 +201,74 @@
   </button>
 </nav>
 <button id="aiBtn" class="ai-bubble mascot" type="button" aria-label="Assistente FUORI">
-  <!-- la mascotte e' il logo FUORI uguale, con gli occhi che sbattono e il sorrisetto -->
-  <!-- il logo FUORI identico (anello + aeroplanino), con una faccina dentro -->
-  <svg class="mascot-face" viewBox="0 0 100 100" aria-hidden="true">
-    <circle class="mf-plate" cx="50" cy="54" r="26.5" fill="#f8fdf2"/>
-    <g class="mf-face">
-      <circle class="mf-cheek" cx="34.5" cy="62" r="4" fill="#ff5f7a"/>
-      <circle class="mf-cheek" cx="65.5" cy="62" r="4" fill="#ff5f7a"/>
-      <g class="mf-eye"><ellipse cx="41" cy="51" rx="3.4" ry="3.9" fill="#1f9d3a"/><circle class="mf-spark" cx="42.4" cy="49.6" r="1.1" fill="#fff"/></g>
-      <g class="mf-eye"><ellipse cx="59" cy="51" rx="3.4" ry="3.9" fill="#1f9d3a"/><circle class="mf-spark" cx="60.4" cy="49.6" r="1.1" fill="#fff"/></g>
-      <g class="mf-hearts">
-        <path class="mf-heart" d="M41 49.4c-1.7-1.9-4.5-.7-4.5 1.8 0 2 2.6 3.7 4.5 5.2 1.9-1.5 4.5-3.2 4.5-5.2 0-2.5-2.8-3.7-4.5-1.8Z" fill="#ff3d5e"/>
-        <path class="mf-heart" d="M59 49.4c-1.7-1.9-4.5-.7-4.5 1.8 0 2 2.6 3.7 4.5 5.2 1.9-1.5 4.5-3.2 4.5-5.2 0-2.5-2.8-3.7-4.5-1.8Z" fill="#ff3d5e"/>
-      </g>
-      <path class="mf-nose" d="M48.5 55.5q1.5 2 3 0" fill="none" stroke="#1f9d3a" stroke-width="1.8" stroke-linecap="round"/>
-      <g class="mf-mouthg">
-        <path class="mf-mouth" d="M40 61q10 6 20 0q-10 3-20 0Z" fill="#0f4d22" stroke="#1f9d3a" stroke-width="1.8" stroke-linejoin="round"/>
-        <path class="mf-teeth" d="M42 61.6q8 3.2 16 0v1.6q-8 2.2-16 0Z" fill="#fff"/>
-        <path class="mf-tongue" d="M47 65.5q3-3 6 0q-3 3-6 0Z" fill="#ff6b81"/>
-      </g>
+  <!-- v638: la mascotte ha bocca, mani con le dita e tante espressioni -->
+  <svg class="mascot-face" viewBox="0 0 100 100" aria-hidden="true" data-eyes="open" data-mouth="smile" data-hands="rest" data-extra="">
+    <circle class="mx-plate" cx="50" cy="54" r="26.5"/>
+    <circle class="mx-cheek" cx="33.6" cy="62" r="4.4"/>
+    <circle class="mx-cheek" cx="66.4" cy="62" r="4.4"/>
+    <g class="mx-eye mx-eye-l">
+      <ellipse class="mx-eopen" cx="40.6" cy="50.6" rx="3.6" ry="4.2"/>
+      <circle class="mx-espark" cx="42" cy="49" r="1.1"/>
+      <circle class="mx-epupil" cx="41.6" cy="50.9" r="2.4"/>
+      <ellipse class="mx-ebig" cx="40.6" cy="50.4" rx="4.8" ry="5.4"/>
+      <path class="mx-ehappy" d="M36.9 52.6q3.7-5.4 7.4 0"/>
+      <path class="mx-eclosed" d="M36.9 50.8q3.7 3.4 7.4 0"/>
+      <path class="mx-eheart" d="M40.6 55.6c-2.9-2.2-5.5-4.2-5.5-6.7 0-2.4 3-3.4 4-1.3.4 1 .9 1.8 1.5 2.3.6-.5 1.1-1.3 1.5-2.3 1-2.1 4-1.1 4 1.3 0 2.5-2.6 4.5-5.5 6.7Z"/>
+      <path class="mx-estar" d="M40.6 44l1.7 3.9 3.9 1.7-3.9 1.7-1.7 3.9-1.7-3.9L35 49.6l3.9-1.7Z"/>
     </g>
-    <g class="mf-hand mf-hand-l">
-      <ellipse class="mf-palm" cx="15" cy="68" rx="6.4" ry="7.4" fill="#f8fdf2" stroke="#1f9d3a" stroke-width="1.3"/>
-      <circle class="mf-thumb" cx="20.2" cy="62.6" r="2.5" fill="#f8fdf2" stroke="#1f9d3a" stroke-width="1.1"/>
+    <g class="mx-eye mx-eye-r">
+      <ellipse class="mx-eopen" cx="59.4" cy="50.6" rx="3.6" ry="4.2"/>
+      <circle class="mx-espark" cx="58" cy="49" r="1.1"/>
+      <circle class="mx-epupil" cx="58.4" cy="50.9" r="2.4"/>
+      <ellipse class="mx-ebig" cx="59.4" cy="50.4" rx="4.8" ry="5.4"/>
+      <path class="mx-ehappy" d="M63.1 52.6q-3.7-5.4-7.4 0"/>
+      <path class="mx-eclosed" d="M63.1 50.8q-3.7 3.4-7.4 0"/>
+      <path class="mx-eheart" d="M59.4 55.6c2.9-2.2 5.5-4.2 5.5-6.7 0-2.4-3-3.4-4-1.3-.4 1-.9 1.8-1.5 2.3-.6-.5-1.1-1.3-1.5-2.3-1-2.1-4-1.1-4 1.3 0 2.5 2.6 4.5 5.5 6.7Z"/>
+      <path class="mx-estar" d="M59.4 44l1.7 3.9 3.9 1.7-3.9 1.7-1.7 3.9-1.7-3.9-3.9-1.7 3.9-1.7Z"/>
     </g>
-    <g class="mf-hand mf-hand-r">
-      <ellipse class="mf-palm" cx="85" cy="68" rx="6.4" ry="7.4" fill="#f8fdf2" stroke="#1f9d3a" stroke-width="1.3"/>
-      <circle class="mf-thumb" cx="79.8" cy="62.6" r="2.5" fill="#f8fdf2" stroke="#1f9d3a" stroke-width="1.1"/>
-    </g>
-    <!-- esattamente l'anello e l'aeroplanino del logo -->
-    <path class="mf-ring" d="M82 54A32 32 0 1 1 50 22" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="butt"/>
-    <g class="mf-plane" fill="currentColor">
+    <path class="mx-browup" d="M36.9 44.6q3.7-2.8 7.4 0"/>
+    <path class="mx-browup" d="M55.7 44.6q3.7-2.8 7.4 0"/>
+    <path class="mx-browsad" d="M36.9 44.2q3.7 3 7.4 0"/>
+    <path class="mx-browsad" d="M55.7 44.2q3.7 3 7.4 0"/>
+    <path class="mx-nose" d="M48.4 55.6q1.6 2.2 3.2 0"/>
+    <g class="mx-m mx-m-smile"><path d="M41.4 61.8q8.6 8.2 17.2 0q-8.6 5.4-17.2 0Z"/></g>
+    <g class="mx-m mx-m-small"><path d="M45.2 62.6q4.8 4 9.6 0q-4.8 2.8-9.6 0Z"/></g>
+    <g class="mx-m mx-m-grin"><path d="M40.4 60.6q9.6 12.2 19.2 0q-9.6 6-19.2 0Z"/><path class="mx-teeth" d="M42.4 61.4q7.6 5.4 15.2 0v2.8q-7.6 3.2-15.2 0Z"/></g>
+    <g class="mx-m mx-m-laugh"><path d="M41.8 60.8q8.2 12.6 16.4 0q-8.2 5-16.4 0Z"/><ellipse class="mx-tongue" cx="50" cy="68" rx="3.6" ry="2.4"/></g>
+    <g class="mx-m mx-m-ooh"><ellipse cx="50" cy="64" rx="3.4" ry="4.1"/></g>
+    <g class="mx-m mx-m-flat"><path d="M43.4 64h13.2"/></g>
+    <g class="mx-m mx-m-sad"><path d="M43.4 66.6q6.6-6 13.2 0"/></g>
+    <g class="mx-m mx-m-wavy"><path d="M43.4 64q3.3-3.6 6.6 0t6.6 0"/></g>
+    <g class="mx-m mx-m-yawn"><ellipse cx="50" cy="64.4" rx="6" ry="7.2"/><ellipse class="mx-yawnin" cx="50" cy="66.6" rx="2.9" ry="3.3"/></g>
+    <g class="mx-m mx-m-tongue"><path d="M41.4 61.8q8.6 8.2 17.2 0q-8.6 5.4-17.2 0Z"/><ellipse class="mx-tongue" cx="50" cy="68.4" rx="3.6" ry="2.8"/></g>
+    <g class="mx-m mx-m-kiss"><path class="mx-lips" d="M45.2 62.8q4.8-3.4 9.6 0q-4.8 5.8-9.6 0Z"/></g>
+    <path class="mx-ring" d="M82 54A32 32 0 1 1 50 22" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="butt"/>
+    <g class="mx-plane" fill="currentColor">
       <path d="M96 10 56.8 29.7 70.8 32.1Z"/>
       <path d="M96 10 70.8 32.1 71.2 46.3Z" fill-opacity=".72"/>
     </g>
+    <g class="mx-handwrap" transform="translate(21.5 70)"><g class="mx-hand mx-l"><g class="mx-handin">
+      <g class="mx-fingers"><rect x="-6.1" y="-13.4" width="3.6" height="9.4" rx="1.8"/><rect x="-1.8" y="-14.4" width="3.6" height="10.4" rx="1.8"/><rect x="2.5" y="-13.6" width="3.6" height="9.6" rx="1.8"/></g>
+      <rect class="mx-thumb" x="5.2" y="-2.8" width="3.2" height="8" rx="1.6" transform="rotate(30 6.8 1.2)"/>
+      <ellipse class="mx-palm" cx="0" cy="0" rx="6.6" ry="7.2"/>
+    </g></g></g>
+    <g class="mx-handwrap" transform="translate(78.5 70)"><g class="mx-hand mx-r"><g class="mx-handin"><g transform="scale(-1 1)">
+      <g class="mx-fingers"><rect x="-6.1" y="-13.4" width="3.6" height="9.4" rx="1.8"/><rect x="-1.8" y="-14.4" width="3.6" height="10.4" rx="1.8"/><rect x="2.5" y="-13.6" width="3.6" height="9.6" rx="1.8"/></g>
+      <rect class="mx-thumb" x="5.2" y="-2.8" width="3.2" height="8" rx="1.6" transform="rotate(30 6.8 1.2)"/>
+      <ellipse class="mx-palm" cx="0" cy="0" rx="6.6" ry="7.2"/>
+    </g></g></g></g>
+    <g class="mx-ex mx-ex-hearts">
+      <path d="M30.6 20.4c-2-1.9-5-.7-5 1.8 0 2.1 2.8 4 5 5.6 2.2-1.6 5-3.5 5-5.6 0-2.5-3-3.7-5-1.8Z"/>
+      <path d="M39.4 12c-1.4-1.3-3.5-.5-3.5 1.3 0 1.5 2 2.8 3.5 4 1.5-1.2 3.5-2.5 3.5-4 0-1.8-2.1-2.6-3.5-1.3Z"/>
+    </g>
+    <g class="mx-ex mx-ex-zzz">
+      <path d="M24.8 18.6h6.4l-6.4 6.6h6.4"/>
+      <path d="M31.8 12.4h5.4l-5.4 5.8h5.4"/>
+      <path d="M37.8 6.8h4.6l-4.6 4.8h4.6"/>
+    </g>
+    <g class="mx-ex mx-ex-confetti"><circle cx="26.4" cy="19.4" r="2.1"/><rect x="33.8" y="10.6" width="3.4" height="3.4" rx="1.2" transform="rotate(22 35.5 12.3)"/><circle cx="42.4" cy="16.8" r="1.6"/></g>
+    <g class="mx-ex mx-ex-dots"><circle cx="27.4" cy="20.4" r="2"/><circle cx="34.6" cy="15" r="2"/><circle cx="41.6" cy="9.8" r="2"/></g>
+    <g class="mx-ex mx-ex-qmark"><path d="M29.4 14.6q0-4.6 4.2-4.6t4.2 4.6q0 2.9-4.2 4.2v2"/><circle cx="33.6" cy="24.4" r="1.4"/></g>
   </svg>
 </button>
 <div id="mascotBubble" class="mascot-bubble" hidden>
@@ -1249,6 +1283,6 @@
 </div>
 
 <div class="toast" id="toast" hidden></div>
-<script src="/app.min.js?v=637" defer></script>
+<script src="/app.min.js?v=638" defer></script>
 </body>
 </html>
