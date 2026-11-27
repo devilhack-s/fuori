@@ -22,15 +22,15 @@
 <meta name="twitter:image:alt" content="FUORI — eventi in Sicilia">
 <meta name="theme-color" content="#060606">
 <meta name="color-scheme" content="dark">
-<link rel="manifest" href="/manifest.webmanifest?v=657">
+<link rel="manifest" href="/manifest.webmanifest?v=669">
 <link rel="icon" href="/icons/fuori-favicon-32.png" sizes="32x32">
 <link rel="icon" href="/icons/fuori-favicon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="/icons/fuori-app-180.png">
 <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
-<script src="/boot.js?v=657"></script>
-<link rel="stylesheet" href="/styles.css?v=657">
-<link rel="preload" as="script" href="/app.min.js?v=657">
-<link rel="preload" as="image" href="/hand-fingers.svg?v=657" fetchpriority="high">
+<script src="/boot.js?v=669"></script>
+<link rel="stylesheet" href="/styles.css?v=669">
+<link rel="preload" as="script" href="/app.min.js?v=669">
+<link rel="preload" as="image" href="/hand-fingers.svg?v=669" fetchpriority="high">
 </head>
 <body>
 
@@ -105,17 +105,6 @@
 
 
 
-  <!-- la ricerca: scrivi il nome di un evento e sotto arrivano i suggerimenti -->
-  <section class="esearch-wrap">
-    <div class="esearch" id="homeSearch">
-      <span class="esearch-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></span>
-      <input id="search" class="esearch-in" type="search" autocomplete="off" enterkeyhint="search"
-             data-ph="search.ph" aria-label="Cerca un evento" aria-controls="searchSug" aria-expanded="false" aria-autocomplete="list">
-      <button class="esearch-x" id="searchX" type="button" aria-label="Pulisci" hidden>×</button>
-      <div class="esearch-out" id="searchSug" role="listbox" hidden></div>
-    </div>
-  </section>
-
   <section class="tools tools-radius">
     <div class="radius-box">
       <div class="radius-top">
@@ -132,6 +121,17 @@
     <span class="ms-txt" id="moodSayTxt"></span>
     <button class="ms-btn" id="moodSayBtn" type="button"></button>
   </div>
+
+  <!-- la ricerca: scrivi il nome di un evento e sotto arrivano i suggerimenti -->
+  <section class="esearch-wrap">
+    <div class="esearch" id="homeSearch">
+      <span class="esearch-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg></span>
+      <input id="search" class="esearch-in" type="search" autocomplete="off" enterkeyhint="search"
+             data-ph="search.ph" aria-label="Cerca un evento" aria-controls="searchSug" aria-expanded="false" aria-autocomplete="list">
+      <button class="esearch-x" id="searchX" type="button" aria-label="Pulisci" hidden>×</button>
+      <div class="esearch-out" id="searchSug" role="listbox" hidden></div>
+    </div>
+  </section>
 
   <section class="matrix-wrap">
     <p class="kicker" data-i="matrix.railTitle">Esplora per categoria</p>
@@ -236,7 +236,7 @@
         <path class="mx-lid" d="M35.9 51.4q4.7-6.7 9.4 0"/>
       </g>
       <path class="mx-ehappy" d="M36.9 52.4q3.7-5.4 7.4 0"/>
-      <path class="mx-eclosed" d="M36.3 50.9q4.3 3.9 8.6 0M37 52.7l-1.3 1.9M40.6 54.5v2.1M44.2 52.7l1.3 1.9"/>
+      <path class="mx-eclosed" d="M36.2 52.4q4.4-4.6 8.8 0"/>
     </g>
     <g class="mx-eye mx-eye-r">
       <g class="mx-eopen">
@@ -255,7 +255,7 @@
         <path class="mx-lid" d="M64.1 51.4q-4.7-6.7-9.4 0"/>
       </g>
       <path class="mx-ehappy" d="M63.1 52.4q-3.7-5.4-7.4 0"/>
-      <path class="mx-eclosed" d="M63.7 50.9q-4.3 3.9 -8.6 0M63 52.7l1.3 1.9M59.4 54.5v2.1M55.8 52.7l-1.3 1.9"/>
+      <path class="mx-eclosed" d="M63.8 52.4q-4.4-4.6-8.8 0"/>
     </g>
     <path class="mx-browup" d="M37.2 43.4q3.4-2.6 6.8 0"/>
     <path class="mx-browup" d="M56 43.4q3.4-2.6 6.8 0"/>
@@ -273,10 +273,12 @@
     <g class="mx-m mx-m-yawn"><ellipse cx="50" cy="64.4" rx="6" ry="7.2"/><ellipse class="mx-yawnin" cx="50" cy="66.6" rx="2.9" ry="3.3"/></g>
     <g class="mx-m mx-m-tongue"><path d="M41.4 61.8q8.6 8.2 17.2 0q-8.6 5.4-17.2 0Z"/><ellipse class="mx-tongue" cx="50" cy="68.4" rx="3.6" ry="2.8"/></g>
     <g class="mx-m mx-m-kiss"><path class="mx-lips" d="M45.2 62.8q4.8-3.4 9.6 0q-4.8 5.8-9.6 0Z"/></g>
-    <path class="mx-ring" d="M82 54A32 32 0 1 1 50 22" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="butt"/>
-    <g class="mx-plane" fill="currentColor">
-      <path d="M96 10 56.8 29.7 70.8 32.1Z"/>
-      <path d="M96 10 70.8 32.1 71.2 46.3Z" fill-opacity=".72"/>
+    <g class="mx-orbit">
+      <path class="mx-ring" d="M82 54A32 32 0 1 1 50 22" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="butt"/>
+      <g class="mx-plane" fill="currentColor">
+        <path d="M96 10 56.8 29.7 70.8 32.1Z"/>
+        <path d="M96 10 70.8 32.1 71.2 46.3Z" fill-opacity=".72"/>
+      </g>
     </g>
     <g class="mx-handwrap" transform="translate(16 73.5)"><g class="mx-hand mx-l"><g class="mx-handin"><g class="mx-bob">
       <g class="mx-fingers"><rect x="-6.2" y="-11.9" width="2.7" height="8.2" rx="1.35"/><rect x="-3" y="-13.6" width="2.7" height="9.9" rx="1.35"/><rect x=".2" y="-14" width="2.7" height="10.3" rx="1.35"/><rect x="3.4" y="-13.1" width="2.7" height="9.4" rx="1.35"/></g>
@@ -1322,6 +1324,6 @@
 </div>
 
 <div class="toast" id="toast" hidden></div>
-<script src="/app.min.js?v=657" defer></script>
+<script src="/app.min.js?v=669" defer></script>
 </body>
 </html>

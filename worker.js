@@ -39,7 +39,7 @@ const SCHEMA_V = 14;
 
 // la versione dell'app: la aggiorna build.sh da sola leggendo src/app.js.
 // I telefoni la chiedono ogni minuto e, se è cambiata, si aggiornano da soli.
-const CLIENT_V = "659";
+const CLIENT_V = "669";
 
 async function initDb(env) {
   if (ready) return;
@@ -4036,7 +4036,9 @@ async function whereAt(url) {
   const lat = Number(url.searchParams.get("lat"));
   const lng = Number(url.searchParams.get("lng"));
   if (!Number.isFinite(lat) || !Number.isFinite(lng)) return json({ town: "", label: "" });
-  const det = await reversePlace(lat, lng).catch(() => null);
+  // il punto della persona: qui serve il nome di quartiere vero, non la
+  // sotto-zona intitolata a una via (vedi vicinoQuartiere)
+  const det = await reversePlace(lat, lng, true).catch(() => null);
   const town = (det && det.town) || (await reverseTown(lat, lng).catch(() => ""));
   const label = det && det.label ? det.label : town;
   const short = det && det.short ? det.short : town;
@@ -4061,8 +4063,42 @@ async function whereAt(url) {
 // il posto esatto: non solo il comune, anche la frazione e la provincia.
 // Cosi' la mappa dice "Riposto (CT)" e non un generico "Catania".
 const placeCacheSec = new Map();
-async function reversePlace(lat, lng) {
-  const k = `${Number(lat).toFixed(3)},${Number(lng).toFixed(3)}`;
+// il nome del quartiere vero attorno al punto. Nominatim chiama "quarter" anche
+// le sotto-zone intitolate a una via: al punto di Milano dice "Corsica" (il
+// viale) mentre il quartiere in cui si sta e' "Acquabella". Qui si prende il
+// `place=suburb` piu' vicino entro 700 m, che e' il nome che usa la gente.
+const SUBURB_MAX_KM = 0.7;
+async function quartiereVicino(lat, lng, town) {
+  const qui = { lat: Number(lat), lng: Number(lng) };
+  if (!Number.isFinite(qui.lat) || !Number.isFinite(qui.lng)) return "";
+  try {
+    const r = await fetch(`https://photon.komoot.io/reverse?lat=${qui.lat}&lon=${qui.lng}&limit=40&layer=locality`, {
+      headers: { "user-agent": "FUORI/1.0 (fuori.app)" },
+      signal: AbortSignal.timeout(2400),
+    });
+    if (!r.ok) return "";
+    const j = await r.json();
+    let migliore = null;
+    for (const f of j.features || []) {
+      const pr = f.properties || {};
+      if (pr.osm_key !== "place" || pr.osm_value !== "suburb") continue;
+      const nome = tidyPlace(pr.name || "");
+      if (!nome || nome.length < 3) continue;
+      if (town && nome.toLowerCase() === String(town).toLowerCase()) continue;
+      if (/^(municipio|zona|nil|quartiere)\s*\d/i.test(nome) || /^quartiere\b/i.test(nome)) continue;
+      const c = (f.geometry && f.geometry.coordinates) || [];
+      const d = kmBetween(qui, { lat: Number(c[1]), lng: Number(c[0]) });
+      if (!Number.isFinite(d) || d > SUBURB_MAX_KM) continue;
+      if (!migliore || d < migliore.d) migliore = { d, nome };
+    }
+    return migliore ? migliore.nome : "";
+  } catch {
+    return "";
+  }
+}
+
+async function reversePlace(lat, lng, conQuartiere) {
+  const k = `${Number(lat).toFixed(3)},${Number(lng).toFixed(3)}` + (conQuartiere ? "|q" : "");
   if (placeCacheSec.has(k)) return placeCacheSec.get(k);
   let out = null;
   const pulito = (v) => tidyPlace(v);
@@ -4082,7 +4118,13 @@ async function reversePlace(lat, lng) {
       // la frazione/il quartiere vero prima di tutto, mai il generico "Municipio 1":
       // frazione (hamlet/village) > quartiere > zona > sobborgo amministrativo
       const quartiere = pulito(a.quarter || a.neighbourhood || "");
-      const fraz = pulito(a.hamlet || a.village || "") || quartiere || pulito(a.locality || "") || pulito(a.suburb || a.city_district || "");
+      let fraz = pulito(a.hamlet || a.village || "") || quartiere || pulito(a.locality || "") || pulito(a.suburb || a.city_district || "");
+      // per la posizione della persona si controlla il nome vero della zona:
+      // "Acquabella" invece di "Corsica", che e' il nome di un viale.
+      if (conQuartiere && !pulito(a.hamlet || a.village || "")) {
+        const vicino = await quartiereVicino(lat, lng, town);
+        if (vicino) fraz = vicino;
+      }
       const prov = pulito(a.county || "").replace(/^Citta metropolitana di /i, "").replace(/^Libero consorzio comunale di /i, "");
       const reg = pulito(a.state || a.region || "");
       const paese = pulito(a.country || "");

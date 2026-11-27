@@ -852,7 +852,7 @@ button.who:active{opacity:.75}
 /* "crea il tuo evento", chiaro e in vista sotto gli eventi */
 .hero .crea-cta{margin:18px 0 2px}
 .crea-cta{display:flex;align-items:center;gap:12px;width:100%;margin:14px 0 6px;padding:14px 14px;border-radius:18px;
-  border:1px solid rgba(198,255,0,.35);background:linear-gradient(180deg,rgba(198,255,0,.10),rgba(198,255,0,.04));
+  border:1.5px solid #c8ff00;background:linear-gradient(180deg,rgba(198,255,0,.32),rgba(150,220,0,.14));box-shadow:0 0 22px rgba(198,255,0,.35);
   color:var(--fg);text-align:left;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .crea-cta:active{transform:scale(.99)}
 .crea-cta-ico{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:var(--lime);color:#0a0a0a;
@@ -1057,9 +1057,10 @@ span.st{cursor:default}
 .matrix-hint{margin:8px 0 0;line-height:1.4}
 
 /* la cartella dei ricordi nella community */
-.past-folder{border:1px solid #2a2a2a;border-radius:18px;padding:12px;background:linear-gradient(180deg,#111,#0b0b0b)}
+.past-folder{border:1px solid rgba(215,255,62,.28);border-radius:18px;padding:12px;background:radial-gradient(120% 90% at 0% 0%,rgba(215,255,62,.13),transparent 60%),linear-gradient(180deg,#111,#0b0b0b);box-shadow:0 0 26px rgba(215,255,62,.1)}
 .past-folder-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.pf-ico{width:36px;height:36px;border-radius:11px;background:#1b1b1b;display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+.pf-ico{width:44px;height:44px;border-radius:14px;background:radial-gradient(circle at 30% 25%,rgba(215,255,62,.28),rgba(215,255,62,.04) 70%),#161c08;border:1px solid rgba(215,255,62,.4);box-shadow:0 0 16px rgba(215,255,62,.28);display:grid;place-items:center;flex:0 0 auto}
+.pf-ico svg{width:26px;height:26px;filter:drop-shadow(0 0 4px rgba(215,255,62,.5))}
 .pf-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .pf-txt b{font-size:15px;font-weight:700}
 .pf-txt i{font-style:normal;font-size:11.5px;color:var(--dim);line-height:1.3}
@@ -1847,10 +1848,10 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
 .det-actions .fav-inline span{font-size:14px}
 
 /* v636: "Crea" rosso vivo e "Partecipa" blu acceso, colori pieni (stesso effetto Matrix) */
-.hero-pill.red{color:#fff2ef;border-color:#ff4d3d;text-shadow:0 0 9px rgba(255,80,60,.9),0 1px 0 rgba(0,0,0,.45);background:linear-gradient(180deg,rgba(255,66,50,.36) 0%,rgba(150,9,20,.68) 52%,rgba(76,0,8,.86) 100%),repeating-linear-gradient(0deg,rgba(255,150,130,.09) 0 1px,transparent 1px 4px);box-shadow:0 0 0 1px rgba(255,110,90,.34) inset,0 0 24px rgba(255,60,40,.5),0 10px 22px rgba(0,0,0,.55)}
+.hero-pill.red{color:#fff;border-color:#ff2e1f;text-shadow:0 0 10px rgba(255,80,60,1),0 1px 0 rgba(0,0,0,.45);background:linear-gradient(180deg,rgba(255,52,36,.85) 0%,rgba(230,12,24,.95) 52%,rgba(150,0,12,.98) 100%),repeating-linear-gradient(0deg,rgba(255,170,150,.12) 0 1px,transparent 1px 4px);box-shadow:0 0 0 1px rgba(255,130,110,.5) inset,0 0 30px rgba(255,50,30,.85),0 10px 22px rgba(0,0,0,.55)}
 .hero-pill.red .hp-main{color:#fff;text-shadow:0 0 10px rgba(255,120,90,.95),0 1px 0 rgba(0,0,0,.5)}
 .hero-pill.red::before{background:linear-gradient(180deg,transparent 0%,rgba(255,200,185,.32) 50%,transparent 100%)}
-.hero-pill.blue{color:#eaf8ff;border-color:#35b7ff;text-shadow:0 0 9px rgba(70,185,255,.95),0 1px 0 rgba(0,0,0,.45);background:linear-gradient(180deg,rgba(44,166,255,.36) 0%,rgba(6,64,160,.7) 52%,rgba(2,24,80,.88) 100%),repeating-linear-gradient(0deg,rgba(140,210,255,.09) 0 1px,transparent 1px 4px);box-shadow:0 0 0 1px rgba(100,195,255,.34) inset,0 0 24px rgba(40,155,255,.52),0 10px 22px rgba(0,0,0,.55)}
+.hero-pill.blue{color:#fff;border-color:#1fa8ff;text-shadow:0 0 10px rgba(70,185,255,1),0 1px 0 rgba(0,0,0,.45);background:linear-gradient(180deg,rgba(30,170,255,.85) 0%,rgba(0,100,235,.95) 52%,rgba(0,50,170,.98) 100%),repeating-linear-gradient(0deg,rgba(160,220,255,.12) 0 1px,transparent 1px 4px);box-shadow:0 0 0 1px rgba(120,205,255,.5) inset,0 0 30px rgba(30,160,255,.85),0 10px 22px rgba(0,0,0,.55)}
 .hero-pill.blue .hp-main{color:#fff;text-shadow:0 0 10px rgba(130,210,255,.95),0 1px 0 rgba(0,0,0,.5)}
 .hero-pill.blue::before{background:linear-gradient(180deg,transparent 0%,rgba(190,232,255,.32) 50%,transparent 100%)}
 
@@ -1898,6 +1899,33 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
 /* testa e tratti: faccia calda, non bianco freddo */
 .mascot-face .mx-plate{fill:#fdf8ef;stroke:#e3cab0;stroke-width:1.1}
 .mascot-face .mx-ring,.mascot-face .mx-plane{color:#c8ff3d}
+
+/* v668: cerchio e freccia hanno un solo ciclo, sempre uguale e nello stesso
+   ordine: girano insieme, poi la freccia si stacca e vola mentre il cerchio
+   continua il giro e respira, poi tornano a girare insieme. Prima erano tre
+   animazioni con durate diverse (20s, 7s, 3.4s), quindi si sfalsavano e
+   sembravano scollegate. */
+.mascot-face .mx-orbit{transform-box:view-box;transform-origin:50px 54px;animation:mxOrbit 12s linear infinite}
+.mascot-face .mx-ring{transform-box:view-box;transform-origin:50px 54px;animation:mxRingPulse 12s ease-in-out infinite}
+.mascot-face .mx-plane{transform-box:view-box;transform-origin:72px 30px;animation:mxHat 12s linear infinite}
+@keyframes mxOrbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+/* il cerchio respira solo mentre la freccia è in aria (22%-66%) */
+@keyframes mxRingPulse{
+  0%,18%{transform:scale(1)}
+  30%{transform:scale(1.045)}
+  46%{transform:scale(1.02)}
+  66%,100%{transform:scale(1)}
+}
+@keyframes mxHat{
+  0%,22%{transform:translate(0,0) rotate(0deg) scale(1)}
+  26%{transform:translate(-3px,4px) rotate(-12deg) scale(.93)}
+  33%{transform:translate(-8px,-14px) rotate(64deg) scale(1.07)}
+  40%{transform:translate(-5px,-23px) rotate(178deg) scale(1.11)}
+  47%{transform:translate(2px,-24px) rotate(268deg) scale(1.05)}
+  54%{transform:translate(6px,-11px) rotate(340deg) scale(.97)}
+  61%{transform:translate(1px,4px) rotate(354deg) scale(.9)}
+  66%,100%{transform:translate(0,0) rotate(360deg) scale(1)}
+}
 .mascot-face .mx-nose{stroke:#b07a63;stroke-width:1.5;fill:none;stroke-linecap:round}
 
 /* v643: occhi veri in ogni espressione. Hanno sempre bianco, iride, pupilla,
@@ -2077,15 +2105,15 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
 
 /* ---- la ricerca con i suggerimenti (home e ricordi) ---- */
 .esearch-wrap{margin:14px 0 2px}
-.esearch{position:relative;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px 8px 11px 14px;transition:border-color .15s ease,box-shadow .15s ease}
+.esearch{position:relative;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 6px 6px 11px;transition:border-color .15s ease,box-shadow .15s ease}
 .esearch:focus-within{border-color:rgba(215,255,62,.45);box-shadow:0 0 0 3px rgba(215,255,62,.07)}
 .esearch-ico{flex:0 0 auto;display:grid;place-items:center;color:var(--dim)}
-.esearch-ico svg{width:17px;height:17px}
+.esearch-ico svg{width:14px;height:14px}
 .esearch:focus-within .esearch-ico{color:var(--lime)}
-.esearch-in{flex:1;min-width:0;background:none;border:0;outline:0;font:inherit;font-size:15px;color:var(--ink);-webkit-appearance:none;appearance:none}
+.esearch-in{flex:1;min-width:0;background:none;border:0;outline:0;font:inherit;font-size:13px;color:var(--ink);-webkit-appearance:none;appearance:none}
 .esearch-in::placeholder{color:#6d6d68}
 .esearch-in::-webkit-search-cancel-button{display:none}
-.esearch-x{flex:0 0 30px;width:30px;height:30px;border:0;border-radius:50%;background:#1a1a1a;color:var(--dim);font-size:17px;line-height:1;display:grid;place-items:center;cursor:pointer}
+.esearch-x{flex:0 0 24px;width:24px;height:24px;border:0;border-radius:50%;background:#1a1a1a;color:var(--dim);font-size:17px;line-height:1;display:grid;place-items:center;cursor:pointer}
 .esearch-x:active{background:#242424;color:var(--ink)}
 .esearch-x[hidden]{display:none}
 .esearch-out{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;background:#101010;border:1px solid var(--line);border-radius:16px;padding:6px;max-height:56vh;overflow-y:auto;box-shadow:0 18px 40px rgba(0,0,0,.62),inset 0 1px 0 rgba(255,255,255,.03);animation:sgIn .13s ease-out}

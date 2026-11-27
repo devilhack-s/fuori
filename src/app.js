@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "659";
+const VERSION = "669";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -10185,9 +10185,12 @@ async function cercaSuggerimenti(testo, out, input, scegli) {
     return;
   }
   if (mio !== sugSeq) return;
+  // ogni campo cerca solo nel suo mondo: eventi in programma o ricordi
+  const soloRicordi = input && input.id === "pastSearchIn";
+  const soloEventi = input && input.id === "search";
   const voci = [
-    ...(r.events || []).map((x) => ({ ...x, tipo: "ev" })),
-    ...(r.past || []).map((x) => ({ ...x, tipo: "past" })),
+    ...(soloRicordi ? [] : (r.events || []).map((x) => ({ ...x, tipo: "ev" }))),
+    ...(soloEventi ? [] : (r.past || []).map((x) => ({ ...x, tipo: "past" }))),
   ];
   if (!voci.length) {
     out.innerHTML = `<p class="sg-wait">${esc(t("search.none", { q: scritto }))}</p>`;
@@ -10277,7 +10280,7 @@ function paintPastFolder() {
   }
   box.innerHTML = `<div class="past-folder">
     <div class="past-folder-top">
-      <span class="pf-ico" aria-hidden="true">📸</span>
+      <span class="pf-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5a2 2 0 0 1 2-2h4.2l1.8 2H19a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="rgba(215,255,62,.16)" stroke="#d7ff3e" stroke-width="1.6"/><rect x="6.5" y="9.5" width="11" height="6.5" rx="1.4" fill="#0b0b0b" stroke="#d7ff3e" stroke-width="1.2"/><path d="M12 14.9s-2.1-1.3-2.1-2.6a1.05 1.05 0 0 1 2.1-.4 1.05 1.05 0 0 1 2.1.4c0 1.3-2.1 2.6-2.1 2.6z" fill="#ff5a7a" stroke="none"/></svg></span>
       <span class="pf-txt"><b>${esc(t("past.folder"))}</b><i>${esc(t("past.folderSub"))}</i></span>
       <span class="pf-n">${passatiVoti.length}</span>
     </div>
@@ -11372,6 +11375,10 @@ function mascotteMostra(b) {
 
 // v631b: la mascotte prima guarda cosa c'è vicino a te, poi parla: niente frasi a caso
 let mascotEventiVicini = [];
+// v667: se non ha guardato la mappa non può dire "c'è qualcosa qui vicino".
+// "si" = ci sono eventi (visti ora), "no" = non ce ne sono, "?" = non lo so.
+let mascotViciniQuando = 0;
+let mascotViciniStato = "?";
 
 function mascotteRispondi(si) {
   nascondiMascotte();
@@ -11381,7 +11388,7 @@ function mascotteRispondi(si) {
     const n = mascotEventiVicini.length;
     aiBubble(n === 1 ? "Ecco l'evento vicino a te:" : `Ecco i ${n} eventi vicino a te:`, "bot", mascotEventiVicini);
   } else {
-    aiBubble("Qui intorno non c'è niente. Scrivimi dove vuoi andare (una città o una zona) e ti cerco qualcosa.", "bot");
+    aiBubble("Qui intorno non c'è ancora niente in programma. Se ti va possiamo inventarlo: un aperitivo, una camminata, una partita a carte. Dimmi che aria ti va e ti aiuto a crearlo.", "bot");
   }
 }
 
@@ -11393,16 +11400,21 @@ async function mascotteCerca() {
   try {
     const data = await api(`/map?device=${encodeURIComponent(device)}&lat=${pos.lat}&lng=${pos.lng}&r=10`);
     mascotEventiVicini = (data.events || []).filter((e) => e.distance <= 10000);
+    mascotViciniQuando = Date.now();
+    mascotViciniStato = mascotEventiVicini.length ? "si" : "no";
     return mascotEventiVicini.length;
   } catch {
+    mascotViciniQuando = Date.now();
+    mascotViciniStato = "?";
     return null;
   }
 }
 
 function mascotteFrase(n) {
   if (n === null) return mascotteOra();
-  if (n > 0) return `Ci sono ${n === 1 ? "un evento interessante" : n + " eventi interessanti"} vicino a te. Vuoi che te li mostri?`;
-  return "Qui intorno non c'è niente in programma. Vuoi che ti cerchi qualcosa in un'altra zona?";
+  if (n > 0) return `Ci sono ${n === 1 ? "un evento" : n + " eventi"} a meno di 10 km da te. Vuoi che te li mostri?`;
+  // niente bugie: qui non c'è nulla, quindi propone cose da fare o da creare
+  return "Qui intorno non c'è ancora niente in programma. Ti va un caffè, una camminata o una partita a carte con qualcuno della zona? Puoi crearlo tu in un minuto.";
 }
 
 async function mascotteAvvia() {
@@ -11439,13 +11451,50 @@ const MF_HINT = {
   register: "Bastano due dati e sei dentro: poi crei anche i tuoi eventi.",
 };
 
-const MF_IDLE = [
-  "Ho un'idea per stasera: dimmi che aria ti va e ti trovo il posto giusto.",
-  "Qualcosa di nuovo ti aspetta qui vicino. Vuoi che te lo mostri?",
-  "Serata libera o voglia di uscire? Dimmelo e ci penso io.",
-  "Hai un'idea di evento in testa? Creala tu e vediamo chi si unisce.",
-  "Due tap e scopri cosa succede intorno a te. Ti porto alla mappa?",
+/* v667: le frasi dipendono da quello che la mascotte ha verificato davvero.
+   Prima erano fisse e dicevano "c'è qualcosa qui vicino" anche quando non
+   c'era niente. Adesso: "si" solo con eventi trovati ora, "no" con consigli
+   su cosa fare o creare, "?" senza affermare nulla. Mai due volte di fila. */
+const MF_IDLE_PIENO = [
+  "Ho controllato: c'è qualcosa a meno di 10 km. Ti va di vederlo?",
+  "Ci sono eventi qui vicino, non tanti ma veri. Te li mostro?",
+  "Prima di parlare ho guardato la mappa: qualcosa c'è. Lo apriamo?",
 ];
+
+const MF_IDLE_VUOTO = [
+  "Qui non c'è ancora niente in programma. Un caffè con qualcuno del quartiere? Puoi crearlo tu.",
+  "Zona tranquilla: nessun evento. Se ti va una camminata o una partita a carte, la apri tu in un minuto.",
+  "Niente in programma qui intorno. Un aperitivo, una mostra, un giro in bici: scegli tu e lo crei.",
+  "Non ci sono eventi vicini. È il momento buono per inventarne uno piccolo, con due persone.",
+];
+
+const MF_IDLE_NOTO = [
+  "Non riesco a vedere la mappa adesso. Dimmi la zona e ti dico cosa c'è.",
+  "Per dirti cosa c'è qui vicino mi serve la tua posizione. La attivi?",
+];
+
+let mfIdleSacco = { fonte: null, idx: [] };
+
+function mfIdleFrase(stato) {
+  const fonte = stato === "si" ? MF_IDLE_PIENO : stato === "no" ? MF_IDLE_VUOTO : MF_IDLE_NOTO;
+  if (mfIdleSacco.fonte !== fonte) mfIdleSacco = { fonte, idx: [] };
+  if (!mfIdleSacco.idx.length) {
+    const idx = fonte.map((_, i) => i);
+    for (let i = idx.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [idx[i], idx[j]] = [idx[j], idx[i]];
+    }
+    mfIdleSacco.idx = idx;
+  }
+  return fonte[mfIdleSacco.idx.pop()] || "";
+}
+
+// riguarda la mappa solo se l'ultimo controllo è vecchio: niente richieste a raffica
+async function mascotViciniFresco(maxEtaMs) {
+  if (Date.now() - mascotViciniQuando < (maxEtaMs || 90000)) return mascotViciniStato;
+  await mascotteCerca();
+  return mascotViciniStato;
+}
 
 function mfLato() {
   const b = $("#aiBtn");
@@ -11559,7 +11608,7 @@ function mfSveglia() {
   mfIdleT = setTimeout(mfIdle, 30000);
 }
 
-function mfIdle() {
+async function mfIdle() {
   mfIdleT = 0;
   mfSveglia();
   if (mascotChiusaOra || mfIdleGiri >= 3) return;
@@ -11570,7 +11619,12 @@ function mfIdle() {
   if (a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA" || a.tagName === "SELECT" || a.isContentEditable)) return;
   if (strati.indexOf("assistant") >= 0) return;
   mfIdleGiri++;
-  mfDici(MF_IDLE[Math.floor(Math.random() * MF_IDLE.length)], 8000, "info");
+  // prima guarda, poi parla: se non ha potuto verificare non afferma niente
+  const stato = await mascotViciniFresco(90000);
+  const b2 = $("#mascotBubble");
+  if (mascotChiusaOra || document.hidden || (b2 && !b2.hidden)) return;
+  const frase = mfIdleFrase(stato);
+  if (frase) mfDici(frase, 8000, "info");
 }
 
 function mfHint(id) {
