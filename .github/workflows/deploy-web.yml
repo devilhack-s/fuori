@@ -1,0 +1,58 @@
+name: Pubblica sito e app web
+
+# Ogni volta che cambia qualcosa del sito o del server, GitHub lo mette online.
+# Serve una sola volta: Settings -> Secrets and variables -> Actions ->
+# CLOUDFLARE_API_TOKEN e CLOUDFLARE_ACCOUNT_ID (vedi PUBBLICARE.md).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "public/**"
+      - "content/**"
+      - "tools/**"
+      - "worker.js"
+      - "build.sh"
+      - "wrangler.toml"
+      - "deploy.json"
+      - "capacitor.config.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: produzione-fuori
+  cancel-in-progress: true
+
+jobs:
+  pubblica:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Controlla che il token Cloudflare ci sia
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "::error::Mancano i segreti CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID. Vedi PUBBLICARE.md nella prima pagina del repository."
+            exit 1
+          fi
+
+      - name: Build (contenuti + app.min.js + versioni)
+        run: ./build.sh
+
+      - name: Pubblica su Cloudflare
+        run: npx --yes wrangler@4 deploy
+
+      - name: Controlla che la versione online sia quella nuova
+        run: |
+          sleep 5
+          curl -fsS "https://fuori.fuori-catania.workers.dev/api/version?x=$RANDOM"
