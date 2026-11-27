@@ -1,0 +1,130 @@
+name: App iPhone (TestFlight)
+
+# Si avvia con un tag "v..." oppure a mano.
+# Se i segreti Apple non ci sono, non fallisce: salta la pubblicazione e lo dice.
+# I segreti sono elencati in PUBBLICARE.md.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pubblicazione-ios
+  cancel-in-progress: false
+
+jobs:
+  testflight:
+    runs-on: macos-15
+    env:
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APPLE_KEY_ID: ${{ secrets.APPLE_KEY_ID }}
+      APPLE_ISSUER_ID: ${{ secrets.APPLE_ISSUER_ID }}
+      APPLE_KEY_P8: ${{ secrets.APPLE_KEY_P8 }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Ci sono le chiavi Apple?
+        id: check
+        run: |
+          if [ -n "$APPLE_KEY_P8" ] && [ -n "$APPLE_TEAM_ID" ] && [ -n "$APPLE_KEY_ID" ] && [ -n "$APPLE_ISSUER_ID" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Mancano i segreti Apple (APPLE_KEY_P8, APPLE_TEAM_ID, APPLE_KEY_ID, APPLE_ISSUER_ID): salto TestFlight. Vedi PUBBLICARE.md."
+          fi
+
+      - name: Installa le dipendenze
+        if: steps.check.outputs.ok == 'true'
+        run: npm ci
+
+      - name: Sincronizza il progetto iOS
+        if: steps.check.outputs.ok == 'true'
+        run: npx cap sync ios
+
+      - name: CocoaPods
+        if: steps.check.outputs.ok == 'true'
+        run: cd ios/App && pod install
+
+      - name: Chiave App Store Connect
+        if: steps.check.outputs.ok == 'true'
+        run: |
+          mkdir -p "$RUNNER_TEMP/keys"
+          echo "$APPLE_KEY_P8" | base64 -d > "$RUNNER_TEMP/keys/AuthKey_${APPLE_KEY_ID}.p8"
+
+      - name: Versione dal tag
+        if: steps.check.outputs.ok == 'true'
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            echo "IOS_VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+          else
+            echo "IOS_VERSION=1.7" >> "$GITHUB_ENV"
+          fi
+          echo "IOS_BUILD=$((1000 + GITHUB_RUN_NUMBER))" >> "$GITHUB_ENV"
+
+      - name: Compila e firma
+        if: steps.check.outputs.ok == 'true'
+        run: |
+          cd ios/App
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" archive \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$RUNNER_TEMP/keys/AuthKey_${APPLE_KEY_ID}.p8" \
+            -authenticationKeyID "$APPLE_KEY_ID" \
+            -authenticationKeyIssuerID "$APPLE_ISSUER_ID" \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_STYLE=Automatic \
+            MARKETING_VERSION="$IOS_VERSION" \
+            CURRENT_PROJECT_VERSION="$IOS_BUILD"
+
+      - name: Prepara l'esportazione per l'App Store
+        if: steps.check.outputs.ok == 'true'
+        run: |
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store-connect</string>
+            <key>signingStyle</key>
+            <string>automatic</string>
+            <key>teamID</key>
+            <string>${APPLE_TEAM_ID}</string>
+            <key>uploadSymbols</key>
+            <true/>
+            <key>destination</key>
+            <string>export</string>
+          </dict>
+          </plist>
+          EOF
+
+      - name: Crea l'IPA
+        if: steps.check.outputs.ok == 'true'
+        run: |
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/App.xcarchive" \
+            -exportPath "$RUNNER_TEMP/ipa" \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$RUNNER_TEMP/keys/AuthKey_${APPLE_KEY_ID}.p8" \
+            -authenticationKeyID "$APPLE_KEY_ID" \
+            -authenticationKeyIssuerID "$APPLE_ISSUER_ID"
+
+      - name: Carica su TestFlight
+        if: steps.check.outputs.ok == 'true'
+        env:
+          APPLE_KEY_FILE: ${{ runner.temp }}/keys/AuthKey_APPLE.p8
+        run: |
+          cp "$RUNNER_TEMP/keys/AuthKey_${APPLE_KEY_ID}.p8" "$APPLE_KEY_FILE"
+          gem install fastlane --no-document
+          cd ios/App
+          IPA_PATH="$(find "$RUNNER_TEMP/ipa" -name '*.ipa' | head -1)" fastlane beta
