@@ -2157,3 +2157,50 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
   .sheet-in{max-width:680px;border-radius:24px;border-bottom:1px solid var(--line);max-height:86vh;padding:22px 26px 24px}
   .sheet .evcom-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
+
+/* v651: niente tagli netti: il bagliore in alto a destra nasce dall'angolo e sfuma nel nero,
+   così non si vede più la linea squadrata dove finiva l'immagine */
+.hero::after{
+  top:0;right:0;width:320px;height:320px;border-radius:0;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(198,255,0,.18) 0%,rgba(198,255,0,.07) 28%,rgba(198,255,0,0) 56%),
+    radial-gradient(circle at 100% 0%,rgba(150,255,60,.07) 0%,rgba(150,255,60,0) 74%);
+  filter:blur(6px)
+}
+
+/* v651: la foto profilo aperta in grande ha una retroilluminazione morbida, non piatta */
+#fotoBig{background:radial-gradient(ellipse 78% 62% at 50% 44%,rgba(198,255,46,.13) 0%,rgba(150,255,60,.055) 34%,rgba(8,9,7,.94) 68%,#050505 100%)}
+#fotoBig::before{
+  content:"";position:absolute;left:50%;top:50%;width:min(86vw,560px);aspect-ratio:1;
+  transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;z-index:0;
+  background:radial-gradient(circle,rgba(214,255,120,.22) 0%,rgba(198,255,46,.11) 32%,rgba(150,255,60,.04) 52%,transparent 68%);
+  filter:blur(26px)
+}
+#fotoBig img{
+  position:relative;z-index:1;border-radius:18px;
+  filter:drop-shadow(0 26px 60px rgba(0,0,0,.72)) drop-shadow(0 0 44px rgba(198,255,46,.3)) drop-shadow(0 0 120px rgba(150,255,60,.16))
+}
+#fotoBig .x{
+  z-index:3;border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.055);
+  box-shadow:0 0 22px rgba(198,255,46,.18),inset 0 1px 0 rgba(255,255,255,.1);
+  backdrop-filter:blur(10px)
+}
+
+/* v652: la pioggia di caratteri sfuma prima di toccare il bordo del canvas, così non lascia un taglio dritto */
+.pills-rain{
+  -webkit-mask-image:radial-gradient(ellipse 64% 60% at 50% 50%,#000 38%,rgba(0,0,0,.55) 64%,transparent 88%);
+  mask-image:radial-gradient(ellipse 64% 60% at 50% 50%,#000 38%,rgba(0,0,0,.55) 64%,transparent 88%)
+}
+
+/* v653: il bagliore in alto a destra è un tondo che finisce prima dei bordi del riquadro:
+   niente più linea dritta dove l'immagine veniva tagliata */
+.hero::after{
+  top:10px;right:12px;width:232px;height:232px;border-radius:50%;
+  background:
+    radial-gradient(circle closest-side,rgba(206,255,60,.17) 0%,rgba(198,255,0,.075) 46%,rgba(198,255,0,.02) 76%,rgba(198,255,0,0) 100%),
+    radial-gradient(circle closest-side,rgba(150,255,60,.09) 0%,rgba(150,255,60,0) 100%);
+  filter:blur(9px)
+}
+/* e la foto profilo: alone verde attorno alla foto, sfondo un filo più profondo ma sempre acceso */
+#fotoBig{background:radial-gradient(ellipse 76% 60% at 50% 44%,rgba(198,255,46,.10) 0%,rgba(150,255,60,.04) 34%,rgba(8,9,7,.95) 70%,#050505 100%)}
+#fotoBig::before{background:radial-gradient(circle,rgba(214,255,120,.19) 0%,rgba(198,255,46,.10) 30%,rgba(150,255,60,.035) 50%,transparent 66%)}
