@@ -1,0 +1,31 @@
+name: sync-640
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-640.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  allinea:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Scarica e applica
+        run: |
+          set -e
+          curl -fsSL "https://fuori.fuori-catania.workers.dev/_sync/v640.b64" -o /tmp/p.b64
+          base64 -d /tmp/p.b64 > /tmp/p.tar.gz
+          tar -xzf /tmp/p.tar.gz
+          git config user.name "FUORI sync"
+          git config user.email "christianguerrera@gmail.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "v640: Apri su tutte le categorie con almeno un evento"
+          git rm -q .github/workflows/sync-640.yml
+          git commit -m "sync-640: tolgo il workflow temporaneo"
+          git push origin HEAD:main
