@@ -2117,3 +2117,43 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
 .evcom-add span{font-size:16px;line-height:1;font-weight:400}
 .evcom-sub{margin:9px 2px 0;font-size:12px;color:var(--dim);line-height:1.4}
 .det-photos-tag img{opacity:.98}
+
+/* ---------- v650: formato computer — la stessa app, ma larga da scrivania ----------
+   Su schermo grande la colonna da telefono non ha senso: il menu va in alto,
+   la home diventa due colonne, le categorie una griglia e la community si affianca.
+   Sotto i 900px resta tutto esattamente com'era per il telefono. */
+@media (min-width:900px){
+  #app{max-width:1120px;padding:76px 32px 28px}
+  .bar{top:64px;padding:6px 0 14px}
+
+  /* home in due colonne: a sinistra ricerca e filtri, a destra le categorie */
+  #homeView{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);column-gap:32px;align-items:start}
+  #homeView>.top-utility,#homeView>.hero,#homeView>.esearch-wrap,#homeView>.tools-radius,#homeView>#moodSay{grid-column:1}
+  #homeView>.matrix-wrap{grid-column:2;grid-row:1/span 5}
+  #homeView>footer{grid-column:1/-1}
+
+  /* il menu da telefono diventa una barra in alto, orizzontale */
+  .dock{top:0;bottom:auto;left:0;right:0;max-width:none;height:64px;margin:0;padding:0 28px;justify-content:center;gap:12px;border-top:0;border-bottom:1px solid var(--line);border-radius:0}
+  .tab{flex:0 0 auto;flex-direction:row;gap:8px;padding:8px 16px;border-radius:999px;font-size:13.5px;font-weight:650}
+  .tab svg{width:19px;height:19px}
+  .tab:hover{color:var(--ink)}
+  .tab.on{color:var(--lime);background:rgba(215,255,62,.1);box-shadow:inset 0 0 0 1px rgba(215,255,62,.32)}
+  .dock-plus{width:40px;height:40px;margin:0 6px;font-size:24px;box-shadow:0 6px 16px rgba(196,255,0,.22)}
+  .dock-space{display:none}
+
+  /* categorie: griglia invece del carosello da dito */
+  .matrix.cat-rail{display:grid;grid-template-columns:repeat(auto-fill,minmax(134px,1fr));gap:12px;overflow:visible;padding:4px 0 10px}
+  .cat-rail .mcat{flex:1 1 auto;min-height:156px}
+  .cat-rail .mc-name{font-size:12.5px}
+
+  /* eventi e community: schede affiancate, non una fila da scorrere */
+  .events-wrap .list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;overflow:visible;padding:8px 0 16px}
+  .events-wrap .list .event{flex:none;max-width:none}
+  .feed-view{max-width:1120px;margin:0 auto;padding:26px 32px 0}
+  .feed-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+
+  /* i pannelli si aprono al centro, non incollati al bordo di sotto */
+  .sheet{align-items:center}
+  .sheet-in{max-width:680px;border-radius:24px;border-bottom:1px solid var(--line);max-height:86vh;padding:22px 26px 24px}
+  .sheet .evcom-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
