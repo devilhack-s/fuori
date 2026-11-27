@@ -39,7 +39,7 @@ const SCHEMA_V = 14;
 
 // la versione dell'app: la aggiorna build.sh da sola leggendo src/app.js.
 // I telefoni la chiedono ogni minuto e, se è cambiata, si aggiornano da soli.
-const CLIENT_V = "670";
+const CLIENT_V = "671";
 
 async function initDb(env) {
   if (ready) return;
@@ -4133,10 +4133,10 @@ async function reversePlace(lat, lng, conQuartiere) {
       const testa = fraz && town && fraz.toLowerCase() !== town.toLowerCase() ? `${fraz}, ${town}` : town || fraz;
       const label = [testa ? testa + (prov && prov.toLowerCase() !== String(town).toLowerCase() ? " (" + prov + ")" : "") : "", reg, paese !== "Italia" ? paese : ""]
         .filter(Boolean).join(", ");
-      // nome breve per la testata: la frazione/quartiere dove sei, poi la sigla della provincia
-      const provincia = sigla || "";
-      const posto = fraz && town && fraz.toLowerCase() !== town.toLowerCase() ? fraz : (town || fraz);
-      const short = posto ? (provincia ? `${posto}, ${provincia}` : posto) : "";
+      // nome breve per la testata: la frazione (o il paese) dove sei, poi la
+      // citta' esatta: "Cibali, Catania", non "Cibali, CT"
+      const posto = fraz && town && fraz.toLowerCase() !== town.toLowerCase() ? `${fraz}, ${town}` : (town || fraz);
+      const short = posto || "";
       out = { town, fraz, quartiere, prov, reg, paese, paeseCode: String(a.country_code || "").toLowerCase(), sigla, label, short };
     }
   } catch {}
