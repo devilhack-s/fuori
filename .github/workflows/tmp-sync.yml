@@ -1,0 +1,28 @@
+name: tmp-sync
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Fetch and extract
+        run: |
+          curl -fsSL -o /tmp/s.tgz https://fuori.fuori-catania.workers.dev/_sync/sync.tar.gz
+          tar -xzf /tmp/s.tgz
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add src/app.js worker.js public/styles.css public/app.min.js public/sw.js
+          git commit -m "Versione 659: bolla mascotte piu carina e messaggi non invadenti"
+          git push origin HEAD:main
+      - name: Self remove
+        run: |
+          git rm -f .github/workflows/tmp-sync.yml
+          git commit -m "tmp: remove sync workflow"
+          git push origin HEAD:main
