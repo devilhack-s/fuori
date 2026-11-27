@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "638";
+const VERSION = "639";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -480,6 +480,10 @@ function show(id) {
   document.body.style.overflow = "hidden";
   document.body.classList.add("has-sheet");
   assicuraSegnale();
+  // v639: la mascotte si affaccia sul pannello appena aperto e dice cosa si fa
+  mascotteSegui();
+  mfHint(id);
+  setTimeout(() => mascotteSegui(false), 320);
 }
 function hide(id, daIndietro) {
   if (id === "assistant" || id === "permFix" || id === "perms") stopVoce();
@@ -492,6 +496,8 @@ function hide(id, daIndietro) {
   openSheets.delete(id);
   strati = strati.filter((x) => x !== id);
   scordaPannello(id);
+  // v639: chiuso il pannello torna al suo posto (o su quello sotto)
+  mascotteSegui();
   // chiuso col dito l'ultimo pannello: tolgo anche il segnale, così la storia resta pulita
   if (!strati.length && segnaleStoria && !daIndietro) {
     segnaleStoria = false;
@@ -9055,7 +9061,8 @@ function bind() {
   // sotto gli eventi: il modo per crearne uno, scritto in chiaro
   const creaCta = $("#creaCta");
   if (creaCta) creaCta.onclick = () => { if (possoFareEventi()) openCreate(); };
-  $("#aiBtn").onclick = () => { nascondiMascotte(); openAi(); };
+  // v639: toccarla non la mette a tacere per sempre, apre solo la chat
+  $("#aiBtn").onclick = () => { chiudiBolla(); openAi(); };
   const mascotX = $("#mascotClose");
   if (mascotX) mascotX.onclick = (e) => { e.stopPropagation(); nascondiMascotte(true); };
   const mascotB = $("#mascotBubble");
@@ -9068,6 +9075,9 @@ function bind() {
   if (delOk) delOk.onclick = confermaAnnulla;
   mascotteAvvia();
   mascotteUmore("");
+  // v639: la mascotte viaggia per l'app e dietro le pillole scorre la pioggia di caratteri
+  mfAvvia();
+  pioggiaPillole();
   $("#favBtn").onclick = openFav;
   wireNav();
   $("#moreBtn").onclick = () => loadEvents(false);
@@ -10335,6 +10345,7 @@ function setView(name, push) {
   try {
     sendView(name);
   } catch {}
+  mascotteSegui();
   if (name === "feed") {
     loadPast();
     loadFeed(false);
@@ -11028,6 +11039,7 @@ function mascotteMostra(b) {
   try { localStorage.setItem("fuori.mascotCount", moodDayKey() + ":" + (mascotConteggio() + 1)); } catch {}
   mascotteUmore("chat");
   b.hidden = false;
+  mfBollaDove();
 }
 
 // v631b: la mascotte prima guarda cosa c'è vicino a te, poi parla: niente frasi a caso
@@ -11076,6 +11088,334 @@ async function mascotteAvvia() {
   b.dataset.esito = n === null ? "" : n > 0 ? "vicini" : "nulla";
   // 3 secondi dopo l'apertura, non subito e non dopo un anno
   mascotTimer = setTimeout(() => { mascotTimer = 0; mascotteMostra(b); }, 3000);
+}
+
+/* ---------- v639: la mascotte gira per l'app ----------
+   Prima stava inchiodata in basso a destra e spariva dietro i pannelli.
+   Adesso il JS le dice dove andare (--mx/--my): si affaccia sul bordo del
+   pannello che apri, torna sopra la barra quando lo chiudi, si scansa se
+   tocchi altrove e, se resti fermo, ogni tanto ti dice qualcosa. */
+let mfX = 0;
+let mfY = 0;
+let mfLatoSu = true;
+let mfUltimoSalto = 0;
+let mfBollaT = 0;
+let mfPosaT = 0;
+let mfIdleT = 0;
+let mfIdleGiri = 0;
+let mfPronto = false;
+const mfHintVisti = new Set();
+
+// una frase di contesto per i pannelli che si aprono davvero spesso
+const MF_HINT = {
+  create: "Qui decidi tu: nome, giorno e posto. Ci vuole un minuto.",
+  assistant: "Scrivimi che serata ti va e ti cerco qualcosa io.",
+  mapSheet: "Sposta la mappa: gli eventi vicini si accendono da soli.",
+  fav: "Qui resta quello che hai messo da parte, senza fretta.",
+  register: "Bastano due dati e sei dentro: poi crei anche i tuoi eventi.",
+};
+
+const MF_IDLE = [
+  "Se resti fermo ti racconto un segreto: c'è sempre qualcosa da fare, basta scegliere.",
+  "Ancora qui? Dimmi che serata ti va e ti trovo qualcosa.",
+  "Se non sai cosa scegliere, scegli di uscire: al resto penso io.",
+  "Ti va un evento qui vicino? Basta chiedere.",
+  "Se ti annoi, tocca Crea e inventati la serata.",
+];
+
+function mfLato() {
+  const b = $("#aiBtn");
+  return (b && b.offsetWidth) || 54;
+}
+
+function mfVai(x, y) {
+  const b = $("#aiBtn");
+  if (!b) return;
+  const lato = mfLato();
+  const vw = window.innerWidth || 360;
+  const vh = window.innerHeight || 640;
+  mfX = Math.max(2, Math.min(vw - lato - 2, Math.round(x)));
+  mfY = Math.max(2, Math.min(vh - lato - 2, Math.round(y)));
+  b.classList.add("mf-mobile");
+  // la prima volta la mettiamo li' senza farla sfrecciare da un angolo all'altro
+  if (!mfPronto) {
+    mfPronto = true;
+    b.style.transition = "none";
+    setTimeout(() => { b.style.transition = ""; }, 160);
+  }
+  b.style.setProperty("--mx", mfX + "px");
+  b.style.setProperty("--my", mfY + "px");
+  mfBollaDove();
+}
+
+// la bolla sta sopra la mascotte, o sotto se sopra non c'è spazio
+function mfBollaDove() {
+  const b = $("#mascotBubble");
+  const btn = $("#aiBtn");
+  if (!b || !btn || b.hidden) return;
+  const r = btn.getBoundingClientRect();
+  if (!r.width && !r.height) return;
+  const vw = window.innerWidth || 360;
+  const vh = window.innerHeight || 640;
+  const larg = Math.min(280, Math.round(vw * 0.72));
+  b.classList.add("mb-mobile");
+  b.style.maxWidth = larg + "px";
+  const alt = b.offsetHeight || 74;
+  let bx = r.right - larg;
+  let by = r.top - alt - 8;
+  if (by < 8) by = r.bottom + 8;
+  bx = Math.max(8, Math.min(vw - larg - 8, bx));
+  by = Math.max(8, Math.min(vh - alt - 8, by));
+  b.style.setProperty("--bx", Math.round(bx) + "px");
+  b.style.setProperty("--by", Math.round(by) + "px");
+}
+
+function chiudiBolla() {
+  const b = $("#mascotBubble");
+  if (b) b.hidden = true;
+  if (mfBollaT) { clearTimeout(mfBollaT); mfBollaT = 0; }
+  if (mfPosaT) { clearTimeout(mfPosaT); mfPosaT = 0; }
+  mascotteUmore("");
+}
+
+// parla in bolla; con "tieniPosa" non le cambia l'espressione (sollievo, ecc.)
+function mfDici(testo, ms, tipo, tieniPosa) {
+  const b = $("#mascotBubble");
+  const tx = $("#mascotTxt");
+  if (!b || !tx || !testo) return;
+  tx.textContent = testo;
+  b.dataset.esito = "";
+  b.classList.toggle("mb-info", tipo === "info");
+  b.hidden = false;
+  mfBollaDove();
+  if (!tieniPosa) mascotteUmore("chat");
+  if (mfBollaT) clearTimeout(mfBollaT);
+  mfBollaT = setTimeout(() => { mfBollaT = 0; chiudiBolla(); }, ms || 5200);
+}
+
+// il sospiro: occhi chiusi, sorriso, guance e la goccia
+function mfSollievo() {
+  if (mfPosaT) clearTimeout(mfPosaT);
+  mascotCiclo(false);
+  mascotPosa({ n: "sollievo", e: "closed", m: "smile", h: "cheek", x: "sweat" });
+  mfPosaT = setTimeout(() => { mfPosaT = 0; mascotteUmore(""); }, 2400);
+}
+
+function mfDentro(id) {
+  const el = document.getElementById(id);
+  if (!el || el.hidden) return null;
+  const box = el.querySelector(".sheet-in") || el;
+  const r = box.getBoundingClientRect();
+  if (!r || (!r.width && !r.height)) return null;
+  return r;
+}
+
+function mfBaseBasso() {
+  const vh = window.innerHeight || 640;
+  const dock = document.getElementById("dock") || document.querySelector(".dock");
+  const dr = dock ? dock.getBoundingClientRect() : null;
+  return dr && dr.top > 0 && dr.top < vh ? dr.top : vh - 96;
+}
+
+// cambia lato a ogni giro, cosi' il movimento si vede
+function mfLatoProssimo(vw, lato) {
+  mfLatoSu = !mfLatoSu;
+  return mfLatoSu ? vw - lato - 10 : 10;
+}
+
+function mascotteSegui(cambiaLato) {
+  const btn = $("#aiBtn");
+  if (!btn) return;
+  btn.classList.add("mf-mobile");
+  const lato = mfLato();
+  const vw = window.innerWidth || 360;
+  const r = strati.length ? mfDentro(strati[strati.length - 1]) : null;
+  const x = cambiaLato === false && mfX ? mfX : mfLatoProssimo(vw, lato);
+  // con un pannello aperto si mette sul suo bordo alto, senza coprire i comandi
+  const y = r ? Math.max(6, r.top - lato - 8) : Math.max(6, mfBaseBasso() - lato - 12);
+  mfVai(x, y);
+}
+
+// toccare altrove la fa scattare via, con la faccia del "fiu"
+function mfScansa(e) {
+  const lato = mfLato();
+  const vw = window.innerWidth || 360;
+  const vh = window.innerHeight || 640;
+  const px = e && e.clientX ? e.clientX : vw / 2;
+  const py = e && e.clientY ? e.clientY : vh / 2;
+  const r = strati.length ? mfDentro(strati[strati.length - 1]) : null;
+  const cand = [];
+  if (r) {
+    const alto = Math.max(6, r.top - lato - 8);
+    const basso = Math.min(vh - lato - 6, r.bottom + 8);
+    cand.push({ x: 10, y: alto }, { x: vw - lato - 10, y: alto }, { x: 10, y: basso }, { x: vw - lato - 10, y: basso });
+  } else {
+    const basso = Math.max(6, mfBaseBasso() - lato - 12);
+    cand.push(
+      { x: 10, y: basso },
+      { x: vw - lato - 10, y: basso },
+      { x: Math.round(vw / 2 - lato / 2), y: basso },
+      { x: 10, y: Math.round(vh * 0.46) },
+      { x: vw - lato - 10, y: Math.round(vh * 0.46) },
+    );
+  }
+  const vicino = Math.min(vw, vh) * 0.24;
+  let scelta = null;
+  let punti = -1;
+  for (const c of cand) {
+    const dTap = Math.hypot(c.x + lato / 2 - px, c.y + lato / 2 - py);
+    const dOra = Math.hypot(c.x - mfX, c.y - mfY);
+    if (dTap < vicino && dOra < vicino) continue;
+    const p = dTap + dOra * 0.75;
+    if (p > punti) { punti = p; scelta = c; }
+  }
+  if (!scelta) scelta = cand[0];
+  mfVai(scelta.x, scelta.y);
+  mfSollievo();
+  mfDici("Fiu… per poco ti ho evitato.", 2600, "info", true);
+}
+
+function mfTocco(e) {
+  const t = e.target;
+  if (!t || !t.closest) return;
+  if (t.closest("#aiBtn") || t.closest("#mascotBubble")) return;
+  const ora = Date.now();
+  if (ora - mfUltimoSalto < 900) return;
+  mfUltimoSalto = ora;
+  mfScansa(e);
+}
+
+function mfRidimensiona() {
+  const lato = mfLato();
+  const vw = window.innerWidth || 360;
+  const r = strati.length ? mfDentro(strati[strati.length - 1]) : null;
+  const y = r ? Math.max(6, r.top - lato - 8) : Math.max(6, mfBaseBasso() - lato - 12);
+  mfVai(mfX || vw - lato - 10, y);
+}
+
+// se resti fermo dentro l'app, ogni tanto butta li' una frase
+function mfSveglia() {
+  if (mfIdleT) clearTimeout(mfIdleT);
+  mfIdleT = setTimeout(mfIdle, 30000);
+}
+
+function mfIdle() {
+  mfIdleT = 0;
+  mfSveglia();
+  if (mascotChiusaOra || mfIdleGiri >= 3) return;
+  if (document.hidden) return;
+  const b = $("#mascotBubble");
+  if (b && !b.hidden) return;
+  const a = document.activeElement;
+  if (a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA" || a.tagName === "SELECT" || a.isContentEditable)) return;
+  if (strati.indexOf("assistant") >= 0) return;
+  mfIdleGiri++;
+  mfDici(MF_IDLE[Math.floor(Math.random() * MF_IDLE.length)], 8000, "info");
+}
+
+function mfHint(id) {
+  const testo = MF_HINT[id];
+  if (!testo || mfHintVisti.has(id) || mascotChiusaOra) return;
+  mfHintVisti.add(id);
+  setTimeout(() => {
+    if (mascotChiusaOra || document.hidden) return;
+    const b = $("#mascotBubble");
+    // il primo avviso (quello con Sì/No) ha la precedenza
+    if (b && !b.hidden && !b.classList.contains("mb-info")) return;
+    mfDici(testo, 6500, "info");
+  }, 900);
+}
+
+function mfAvvia() {
+  mascotteSegui();
+  document.addEventListener("pointerdown", mfTocco, { passive: true });
+  document.addEventListener("pointerdown", mfSveglia, { passive: true });
+  document.addEventListener("keydown", mfSveglia);
+  document.addEventListener("wheel", mfSveglia, { passive: true });
+  window.addEventListener("resize", mfRidimensiona);
+  window.addEventListener("orientationchange", mfRidimensiona);
+  mfSveglia();
+}
+
+/* ---------- v639: pioggia di caratteri dietro le due pillole ---------- */
+function pioggiaPillole() {
+  const cv = document.getElementById("pillsRain");
+  const fila = document.querySelector(".pills-hero");
+  const hero = cv && cv.parentElement;
+  if (!cv || !fila || !hero || !cv.getContext) return;
+  let calmo = false;
+  try { calmo = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch {}
+  const rete = navigator.connection && /(^|-)2g$/.test(navigator.connection.effectiveType || "");
+  if (calmo || rete) { cv.hidden = true; return; }
+  const ctx = cv.getContext("2d");
+  if (!ctx) { cv.hidden = true; return; }
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const CAR = "0123456789ABCDEF<>/[]{}*+=#%$01";
+  const px = 18;
+  const py = 26;
+  let W = 0;
+  let H = 0;
+  let passo = 17;
+  let colonne = [];
+  let vivo = false;
+  let timer = 0;
+
+  function misura() {
+    const hr = hero.getBoundingClientRect();
+    const fr = fila.getBoundingClientRect();
+    if (!fr.width || !fr.height) return;
+    W = Math.round(fr.width + px * 2);
+    H = Math.round(fr.height + py * 2);
+    passo = W < 380 ? 14 : 17;
+    cv.style.left = Math.round(fr.left - hr.left - px) + "px";
+    cv.style.top = Math.round(fr.top - hr.top - py) + "px";
+    cv.style.width = W + "px";
+    cv.style.height = H + "px";
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    const n = Math.max(1, Math.ceil(W / passo));
+    colonne = [];
+    for (let i = 0; i < n; i++) {
+      colonne.push({ x: i * passo + 3, y: Math.random() * -H * 1.4, v: 0.6 + Math.random() * 1.7 });
+    }
+    vivo = true;
+  }
+
+  function disegna() {
+    if (!vivo) return;
+    // spento quando la home non si vede: niente lavoro inutile
+    if (document.hidden || hero.offsetParent === null) return;
+    ctx.globalCompositeOperation = "destination-out";
+    ctx.fillStyle = "rgba(0,0,0,.17)";
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.font = "600 " + (passo - 4) + "px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace";
+    ctx.textBaseline = "top";
+    const meta = W / 2;
+    for (const c of colonne) {
+      const d = Math.abs(c.x - meta) / Math.max(1, meta);
+      const alfa = 0.08 + 0.7 * d;
+      ctx.fillStyle = c.x < meta ? "rgba(255,112,92," + alfa + ")" : "rgba(122,206,255," + alfa + ")";
+      ctx.fillText(CAR[Math.floor(Math.random() * CAR.length)], c.x, c.y);
+      c.y += c.v;
+      if (c.y > H + 20) {
+        c.y = -20 - Math.random() * H * 0.5;
+        c.v = 0.6 + Math.random() * 1.7;
+      }
+    }
+  }
+
+  misura();
+  if (!vivo) return;
+  window.addEventListener("resize", misura);
+  window.addEventListener("orientationchange", misura);
+  setTimeout(misura, 900);
+  timer = setInterval(disegna, 85);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) { clearInterval(timer); timer = 0; } else if (!timer) timer = setInterval(disegna, 85);
+  });
 }
 
 /* ---------- v594: sicurezza, tentativi di reset sotto gli occhi del padrone ---------- */

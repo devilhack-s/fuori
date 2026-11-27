@@ -2008,3 +2008,53 @@ h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:1
 @keyframes mxSpin{0%,100%{transform:rotate(-6deg) scale(.94)}50%{transform:rotate(8deg) scale(1.06)}}
 @keyframes mxDots{0%,100%{opacity:.5}50%{opacity:1}}
 @keyframes mxWiggle{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+
+/* ===== v639: pillole con la polverina dentro, matrix dietro, mascotte mobile ===== */
+/* la pioggia di caratteri sta dietro le pillole, non sopra: e' un canvas
+   trasparente grande quanto la fila, riempito dal JS (src/app.js). */
+.hero{isolation:isolate}
+.hero h1{max-width:14ch}
+.pills-rain{position:absolute;left:0;top:0;z-index:0;pointer-events:none;opacity:.7;mix-blend-mode:screen}
+.hand-row.pills-hero{position:relative;z-index:1}
+
+/* capsula vera: angoli tondi, linea a meta' e testo diviso sopra/sotto */
+.hero-pill{border-radius:999px;min-height:80px;padding:14px 16px;overflow:hidden}
+.hero-pill .hp-main{transform:translateY(-8px)}
+.hero-pill .hp-sub{transform:translateY(9px)}
+.hero-pill::after{content:"";position:absolute;left:11%;right:11%;top:calc(50% - .5px);height:1px;background:linear-gradient(90deg,transparent,currentColor 18%,currentColor 82%,transparent);opacity:.55;pointer-events:none}
+.hero-pill.red::after{background:linear-gradient(90deg,transparent,rgba(255,196,182,.85) 18%,rgba(255,214,202,.9) 50%,rgba(255,196,182,.85) 82%,transparent)}
+.hero-pill.blue::after{background:linear-gradient(90deg,transparent,rgba(178,224,255,.85) 18%,rgba(212,240,255,.9) 50%,rgba(178,224,255,.85) 82%,transparent)}
+
+/* polverina: tanti granelli chiari sovrapposti al colore pieno della pillola */
+.hero-pill.red{background-image:
+  radial-gradient(circle at 50% 50%,rgba(255,240,235,.95) 0 .75px,transparent 1.55px),
+  radial-gradient(circle at 50% 50%,rgba(255,190,172,.85) 0 .6px,transparent 1.35px),
+  radial-gradient(circle at 50% 50%,rgba(255,120,96,.75) 0 .55px,transparent 1.25px),
+  radial-gradient(circle at 50% 50%,rgba(255,255,255,.5) 0 .5px,transparent 1.15px),
+  linear-gradient(180deg,rgba(255,74,56,.44) 0%,rgba(150,9,20,.72) 52%,rgba(70,0,8,.9) 100%),
+  repeating-linear-gradient(0deg,rgba(255,150,130,.09) 0 1px,transparent 1px 4px);
+  background-size:7px 6px,11px 9px,17px 13px,23px 19px,100% 100%,100% 100%;
+  background-position:0 0,3px 4px,7px 2px,9px 6px,0 0,0 0}
+.hero-pill.blue{background-image:
+  radial-gradient(circle at 50% 50%,rgba(235,248,255,.95) 0 .75px,transparent 1.55px),
+  radial-gradient(circle at 50% 50%,rgba(170,220,255,.85) 0 .6px,transparent 1.35px),
+  radial-gradient(circle at 50% 50%,rgba(90,170,240,.75) 0 .55px,transparent 1.25px),
+  radial-gradient(circle at 50% 50%,rgba(255,255,255,.5) 0 .5px,transparent 1.15px),
+  linear-gradient(180deg,rgba(46,168,255,.42) 0%,rgba(6,64,160,.74) 52%,rgba(2,20,70,.9) 100%),
+  repeating-linear-gradient(0deg,rgba(140,210,255,.09) 0 1px,transparent 1px 4px);
+  background-size:7px 6px,11px 9px,17px 13px,23px 19px,100% 100%,100% 100%;
+  background-position:0 0,3px 5px,6px 2px,8px 7px,0 0,0 0}
+
+/* la mascotte non sta piu' in un angolo: la porta in giro il JS (--mx/--my) */
+.ai-bubble.mascot.mf-mobile{left:0;top:0;right:auto;bottom:auto;z-index:61;transform:translate3d(var(--mx,0px),var(--my,0px),0);transition:transform .62s cubic-bezier(.22,.9,.24,1.12);will-change:transform}
+.mascot-bubble.mb-mobile{left:0;top:0;right:auto;bottom:auto;z-index:62;transform:translate3d(var(--bx,0px),var(--by,0px),0);animation:mbMobIn .2s ease-out}
+@keyframes mbMobIn{from{opacity:0}to{opacity:1}}
+/* l'avviso "fiu" non ha bisogno di Sì/No */
+.mascot-bubble.mb-info{padding-right:14px}
+.mascot-bubble.mb-info .mb-ans{display:none}
+
+/* la goccia di sudore del sollievo */
+.mascot-face .mx-ex-sweat path{fill:#9fe3ff;stroke:#2b8ec4;stroke-width:1.2;stroke-linejoin:round}
+.mascot-face .mx-ex-sweat .mx-sweatshine{fill:none;stroke:#fff;stroke-width:1;stroke-linecap:round;opacity:.9}
+[data-extra="sweat"] .mx-ex-sweat{opacity:1;animation:mxSweat 1.5s ease-in-out infinite}
+@keyframes mxSweat{0%,100%{transform:translate(0,0) scale(1);opacity:.75}45%{transform:translate(.8px,1.5px) scale(1.08);opacity:1}}

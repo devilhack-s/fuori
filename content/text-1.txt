@@ -1,6 +1,6 @@
 brand|FUORI|FUORI|FUORI|FUORI
 hero.kicker|Sicilia, adesso|Sicily, right now|Sicilia, ahora|Sicília, agora
-hero.title|Cosa ti va di fare oggi?|What do you feel like doing today?|¿Qué te apetece hacer hoy?|O que você quer fazer hoje?
+hero.title|Cosa scegli oggi?|What do you feel like doing today?|¿Qué te apetece hacer hoy?|O que você quer fazer hoje?
 home.install|Scarica l'app|Download the app|Descarga la app|Baixe o app
 home.feedback|Lascia un parere|Send feedback|Deja tu opinión|Deixe sua opinião
 home.search|Cerca: mare, vinili, domenica…|Search: padel, vinyl, Sunday…|Busca: pádel, vinilos, domingo…|Busque: padel, vinis, domingo…
