@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "671";
+const VERSION = "672";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -6824,6 +6824,21 @@ function renderVoice() {
   if (label) label.textContent = voiceOn ? t("ai.voiceOn") : t("ai.voice");
 }
 
+// il modello infila i due punti a metà frase ("Ecco: il mercato apre alle 20:30"):
+// al posto loro va un punto e la frase dopo riparte con la maiuscola.
+// Orari e link restano interi.
+function senzaDuePunti(t) {
+  let s = String(t || "");
+  if (s.indexOf(":") < 0) return s;
+  s = s.replace(/(\d):(\d)/g, "$1\u0001$2").replace(/(\d):(?=\D|$)/g, "$1\u0001");
+  s = s.replace(/(https?):(?=\/|$)/gi, "$1\u0002").replace(/:\/\//g, "\u0002//");
+  s = s.replace(/([.!?…])\s*:\s*/g, "$1 ");
+  s = s.replace(/\s*:\s*/g, ". ");
+  s = s.replace(/\. (?!https?\b)([a-zà-öø-ÿ])/g, (m, c) => ". " + c.toUpperCase());
+  s = s.replace(/\.\s+\./g, ".").replace(/^\.\s*/, "").trim();
+  return s.replace(/\u0001/g, ":").replace(/\u0002/g, ":");
+}
+
 // le righe-istruzione (AZIONE=, NAVIGA=) non si leggono e non si dicono:
 // sono ordini per l'app, non frasi da mostrare alla persona.
 function senzaAzione(t) {
@@ -6834,6 +6849,7 @@ function senzaAzione(t) {
   s = s.replace(/\{\s*"(?:tipo|evento)"[\s\S]*$/i, "");
   // via la parola da sola, se il modello la scrive senza JSON
   s = s.replace(/\b(?:AZIONE|NAVIGA)\b\s*[=:]?/gi, "");
+  s = senzaDuePunti(s);
   return s.replace(/[ \t]+\n/g, "\n").replace(/\n{2,}/g, "\n").trim();
 }
 

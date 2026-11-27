@@ -39,7 +39,7 @@ const SCHEMA_V = 14;
 
 // la versione dell'app: la aggiorna build.sh da sola leggendo src/app.js.
 // I telefoni la chiedono ogni minuto e, se è cambiata, si aggiornano da soli.
-const CLIENT_V = "671";
+const CLIENT_V = "672";
 
 async function initDb(env) {
   if (ready) return;
@@ -6385,9 +6385,24 @@ function domandeGiuste(t) {
   return pezzi.join("");
 }
 
+// il modello infila i due punti a metà frase ("Ecco: il mercato apre alle 20:30").
+// Al posto loro va un punto e la frase dopo riparte con la maiuscola. Orari e link restano interi.
+function senzaDuePunti(t) {
+  let s = String(t || "");
+  if (s.indexOf(":") < 0) return s;
+  s = s.replace(/(\d):(\d)/g, "$1\u0001$2").replace(/(\d):(?=\D|$)/g, "$1\u0001");
+  s = s.replace(/(https?):(?=\/|$)/gi, "$1\u0002").replace(/:\/\//g, "\u0002//");
+  // se prima c'è già un punto, il due punti sparisce senza raddoppiare
+  s = s.replace(/([.!?…])\s*:\s*/g, "$1 ");
+  s = s.replace(/\s*:\s*/g, ". ");
+  s = s.replace(/\. (?!https?\b)([a-zà-öø-ÿ])/g, (m, c) => ". " + c.toUpperCase());
+  s = s.replace(/\.\s+\./g, ".").replace(/^\.\s*/, "").trim();
+  return s.replace(/\u0001/g, ":").replace(/\u0002/g, ":");
+}
+
 // una risposta scritta bene si sente anche ad alta voce: maiuscola e punto finale
 function rifinisci(t) {
-  let s = domandeGiuste(paroleGiuste(String(t || "").replace(/\n?\s*AZIONE\s*[=:]?\s*\{[\s\S]*$/i, "").replace(/\n?\s*AZIONE\s*[=:]?\s*$/im, "").trim()));
+  let s = domandeGiuste(paroleGiuste(senzaDuePunti(String(t || "").replace(/\n?\s*AZIONE\s*[=:]?\s*\{[\s\S]*$/i, "").replace(/\n?\s*AZIONE\s*[=:]?\s*$/im, "").trim())));
   if (!s) return s;
   s = s.replace(/\s+/g, " ").replace(/\s+([,.!?;:])/g, "$1");
   s = s.charAt(0).toUpperCase() + s.slice(1);
