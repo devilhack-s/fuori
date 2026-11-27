@@ -1,10 +1,10 @@
 /* FUORI — service worker */
-const CACHE = "fuori-v560";
+const CACHE = "fuori-v636";
 const SHELL = [
   "/",
-  "/app.min.js?v=560",
-  "/styles.css?v=560",
-  "/boot.js?v=560",
+  "/app.min.js?v=636",
+  "/styles.css?v=636",
+  "/boot.js?v=636",
 ];
 
 // se il telefono ha in cache una pagina rotta, questa la sostituisce e ricarica pulito
@@ -159,30 +159,84 @@ self.addEventListener("push", (event) => {
           }
         } catch {}
       }
+      // se l'app e' aperta, l'avviso appare subito dentro l'app:
+      // il telefono a volte non mostra la tendina quando la pagina e' davanti
       try {
-      await self.registration.showNotification(data.title || "FUORI", {
-        body: data.body || "",
-        icon: "/icons/icon-192.png",
-        badge: "/icons/badge-96.png",
+        const list = await clients.matchAll({ type: "window", includeUncontrolled: true });
+        for (const c of list) {
+          try { c.postMessage({ type: "fuori-push", title: data.title || "FUORI", body: data.body || "", url: data.url || "/" }); } catch {}
+        }
+      } catch {}
+      // la notifica la mostra SEMPRE il service worker, col logo FUORI.
+      // Se il telefono rifiuta le opzioni ricche riprovo con il minimo: mai
+      // lasciare che sia Chrome a inventarsi una notifica con la sua icona.
+      const base = {
+        body: data.body || "Nuovo evento vicino a te",
+        icon: "/icons/fuori-app-192.png",
+        badge: "/icons/fuori-badge-96.png",
+        dir: "auto",
+        lang: "it",
+        data: { url: data.url || "/" },
+      };
+      const titolo = data.title || "FUORI";
+      try {
+      await self.registration.showNotification(titolo, {
+        ...base,
+        image: "/icons/fuori-app-512.png",
         // una notifica non deve mai sostituire quella prima: ognuna ha il suo tag
         tag: "fuori-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7),
         renotify: true,
         silent: false,
         requireInteraction: false,
         timestamp: Date.now(),
-        data: { url: data.url || "/" },
         vibrate: [80, 40, 80],
+        actions: [{ action: "open", title: "Apri FUORI" }],
       });
       } catch (e) {
-        // il telefono ha rifiutato di mostrarla: lo dico al server, così compare nelle segnalazioni
+        // secondo tentativo, senza opzioni che qualche telefono rifiuta
         try {
-          await fetch("/api/error", {
+          await self.registration.showNotification(titolo, base);
+        } catch (e2) {
+          // il telefono ha rifiutato di mostrarla: lo dico al server, così compare nelle segnalazioni
+          try {
+            await fetch("/api/error", {
+              method: "POST",
+              headers: { "content-type": "application/json" },
+              body: JSON.stringify({ msg: "notifica non mostrata: " + String(e2 || e), where: "service worker", path: "/" }),
+            });
+          } catch {}
+        }
+      }
+    })()
+  );
+});
+
+// l'iscrizione push scade o cambia da sola: la rifaccio e avviso il server,
+// cosi' gli avvisi non si perdono in silenzio per giorni
+self.addEventListener("pushsubscriptionchange", (event) => {
+  event.waitUntil(
+    (async () => {
+      try {
+        const oldSub = event.oldSubscription;
+        const opts = oldSub ? oldSub.options : null;
+        let sub = event.newSubscription;
+        if (!sub && opts) {
+          try { sub = await self.registration.pushManager.subscribe(opts); } catch {}
+        }
+        if (sub && oldSub) {
+          await fetch("/api/push/renew", {
             method: "POST",
             headers: { "content-type": "application/json" },
-            body: JSON.stringify({ msg: "notifica non mostrata: " + String(e), where: "service worker", path: "/" }),
+            body: JSON.stringify({ subscription: sub.toJSON(), oldEndpoint: oldSub.endpoint }),
           });
-        } catch {}
-      }
+        } else if (sub) {
+          await fetch("/api/push/subscribe", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ subscription: sub.toJSON(), device: "" }),
+          });
+        }
+      } catch {}
     })()
   );
 });

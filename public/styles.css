@@ -33,7 +33,8 @@ h1,h2,h3,p{margin:0}
 
 /* top bar */
 .bar{display:flex;align-items:center;justify-content:space-between;padding:16px 0 6px;position:sticky;top:0;background:linear-gradient(var(--bg) 70%,transparent);z-index:20}
-.mark{display:flex;align-items:center;gap:9px;color:var(--lime)}
+.mark{display:flex;align-items:center;gap:9px;color:#f2f2ee}
+.mark .plane,.mark .plane2{fill:var(--lime)}
 .mark svg{width:26px;height:26px;display:block}
 .mark span{font-weight:800;letter-spacing:.16em;font-size:14px;color:var(--ink)}
 .bar-right{display:flex;align-items:center;gap:8px}
@@ -71,7 +72,7 @@ h1,h2,h3,p{margin:0}
 .hero .kicker{text-transform:none;letter-spacing:0;font-size:14px;font-weight:600;color:#dfe6d2;opacity:.9}
 .hero-zone{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:#0c0c0c;color:#cfd6c3;font-size:11.5px;font-weight:600;white-space:nowrap;font-family:inherit;cursor:pointer}
 .hero-zone::before{content:"📍";font-size:11px}
-.hero-zone::after{content:"↻";font-size:12px;opacity:.55;margin-left:1px}
+.hero-zone{cursor:default}
 .hero-share{display:inline-flex;align-items:center;gap:7px;margin-top:11px;padding:6px 2px;border:0;background:none;color:#d7ddcc;font-size:13px;font-weight:650}
 .hero-share svg{width:15px;height:15px;color:var(--lime);flex:0 0 auto}
 .hero-share:active{opacity:.7}
@@ -104,17 +105,18 @@ h1,h2,h3,p{margin:0}
 .hand-pill.red .hp-main{font-size:12.1px}
 
 /* le mani con le pillole: la foto fa da scena, i pulsanti coprono le pillole */
-.hand-row.pills-hero{position:relative;display:block;height:360px;margin:18px 0 0;isolation:isolate}
-.pills-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;pointer-events:none;filter:saturate(1.06) contrast(1.03);-webkit-mask-image:radial-gradient(112% 96% at 50% 48%,#000 0%,#000 52%,rgba(0,0,0,.86) 68%,rgba(0,0,0,.38) 84%,transparent 97%);mask-image:radial-gradient(112% 96% at 50% 48%,#000 0%,#000 52%,rgba(0,0,0,.86) 68%,rgba(0,0,0,.38) 84%,transparent 97%)}
+.hand-row.pills-hero{position:relative;display:block;height:400px;margin:14px 0 0;isolation:isolate}
+.pills-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;pointer-events:none;filter:saturate(1.04) contrast(1.02);}
 .pills-glow{position:absolute;left:50%;top:53%;width:78%;aspect-ratio:1;transform:translate(-50%,-50%);z-index:1;pointer-events:none;background:radial-gradient(circle,rgba(198,255,46,.14) 0%,rgba(198,255,46,.045) 34%,transparent 68%);filter:blur(18px)}
-.pills-hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(3,6,3,.58) 0%,rgba(3,6,3,.06) 26%,rgba(3,6,3,0) 55%,rgba(3,6,3,.7) 100%)}
-.pills-hero .hand-pill{top:27%;left:50%;width:min(150px,40%);height:56px;z-index:3;box-shadow:0 14px 26px rgba(0,0,0,.58),0 2px 0 rgba(255,255,255,.24) inset,0 -7px 14px rgba(0,0,0,.34) inset}
-.pills-hero .pill-left{left:25%;transform:translateX(-50%) rotate(-2.2deg)}
-.pills-hero .pill-right{left:77%;transform:translateX(-50%) rotate(2.2deg)}
+.pills-hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,var(--bg) 0%,rgba(6,6,6,.35) 6%,rgba(6,6,6,0) 20%,rgba(6,6,6,0) 78%,rgba(6,6,6,.4) 94%,var(--bg) 100%)}
+.pills-hero .hand-pill{top:45%;left:50%;width:min(148px,33%);height:58px;z-index:3;box-shadow:0 14px 26px rgba(0,0,0,.58),0 2px 0 rgba(255,255,255,.24) inset,0 -7px 14px rgba(0,0,0,.34) inset}
+.pills-hero .pill-left{left:30%;transform:translateX(-50%) rotate(-2.2deg)}
+.pills-hero .pill-right{left:70%;transform:translateX(-50%) rotate(2.2deg)}
 .pills-hero .pill-left:active{transform:translateX(-50%) rotate(-2.2deg) scale(.96)}
 .pills-hero .pill-right:active{transform:translateX(-50%) rotate(2.2deg) scale(.96)}
-@media (max-width:360px){.hand-row.pills-hero{height:320px;margin-top:12px}.pills-hero .hand-pill{width:min(128px,43%);height:53px;top:27%;padding:0 4px}.pills-hero .pill-left{left:22%}.pills-hero .pill-right{left:79%}.pills-hero .hp-main{font-size:10.2px}}
+@media (max-width:520px){.hand-row.pills-hero{height:380px}.pills-hero .hand-pill{top:46%}}@media (max-width:360px){.hand-row.pills-hero{height:340px;margin-top:10px}.pills-hero .hand-pill{width:min(122px,32%);height:54px;top:46%;padding:0 4px}.pills-hero .pill-left{left:30%}.pills-hero .pill-right{left:70%}.pills-hero .hp-main{font-size:10px}}
 @media (max-width:360px){.hand-choice{height:232px}.hand-photo{height:232px}.hand-choice:first-child .hand-photo{transform:translateX(calc(-50% + 6px)) rotate(24deg)}.hand-choice:last-child .hand-photo{transform:translateX(calc(-50% - 6px)) rotate(-24deg)}.hand-pill{top:105px;height:53px;padding:0 4px}.hand-choice:first-child .hand-pill{left:calc(50% - 10px)}.hand-choice:last-child .hand-pill{left:calc(50% + 14px)}.hp-main{font-size:11.1px}.hand-pill.red .hp-main{font-size:11px}.hp-sub{font-size:9.2px}}
+.hero-explain{margin:6px 0 0;font-size:13.5px;line-height:1.45;opacity:.82}
 .mood-create{margin-top:12px}
 .matrix-create{display:block;width:100%;height:auto;min-height:46px;margin-top:10px;padding:11px 14px;font-size:12.5px;line-height:1.3;white-space:normal}
 .act-jump{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;gap:1px 8px;width:100%;margin:9px 0 0;padding:8px 2px;border:0;background:none;color:var(--lime);text-align:left}
@@ -332,8 +334,8 @@ h1,h2,h3,p{margin:0}
 .vcard .btn.primary{margin-top:10px;width:100%}
 
 /* profilo */
-.prof-top{display:flex;gap:14px;align-items:flex-start;margin:14px 0 6px}
-.avatar{width:84px;height:84px;border-radius:50%;background:#1d1d1d;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#8d8d8d;line-height:1;overflow:visible;position:relative;flex:0 0 auto}
+.prof-top{display:flex;gap:14px;align-items:center;margin:14px -2px 14px;padding:14px 12px;border:1px solid rgba(215,255,62,.2);border-radius:20px;background:radial-gradient(120% 120% at 0% 0%,rgba(215,255,62,.14),transparent 58%),linear-gradient(160deg,#12140e,#0b0c09)}
+.avatar{position:relative;width:88px;height:88px;border-radius:50%;background:#1d1d1d;border:2px solid transparent;background-image:linear-gradient(#161616,#101010),linear-gradient(150deg,var(--lime),#39d353 60%,#111);background-origin:border-box;background-clip:padding-box,border-box;box-shadow:0 0 24px rgba(215,255,62,.18);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#8d8d8d;line-height:1;overflow:visible;position:relative;flex:0 0 auto}
 .avatar img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
 /* il più sta fuori dal cerchio, accanto alla foto: non copre la faccia */
 .avatar .cam{
@@ -344,7 +346,7 @@ h1,h2,h3,p{margin:0}
 }
 .prof-top .avatar{margin-right:20px}
 .prof-id{flex:1;min-width:0}
-.prof-name{font-size:18px;font-weight:700}
+.prof-name{font-size:20px;font-weight:800;letter-spacing:-.02em}
 .badges{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 0}
 
 /* onboarding */
@@ -439,11 +441,12 @@ body.has-sheet .veil.cookieveil{visibility:hidden}
 .city-field input{flex:1;min-width:0;background:none;border:0;color:var(--ink);font-size:13px;outline:none}
 .city-field input::placeholder{color:var(--dim)}
 .radius-row{display:flex;align-items:center;gap:10px;margin:8px 0 2px}
-.range{flex:1;min-width:0;-webkit-appearance:none;appearance:none;height:22px;background:none;cursor:pointer}
-.range::-webkit-slider-runnable-track{height:2px;background:var(--line);border-radius:2px}
-.range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-top:-7px;border-radius:50%;background:var(--lime);border:0;box-shadow:0 0 0 3px rgba(198,255,0,.14)}
-.range::-moz-range-track{height:2px;background:var(--line);border-radius:2px}
-.range::-moz-range-thumb{width:16px;height:16px;border:0;border-radius:50%;background:var(--lime)}
+.range{flex:1;min-width:0;-webkit-appearance:none;appearance:none;height:34px;background:none;cursor:pointer}
+.range::-webkit-slider-runnable-track{height:8px;background:linear-gradient(90deg,var(--lime) var(--fill,0%),#2a2a2a var(--fill,0%));border-radius:99px}
+.range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;margin-top:-10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f2ffb0,var(--lime) 55%,#a8cc14);border:3px solid #0a0a0a;box-shadow:0 0 0 3px rgba(215,255,62,.28),0 3px 8px rgba(0,0,0,.55)}
+.range::-moz-range-track{height:8px;background:#2a2a2a;border-radius:99px}
+.range::-moz-range-progress{height:8px;background:var(--lime);border-radius:99px}
+.range::-moz-range-thumb{width:26px;height:26px;border:3px solid #0a0a0a;border-radius:50%;background:var(--lime);box-shadow:0 0 0 3px rgba(215,255,62,.28)}
 .radius-row .tiny{color:var(--dim);flex:0 0 auto;font-variant-numeric:tabular-nums}
 .tiny.left{justify-content:flex-start;text-align:left}
 
@@ -520,11 +523,18 @@ body.has-sheet .veil.cookieveil{visibility:hidden}
 .mood-other{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin:8px 0 0;padding:8px 10px;border:1px dashed var(--line);border-radius:11px;background:transparent;color:var(--dim);font:inherit;font-size:12px;cursor:pointer}
 .mood-other:hover{border-color:var(--lime);color:var(--ink)}
 .mood-loc{background:none;border:0;padding:0;color:var(--lime);cursor:pointer;font:inherit}
-.mood-ideas{margin-top:10px;display:flex;flex-direction:column;gap:6px}
+.mood-ideas{margin:12px 0 0;padding:0;display:block;overflow:visible}
+.ideas2-row{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:8px -14px 0;padding:0 14px 6px}
+.ideas2-row::-webkit-scrollbar{display:none}
+.ideas2-head .ideas2-sub{margin:2px 0 0}
 .mood-ideas[hidden]{display:none}
 .ideas2-label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin:2px 0 0}
-.idea2{display:flex;flex-direction:column;gap:1px;text-align:left;padding:8px 12px;border:1px solid var(--line);border-radius:11px;background:#0f0f0f;color:var(--ink);cursor:pointer}
+.idea2{position:relative;flex:0 0 74%;min-height:104px;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;text-align:left;padding:14px 14px 12px;border:1px solid #2e3329;border-radius:18px;background:radial-gradient(120% 90% at 100% 0%,rgba(215,255,62,.16),transparent 60%),linear-gradient(160deg,#15180f,#0c0d0a);color:var(--ink);cursor:pointer;scroll-snap-align:center;overflow:hidden}
 .idea2:hover{border-color:var(--lime)}
+.idea2 .i2-t{font-size:15px;font-weight:800;letter-spacing:-.01em;line-height:1.15}
+.idea2 .i2-c{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--lime)}
+.idea2 .i2-w{font-size:11.5px;color:var(--dim);line-height:1.35}
+.idea2 .i2-go{position:absolute;right:12px;bottom:10px;color:var(--lime);font-size:18px}
 .i2-t{font-size:14px;font-weight:600;line-height:1.25}
 .i2-w{font-size:11px;color:var(--dim);line-height:1.2}
 
@@ -616,8 +626,7 @@ body.has-sheet .veil.cookieveil{visibility:hidden}
 .act .why{flex:0 0 auto}
 .why{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;border:1px solid #3a3a3a;background:#151515;color:var(--dim);font-size:10.5px;font-weight:800;line-height:1;cursor:pointer;flex:0 0 auto}
 .why:active{background:var(--lime);color:#0a0a0a}
-.idea2{position:relative;padding-right:26px}
-.idea2 .why{position:absolute;top:6px;right:6px}
+.idea2{padding-right:26px}
 /* domande veloci */
 .qchip{display:inline-flex;align-items:center;justify-content:center;padding:9px 14px;border:1px solid var(--line);border-radius:999px;background:#121212;color:var(--ink);font-size:13.5px;font-weight:600;cursor:pointer}
 .qchip.on{background:var(--lime);color:#0a0a0a;border-color:var(--lime)}
@@ -1163,6 +1172,9 @@ span.st{cursor:default}
 .det-photos img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}
 .det-desc{margin:10px 0 2px}
 .det-desc .body{font-size:13.5px;line-height:1.5;color:#d6d6cf;margin:2px 0 0}
+.chi-cera{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chi{font-size:12px;line-height:1;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#e7e7e2}
+.chi.io{background:rgba(120,220,150,.14);border-color:rgba(120,220,150,.4);color:#dff7e6}
 .priv-note{color:#ffcf7a;line-height:1.4}
 .help-body{display:flex;flex-direction:column;gap:10px;margin:6px 0 16px}
 .help-sec{padding:12px 13px;border:1px solid #24251f;border-radius:14px;background:#0b0c09}
@@ -1216,7 +1228,7 @@ span.st{cursor:default}
 }
 
 /* ---------- come ti senti: le cinque idee di oggi ---------- */
-.mood-ideas{margin-top:12px;display:flex;flex-direction:column;gap:6px}
+.mood-ideas{margin-top:12px;display:block}
 .mood-ideas[hidden]{display:none}
 .ideas2-label{margin:0;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:800}
 .ideas2-sub{margin:-2px 0 4px;font-size:11.5px;color:var(--dim);line-height:1.35}
@@ -1310,12 +1322,561 @@ span.st{cursor:default}
 .events-wrap .kicker{font-size:clamp(13px,3.7vw,14.5px);letter-spacing:.12em;line-height:1.3;margin:0 0 5px}
 
 /* ---------- "Quanto lontano": colori morbidi, senza il verde neon ---------- */
-.tools-radius .radius-box{border:1px solid rgba(214,226,198,.14);border-radius:16px;background:linear-gradient(160deg,rgba(214,226,198,.04),rgba(255,255,255,.008) 45%),#0c0d0b;box-shadow:0 7px 18px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.03);padding:11px 13px 8px}
-.tools-radius .radius-lbl{color:#c8d2bd;font-size:12px;font-weight:600;line-height:1.3}
-.tools-radius .radius-val{color:#d6e2c6;font-size:13.5px;font-weight:700}
-.tools-radius .radius-box #radiusNote{color:#9fab93;opacity:1;font-size:10.5px;font-weight:500}
+.tools-radius .radius-box{border:1px solid rgba(215,255,62,.32);border-radius:16px;background:linear-gradient(160deg,rgba(215,255,62,.1),rgba(255,255,255,.012) 50%),#0d0f0a;box-shadow:0 7px 18px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.03);padding:11px 13px 8px}
+.tools-radius .radius-lbl{color:#f2f4ee;font-size:14px;font-weight:800;line-height:1.3;letter-spacing:-.01em}
+.tools-radius .radius-val{color:var(--lime);font-size:16px;font-weight:800;padding:3px 9px;border-radius:99px;background:rgba(215,255,62,.12);border:1px solid rgba(215,255,62,.25)}
+.tools-radius .radius-box #radiusNote{color:#a9b59d;opacity:1;font-size:11.5px;font-weight:500}
 .tools-radius .radius-box #radiusNote:empty{display:none}
 .tools-radius .range::-webkit-slider-runnable-track{height:2px;background:rgba(207,217,191,.17)}
 .tools-radius .range::-moz-range-track{height:3px;background:rgba(207,217,191,.2)}
 .tools-radius .range::-webkit-slider-thumb{background:#d7e2c6;box-shadow:0 0 0 3px rgba(215,226,198,.12)}
 .tools-radius .range::-moz-range-thumb{background:#d7e2c6}
+
+/* statistiche della community: riga con nome, numero, percentuale e barra */
+.stat-riga{display:grid;grid-template-columns:1fr auto;gap:6px 10px;margin:9px 0;font-size:13px}
+.stat-riga .sr-k{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;opacity:.88}
+.stat-riga .sr-n{font-variant-numeric:tabular-nums;opacity:.92;text-align:right;font-size:12px}
+.stat-riga i{grid-column:1/-1;display:block;height:6px;border-radius:99px;background:linear-gradient(90deg,#f2a65a,#f25f5c);min-width:2px}
+
+/* energia e comfort zone: due etichette sulla scheda dell'evento */
+.vibe-row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.vibe{font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#ecece6}
+.vibe.avventura,.vibe.osa{background:rgba(242,166,90,.14);border-color:rgba(242,166,90,.42);color:#ffd9b0}
+.vibe.calmo,.vibe.comodo{background:rgba(120,180,240,.13);border-color:rgba(120,180,240,.4);color:#d6e9ff}
+.chips.pick .chip.on{background:rgba(242,166,90,.18);border-color:rgba(242,166,90,.55);color:#ffdcbc;font-weight:600}
+.pill.vibe-p{background:rgba(242,166,90,.12);border-color:rgba(242,166,90,.35);color:#ffdcbc}
+
+
+/* ---------- guida e punti interrogativi ---------- */
+.q-aiuto{position:absolute;top:12px;right:54px;z-index:6;width:30px;height:30px;border-radius:50%;border:1px solid rgba(198,255,46,.5);background:rgba(24,28,14,.92);color:var(--lime);font-weight:900;font-size:15px;line-height:1;display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.q-aiuto:active{transform:scale(.94)}
+.feed-view{position:relative}
+.feed-view>.q-aiuto{top:10px;right:44px}
+#homeView{position:relative}
+#homeView>.q-aiuto{top:4px;right:0;width:28px;height:28px;font-size:14px}
+.guida-nav{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0 4px}
+.guida-nav a{font-size:12px;padding:7px 10px;border-radius:999px;border:1px solid #282a22;background:#111310;color:#d8e8a6;text-decoration:none}
+.guida-nav a:active{background:#1a1d13}
+.help-sec{scroll-margin-top:12px}
+.help-sec .glist{margin:8px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:7px;font-size:13.6px;line-height:1.5;color:#d2d2cb}
+.help-sec .glist b{color:#f1f2ea}
+.help-sec .body+.body{margin-top:8px}
+.help-sec .body b{color:#f1f2ea}
+
+/* ---------- statistiche: adesso, insight, eventi in riempimento ---------- */
+.now-lab{display:flex;align-items:center;gap:8px;margin:16px 0 8px;font-size:12px;letter-spacing:.02em;color:#cfe39a}
+.pulse{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 0 rgba(198,255,46,.6);animation:pulse 1.8s infinite}
+.pulse.spento{background:#555;animation:none;box-shadow:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(198,255,46,.55)}70%{box-shadow:0 0 0 9px rgba(198,255,46,0)}100%{box-shadow:0 0 0 0 rgba(198,255,46,0)}}
+.now-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.now{padding:9px 10px;border:1px solid #22251d;border-radius:12px;background:#0d0f0b}
+.now.caldo{border-color:rgba(198,255,46,.35);background:linear-gradient(180deg,rgba(198,255,46,.08),rgba(198,255,46,.02))}
+.now b{display:block;font-size:20px;line-height:1.05}
+.now span{display:block;font-size:10.5px;opacity:.7;margin-top:3px;text-transform:lowercase}
+.now i{display:block;font-style:normal;font-size:9.5px;opacity:.42;margin-top:2px}
+.insight-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.insight{padding:10px 11px;border:1px solid #22251d;border-radius:12px;background:#0d0f0b;display:flex;flex-direction:column;gap:2px}
+.insight b{font-size:20px;line-height:1.05;color:var(--lime)}
+.insight span{font-size:11.5px;line-height:1.3;opacity:.86}
+.insight i{font-style:normal;font-size:10px;opacity:.42;line-height:1.3}
+.top-ev{padding:9px 0;border-bottom:1px solid var(--line)}
+.top-ev:last-child{border-bottom:0}
+.top-ev .te-t{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.top-ev .te-t span{font-size:11px;opacity:.5;white-space:nowrap}
+.top-ev .te-n{font-size:11px;opacity:.6;margin:2px 0 5px;font-variant-numeric:tabular-nums}
+.top-ev .te-b{height:6px;border-radius:99px;background:#1b1d17;overflow:hidden}
+.top-ev .te-b i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#c6ff2e,#6f9c00)}
+.nums .num i{display:block;font-style:normal;font-size:9.5px;opacity:.42;margin-top:2px}
+@media(max-width:360px){.now-grid{grid-template-columns:repeat(2,1fr)}.insight-grid{grid-template-columns:1fr}}
+
+.aff{display:inline-block;margin:2px 0 0;font-size:10.5px;line-height:1.2;color:#cfe39a;background:rgba(198,255,46,.08);border:1px solid rgba(198,255,46,.25);border-radius:999px;padding:3px 8px;width:max-content}
+
+/* i "?" accanto alle funzioni: uno per cosa, non uno per tutta l'app */
+.pill-why{position:absolute;top:4px;right:6px;width:18px;height:18px;font-size:10.5px;background:rgba(0,0,0,.42);border-color:rgba(255,255,255,.6);color:#fff;z-index:2}
+.btn > .why{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:18px;height:18px;font-size:10.5px;background:rgba(0,0,0,.14);border-color:rgba(0,0,0,.32);color:inherit}
+#newPostBtn{padding-right:32px}
+.ai-toggle{position:relative;padding-right:30px}
+.ai-toggle > .why{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:18px;height:18px;font-size:10.5px}
+.map-why{margin-left:1px;width:17px;height:17px;font-size:10px}
+h1 .why{vertical-align:middle;margin-left:5px;width:18px;height:18px;font-size:10.5px}
+.radius-lbl .why,.kicker .why{vertical-align:middle;margin-left:4px}
+.field>span:not(.why):not(.hint){display:inline-block;margin:0 6px 6px 0}
+.field>.why{vertical-align:middle;margin-bottom:6px}
+.field>span.why{display:inline-grid;width:16px;height:16px;margin:0 0 6px 0;font-size:10.5px;color:var(--dim);vertical-align:middle}
+.pill-why{left:6px;right:auto}
+
+.mood-actions{display:flex;gap:8px;margin-top:10px}
+.mood-other{flex:1}
+.mood-refresh{border-style:solid;border-color:rgba(215,255,62,.45);background:rgba(215,255,62,.08);color:var(--lime);font-weight:700}
+.mood-rotate{margin:8px 0 0;font-size:11px;color:var(--dim);text-align:center}
+
+/* condivisione: una riga di app, si vede subito dove mandarlo */
+.share-preview{margin:8px 0 14px;padding:10px 12px;border:1px solid #262626;border-radius:12px;background:#0e0e0e;color:#b9bdb4;font-size:12px;line-height:1.45;max-height:96px;overflow:hidden}
+.share-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}
+.share-app{display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 2px;border:0;background:none;color:#e9e9e3;font-size:10.5px;font-weight:600;cursor:pointer}
+.share-app .sa-ico{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:15px;font-weight:800;font-size:16px;color:#fff;background:#1b1b1b;transition:transform .12s}
+.share-app:active .sa-ico{transform:scale(.92)}
+.sa-ico.wa{background:linear-gradient(160deg,#3ee07a,#128c4a)}
+.sa-ico.tg{background:linear-gradient(160deg,#42b8f5,#1a72c4)}
+.sa-ico.ig{background:linear-gradient(160deg,#f9ce34,#ee2a7b 45%,#6228d7);font-size:13px}
+.sa-ico.fb{background:linear-gradient(160deg,#4b7bf5,#1b48b8);font-size:20px}
+.sa-ico.xx{background:#111;border:1px solid #3a3a3a}
+.sa-ico.ml{background:linear-gradient(160deg,#5c6bc0,#2d3a86);font-size:18px}
+.sa-ico.sms{background:linear-gradient(160deg,#5cd68a,#1f8f52);font-size:18px}
+.sa-ico.cp{background:linear-gradient(160deg,#3a3f34,#171a14);color:var(--lime);font-size:18px}
+.cs-go-list{margin-top:8px;border-color:rgba(215,255,62,.45);background:rgba(215,255,62,.1);justify-content:center;font-weight:800;color:var(--lime)}
+.cs-go-list .cs-name{text-align:center}
+
+/* mappa: notte, così i segnalini si vedono */
+.leaflet-container{background:#0a0a0a;font-family:inherit}
+/* v629: di giorno la mappa resta chiara: il filtro scuro vale solo di notte */
+.leaflet-tile-pane{filter:none}
+.leaflet-control-attribution{background:rgba(8,8,8,.7)!important;color:#6d736a!important;font-size:9px!important}
+.leaflet-control-attribution a{color:#93a089!important}
+.leaflet-bar a{background:#101210!important;color:#e8ece0!important;border-color:#2a2e26!important}
+.mk-event{box-shadow:0 0 0 5px rgba(215,255,62,.16),0 0 22px rgba(215,255,62,.55),0 6px 14px rgba(0,0,0,.6)}
+.mk-person{box-shadow:0 0 0 4px rgba(255,159,67,.18),0 0 16px rgba(255,159,67,.5)}
+.mk-me{box-shadow:0 0 0 6px rgba(77,163,255,.22),0 0 18px rgba(77,163,255,.6)}
+
+/* ---------- v588: mani al neon, rail orizzontale, titoli verdi ---------- */
+/* le mani nuove: disegno al neon con lo sfondo trasparente, nessun bordo visibile */
+.hand-row.pills-hero{height:auto;aspect-ratio:1/1;max-height:420px;width:100%;margin:10px auto 0;overflow:visible}
+.pills-photo{object-fit:contain;width:100%;height:100%;filter:drop-shadow(0 0 22px rgba(150,255,60,.16))}
+.pills-hero::after{display:none}
+.pills-glow{top:46%;width:70%;background:radial-gradient(circle,rgba(150,255,60,.11) 0%,rgba(150,255,60,.03) 38%,transparent 70%)}
+.pills-hero .hand-pill{top:50%;width:min(136px,31%);height:auto;min-height:0;padding:8px 10px;border-radius:999px;gap:0;line-height:1.12}
+.pills-hero .pill-left{left:26%;transform:translate(-50%,-50%) rotate(-2.5deg)}
+.pills-hero .pill-right{left:70%;transform:translate(-50%,-50%) rotate(2.5deg)}
+.pills-hero .pill-left:active{transform:translate(-50%,-50%) rotate(-2.5deg) scale(.96)}
+.pills-hero .pill-right:active{transform:translate(-50%,-50%) rotate(2.5deg) scale(.96)}
+.pills-hero .hp-main{font-size:13.2px;white-space:normal;text-align:center}
+.pills-hero .hp-sub{font-size:10.2px;white-space:normal;text-align:center;opacity:.9}
+.pills-hero .hand-pill.red .hp-main{font-size:13.2px}
+@media (max-width:400px){.pills-hero .hand-pill{width:min(126px,31%);padding:7px 8px}.pills-hero .hp-main{font-size:12.2px}.pills-hero .hp-sub{font-size:9.6px}}
+
+/* macro in orizzontale: titolo e logo dell'attività, si scorre col dito */
+.matrix.cat-rail{display:flex;flex-direction:row;flex-wrap:nowrap;gap:8px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding:2px 2px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.matrix.cat-rail::-webkit-scrollbar{display:none}
+.cat-rail .mcat{flex:0 0 128px;min-height:150px;scroll-snap-align:start}
+.cat-rail .mc-name{font-size:12px}
+
+/* eventi che scorrono di lato: più eleganti, una scheda per volta */
+.events-wrap .list{display:flex;flex-direction:row;flex-wrap:nowrap;gap:10px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding:8px 2px 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.events-wrap .list::-webkit-scrollbar{display:none}
+.events-wrap .list .event{flex:0 0 86%;max-width:340px;scroll-snap-align:start}
+.events-wrap .list .empty{flex:0 0 100%;margin:0}
+.sheet .list{display:flex;flex-direction:column;overflow:visible}
+
+/* nella sottofinestra della categoria: le attività e sotto gli eventi */
+.cs-events{display:flex;flex-direction:column;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.cs-events .ev-row{display:flex;gap:11px;align-items:center;width:100%;padding:10px;border:1px solid #242424;border-radius:16px;background:#101010;color:var(--ink);font:inherit;text-align:left}
+.cs-events .ev-row:active{background:#171717}
+.cs-events .ev-row img{width:66px;height:66px;border-radius:12px;object-fit:cover;flex:0 0 auto}
+.cs-events .ev-row .ev-emoji{width:66px;height:66px;border-radius:12px;flex:0 0 auto;display:grid;place-items:center;font-size:26px;background:linear-gradient(160deg,rgba(215,255,62,.14),rgba(255,255,255,.03))}
+.cs-events .ev-txt{min-width:0;flex:1}
+.cs-events .ev-txt b{display:block;font-size:14px;line-height:1.2;margin-bottom:3px}
+.cs-events .ev-txt span{display:block;font-size:11.5px;color:var(--dim);line-height:1.3}
+.cs-events .ev-txt .ev-gen{color:#e4ff6a;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}
+
+/* titoli dei riquadri: verde acceso, ben staccati */
+.sec-t{display:flex;align-items:center;gap:9px;margin:22px 0 10px;font-size:17px;line-height:1.2;letter-spacing:-.01em;text-transform:none;color:#eaff8f;font-weight:800}
+.sec-t::before{content:'';width:4px;height:17px;border-radius:2px;background:var(--lime);flex:0 0 auto}
+.sec-t:first-child{margin-top:2px}
+.sheet-in>h2{color:#eaff9a}
+.cs-txt h2{color:#eaff9a}
+.mood-q{color:#eaff9a}
+.stat-block-t{color:#eaff8f;opacity:.95}
+.field>span:first-child{color:#e8ff9c;font-weight:700;font-size:13px;letter-spacing:.01em}
+.field>span:first-child .why{color:var(--dim)}
+.why{margin-left:7px;vertical-align:middle;border-color:#4a5238}
+
+/* umore del giorno */
+#moodDaily .sheet-in{padding-bottom:26px}
+#moodDaily .mood-chips{margin-top:6px}
+
+/* il tasto Pubblica della community: largo quanto serve alla parola */
+.feed-new{flex:0 0 auto;width:auto;min-width:0;padding:9px 18px;border-radius:999px;font-size:13px;line-height:1.1;align-self:center;justify-self:end}
+
+/* umore negli insight: una barra per stato d'animo */
+.mood-bar{display:grid;grid-template-columns:minmax(92px,38%) 1fr auto;align-items:center;gap:8px;margin:6px 0;font-size:12.5px}
+.mood-bar b{font-weight:700;color:#eef2e6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mood-bar .mb-track{display:block;height:9px;border-radius:999px;background:#1b1e17;overflow:hidden}
+.mood-bar .mb-track i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#9ccf1e,var(--lime))}
+.mood-bar .mb-n{color:var(--lime);font-weight:800;font-size:11.5px;font-variant-numeric:tabular-nums}
+.act-link .why{margin-left:6px;width:15px;height:15px;font-size:10px}
+
+/* testata: nessuna parola che va a capo nei pulsanti stretti */
+.login-pill{white-space:nowrap}
+@media (max-width:410px){.bar .login-pill{font-size:11px;padding:7px 9px}.bar-right{gap:5px}}
+
+/* profilo: nome e spunta sulla stessa riga, il nome si stringe se è lungo */
+.prof-name{display:flex;align-items:center;gap:6px;white-space:nowrap;min-width:0;line-height:1.15}
+.prof-name .pn-text{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.prof-name .vcheck{margin-left:0;flex:0 0 auto;vertical-align:0}
+@media (max-width:410px){
+  .prof-top{gap:10px;padding:12px 10px}
+  .prof-top .avatar{width:70px;height:70px;margin-right:6px}
+}
+
+/* ===== v594 ===== */
+/* le mani: stesso disegno dell'utente, tratto verde, palmi verso chi guarda */
+.pills-photo{filter:drop-shadow(0 0 26px rgba(120,255,120,.10)) saturate(1.02)}
+.pills-hero .hand-pill{top:41%}
+.pills-hero .pill-left{left:25%}
+.pills-hero .pill-right{left:75%}
+@media (max-width:400px){.pills-hero .hand-pill{top:42%}}
+
+/* esplora le categorie: piu' pulito, meno colorato, piu' leggibile */
+.matrix.cat-rail{gap:10px;padding:4px 2px 12px}
+.cat-rail .mcat{flex:0 0 132px;min-height:158px;border-radius:18px;border:1px solid #232323;background:linear-gradient(180deg,#141414 0%,#0e0e0e 100%);box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+.cat-rail .mcat.on{border-color:#4d6a12;background:linear-gradient(180deg,#1a2110 0%,#11150a 100%)}
+.cat-rail .mcat:active{transform:scale(.985)}
+.cat-rail .mc-emoji{font-size:20px;filter:saturate(.9)}
+.cat-rail .mc-name{font-size:12.4px;font-weight:700;letter-spacing:-.01em;color:#f2f2f2;line-height:1.2;min-height:2.4em}
+.cat-rail .mc-n{background:#0f0f0f;border-color:#2c2c2c;color:#dfffa0;font-weight:700}
+.cat-rail .mact.mact{font-size:9.6px;color:#a9a9a9}
+.cat-rail .mact .mat{max-width:74px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cat-rail .mc-open{color:#8bd400;font-weight:700}
+.cat-rail .mc-more{color:#c8ff3d;background:#161a0c;border:1px solid #2b3410;border-radius:999px;padding:1px 5px;font-weight:700}
+.cat-rail .matrix-plus{border-style:dashed;background:#0d0d0d}
+.cat-rail .matrix-plus .mc-plus{color:#c8ff3d}
+
+/* come ti senti: adesso cambia la home, non resta un dato inutile */
+.mood-say{display:flex;align-items:center;gap:9px;margin:0 16px 10px;padding:10px 12px;border-radius:14px;border:1px solid #2b3410;background:linear-gradient(180deg,#151a0b 0%,#0f1208 100%)}
+.mood-say .ms-emoji{font-size:18px;line-height:1}
+.mood-say .ms-txt{flex:1;font-size:12.4px;line-height:1.3;color:#e8e8e8}
+.mood-say .ms-btn{border:0;background:#c8ff3d;color:#0a0a0a;font-weight:800;font-size:11.4px;padding:7px 11px;border-radius:999px;white-space:nowrap}
+
+/* la mascotte: il logo prende vita, in basso a destra */
+.ai-bubble.mascot{width:56px;height:56px;padding:0;border:0;background:transparent;box-shadow:none;overflow:visible}
+.mascot-face{width:56px;height:56px;display:block;filter:drop-shadow(0 8px 18px rgba(0,0,0,.55))}
+.mf-bg{fill:#101410;stroke:#c8ff3d;stroke-width:2.2}
+.mf-eyes ellipse{fill:#c8ff3d}
+.mf-eyes{animation:mfBlink 5.6s infinite}
+.mf-brow{stroke:#c8ff3d;stroke-width:2.1;fill:none;stroke-linecap:round;opacity:.85}
+.mf-nose{stroke:#c8ff3d;stroke-width:2.1;fill:none;stroke-linecap:round;opacity:.9}
+.mf-mouth{stroke:#c8ff3d;stroke-width:2.4;fill:none;stroke-linecap:round}
+.mf-cheek{fill:#7dff8a;opacity:.18}
+@keyframes mfBlink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.12)}}
+.mascot-bubble{position:fixed;right:14px;bottom:calc(112px + var(--safe) + 64px);z-index:28;max-width:min(280px,72vw);padding:12px 30px 12px 13px;border-radius:16px 16px 4px 16px;background:#f7ffe6;color:#0b0b0b;box-shadow:0 14px 30px rgba(0,0,0,.55);animation:mbIn .22s ease-out}
+.mascot-bubble .mb-txt{margin:0;font-size:12.8px;line-height:1.35;font-weight:600}
+.mascot-bubble .mb-x{position:absolute;top:2px;right:4px;border:0;background:transparent;font-size:18px;line-height:1;color:#20200f;padding:4px}
+@keyframes mbIn{from{opacity:0;transform:translateY(6px) scale(.97)}to{opacity:1;transform:none}}
+
+/* mappa: dice il posto esatto e quanto e' larga la vista */
+#mapScope{color:#dfffa0;font-weight:700}
+.map-world-hint{margin:6px 0 0}
+
+/* sicurezza negli insight */
+.sec-alert{border:1px solid #3a2418;background:#170f0b;border-radius:12px;padding:10px 11px;margin:8px 0;font-size:12.2px;line-height:1.35}
+.sec-alert b{color:#ffb38a}
+.sec-alert .sa-time{display:block;color:#9a9a9a;font-size:10.6px;margin-top:2px}
+.sec-alert .sa-wait{color:#ffd88a;font-weight:700}
+.sec-alert .sa-done{color:#b6ff7a;font-weight:700}
+
+/* annullare un evento: il motivo e' obbligatorio */
+#delWhy{width:100%;margin:8px 0 4px;padding:11px 12px;border-radius:12px;border:1px solid #2c2c2c;background:#0f0f0f;color:#fff;font:inherit;font-size:13.4px;resize:vertical}
+.rec-voti{display:block;margin-top:2px;font-size:11px;color:#9a9a9a}
+.pcard-voto .pv-mine{color:#c8ff3d;font-weight:700}
+
+/* v594b: le mani intere si vedono, i bottoni stanno sui palmi e la mascotte non li copre */
+.hand-row.pills-hero{max-height:300px}
+.pills-hero .hand-pill{top:36%;width:min(128px,31%)}
+.pills-hero .pill-left{left:27%}
+.pills-hero .pill-right{left:73%}
+.ai-bubble.mascot{width:50px;height:50px;bottom:calc(80px + var(--safe));right:10px}
+.mascot-face{width:50px;height:50px}
+.mascot-bubble{bottom:calc(80px + var(--safe) + 58px);right:10px}
+@media (max-width:400px){.pills-hero .hand-pill{top:37%}}
+
+/* v595: tessere delle categorie piu' compatte e ordinate */
+.cat-rail .mcat{display:flex;flex-direction:column;gap:7px;min-height:134px;padding:11px 10px 9px}
+.cat-rail .mc-head{display:flex;align-items:center;gap:6px;margin:0}
+.cat-rail .mc-name{padding-right:0;min-height:0;font-size:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cat-rail .mc-empty{font-size:10px;color:#7d7d7d!important;margin-top:auto}
+.cat-rail .mc-open{margin-top:auto}
+
+/* ===== v601: Pubblica, cuore guida, avatar, avvisi ===== */
+/* il tasto Pubblica: grande quanto la parola, non di piu' */
+.feed-head{align-items:center}
+.feed-new{height:36px!important;min-height:36px!important;padding:0 18px!important;font-size:13px!important;font-weight:800;line-height:36px!important;width:auto!important;flex:0 0 auto!important}
+@media (max-width:400px){.feed-new{padding:0 14px!important;font-size:12.5px!important}}
+
+/* il cuore nella guida: bello, pieno e colorato */
+.help-heart{width:19px;height:19px;display:inline-block;vertical-align:-3px;margin-right:4px;filter:drop-shadow(0 2px 6px rgba(255,61,107,.45))}
+#guida-preferiti h3{color:#ff8fb3}
+#guida-preferiti{border-color:#3a1a26;background:linear-gradient(160deg,#160b10,#0b0c09)}
+#guida-preferiti .body{color:#f0d4dc}
+
+/* il cerchio foto: piu' grande e proporzionato anche sui telefoni stretti */
+.avatar{width:98px;height:98px;font-size:34px}
+@media (max-width:410px){
+  .prof-top{gap:12px;padding:14px 12px}
+  .prof-top .avatar{width:88px;height:88px;margin-right:4px}
+}
+@media (max-width:340px){.prof-top .avatar{width:78px;height:78px}}
+
+/* la campanella degli avvisi in testata */
+.bell-btn{position:relative}
+.bell-count{position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;border-radius:999px;background:#ff3b30;color:#fff;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #060606}
+
+/* elenco avvisi in-app */
+.notif-list{display:flex;flex-direction:column;gap:9px;margin:10px 0 14px}
+.notif-item{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid #24251f;border-radius:14px;background:#0b0c09;text-align:left;width:100%}
+.notif-item .ni-ico{flex:0 0 auto;font-size:17px;line-height:1.2}
+.notif-item .ni-t{flex:1;min-width:0}
+.notif-item b{display:block;font-size:13.4px;line-height:1.3}
+.notif-item span{display:block;font-size:12.2px;color:#a9a9a9;line-height:1.35;margin-top:2px}
+.notif-empty{padding:18px 8px;text-align:center;color:#9a9a9a;font-size:13px}
+
+/* avviso in-app quando arriva una push mentre l'app e' aperta */
+.inapp-notif{position:fixed;left:12px;right:12px;top:calc(10px + var(--safe));z-index:60;display:flex;gap:10px;align-items:center;padding:12px 12px;border-radius:16px;border:1px solid #2b3410;background:linear-gradient(180deg,#171c0c,#0f1208);box-shadow:0 14px 34px rgba(0,0,0,.6);animation:ianIn .25s ease-out}
+.inapp-notif .ian-txt{flex:1;min-width:0}
+.inapp-notif .ian-txt b{display:block;font-size:13.6px;line-height:1.25}
+.inapp-notif .ian-txt span{display:block;font-size:12.2px;color:#b9c9a0;line-height:1.3;margin-top:2px}
+.inapp-notif .ian-open{border:0;background:var(--lime);color:#0a0a0a;font-weight:800;font-size:12.5px;padding:8px 13px;border-radius:999px;flex:0 0 auto}
+.inapp-notif .ian-x{border:0;background:none;color:#9a9a9a;font-size:19px;line-height:1;padding:4px;flex:0 0 auto}
+@keyframes ianIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+
+/* v603: la mascotte e' il logo, animato. Niente faccina inventata. */
+.ai-bubble.mascot{width:54px;height:54px}
+.mascot-face{width:54px;height:54px;animation:mfBob 3.2s ease-in-out infinite}
+.mf-eye{fill:#c8ff3d;transform-origin:center;transform-box:fill-box;animation:mfBlink 4.4s infinite}
+.mf-smile{stroke:#c8ff3d;stroke-width:2.6;fill:none;stroke-linecap:round}
+.mf-plane{transform-origin:72px 28px;transform-box:view-box;animation:mfPlane 3.2s ease-in-out infinite}
+@keyframes mfBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes mfPlane{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-7deg)}}
+.mf-bg,.mf-brow,.mf-nose,.mf-mouth,.mf-cheek{display:none}
+
+/* v603b: i bottoni stanno sul palmo, non sopra il polso: il palmo si vede */
+.pills-hero .hand-pill{top:44%}
+@media (max-width:400px){.pills-hero .hand-pill{top:45%}}
+
+/* v607: icone di categoria eleganti, non piu' emoji piatti */
+.cat-ic{width:22px;height:22px;display:block;filter:drop-shadow(0 1px 6px rgba(0,0,0,.45))}
+.mc-emoji .cat-ic{width:26px;height:26px}
+.mc-emoji{display:inline-flex;padding:7px;border-radius:14px;background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.09);box-shadow:0 4px 14px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12)}
+.ev-emoji{width:52px;height:52px;display:flex;align-items:center;justify-content:center;border-radius:16px;background:linear-gradient(145deg,#1a1a20,#101014);border:1px solid rgba(255,255,255,.08);flex:none}
+.ev-emoji .cat-ic{width:30px;height:30px}
+.act-ic{display:inline-flex;vertical-align:-4px;margin-right:6px}
+.act-ic .cat-ic{width:18px;height:18px}
+.cat-emoji .cat-ic{width:22px;height:22px}
+.cat-chip .cat-emoji{display:inline-flex;padding:6px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08)}
+.ms-emoji .cat-ic{width:22px;height:22px}
+.i2-ic{display:inline-flex;vertical-align:-4px;margin-right:4px}
+.i2-ic .cat-ic{width:17px;height:17px}
+.pcard-emoji .cat-ic{width:30px;height:30px}
+.pcard-emoji{width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:16px;background:linear-gradient(145deg,#1a1a20,#101014);border:1px solid rgba(255,255,255,.08);flex:none}
+.mk-event .cat-ic{width:20px;height:20px}
+.sel-emoji .cat-ic,.cs-emoji .cat-ic{width:30px;height:30px}
+
+/* v608: nuvoletta moderna ed elegante, e si clicca per parlare con l'AI */
+.mascot-bubble{position:fixed;right:14px;bottom:calc(118px + var(--safe) + 58px);z-index:28;max-width:min(300px,76vw);padding:15px 34px 13px 16px;border-radius:22px 22px 8px 22px;background:linear-gradient(150deg,rgba(24,26,22,.94),rgba(12,13,10,.96));color:#f2f7e6;text-align:left;cursor:pointer;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border:1px solid rgba(200,255,61,.35);box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 0 1px rgba(0,0,0,.35),0 0 26px rgba(200,255,61,.10),inset 0 1px 0 rgba(255,255,255,.10);animation:mbIn .28s cubic-bezier(.2,.9,.3,1.2)}
+.mascot-bubble::after{content:"";position:absolute;right:26px;bottom:-7px;width:14px;height:14px;background:inherit;border-right:1px solid rgba(200,255,61,.35);border-bottom:1px solid rgba(200,255,61,.35);transform:rotate(45deg);border-bottom-right-radius:4px}
+.mascot-bubble .mb-txt{display:block;margin:0;font-size:13.6px;line-height:1.42;font-weight:560;letter-spacing:.1px}
+.mascot-bubble .mb-cta{display:inline-flex;align-items:center;gap:2px;margin-top:7px;font-size:11.6px;font-weight:750;color:#c8ff3d;letter-spacing:.3px;text-transform:uppercase}
+.mascot-bubble .mb-cta i{font-style:normal;font-size:14px;line-height:1}
+.mascot-bubble .mb-x{display:flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;position:absolute;top:6px;right:6px;font-size:14px;line-height:1;color:rgba(242,247,230,.75);background:rgba(255,255,255,.07);cursor:pointer}
+.mascot-bubble .mb-x:active{background:rgba(255,255,255,.16)}
+/* v631b: il fumetto chiede Sì o No, e risponde a quello */
+.mascot-bubble .mb-ans{display:flex;gap:8px;margin-top:10px}
+.mascot-bubble .mb-ans button{flex:1;border-radius:999px;padding:7px 0;font:inherit;font-size:12.5px;font-weight:800;letter-spacing:.3px;cursor:pointer;border:1px solid rgba(200,255,61,.45)}
+.mascot-bubble .mb-si{background:#c8ff3d;color:#0b0b0b;border-color:#c8ff3d!important}
+.mascot-bubble .mb-no{background:transparent;color:#f2f7e6}
+.mascot-bubble .mb-ans button:active{transform:scale(.96)}
+.mascot-bubble:active{transform:scale(.98)}
+
+/* v610: niente lista piatta sotto la matrice: gli eventi stanno dentro macro/micro */
+.events-wrap[hidden]{display:none!important}
+
+/* v611: mascotte piu' animata e colorata, occhi e bocca equidistanti */
+.mascot-face{animation:mfBob 2.6s ease-in-out infinite}
+.mf-eye{transform-origin:center;transform-box:fill-box;animation:mfBlink 3.8s infinite}
+.mf-pupil{animation:mfLook 5s ease-in-out infinite}
+.mf-smile{stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;animation:mfSmile 2.6s ease-in-out infinite}
+.mf-cheek{fill:#ff8fa3;opacity:.55;animation:mfCheek 2.6s ease-in-out infinite}
+.mf-plane{animation:mfPlane 2.6s ease-in-out infinite}
+@keyframes mfBlink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+@keyframes mfLook{0%,100%{transform:translate(0,0)}25%{transform:translate(1.4px,-.8px)}55%{transform:translate(-1.4px,.6px)}80%{transform:translate(.6px,1px)}}
+@keyframes mfSmile{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.22)}}
+@keyframes mfCheek{0%,100%{opacity:.45}50%{opacity:.8}}
+@keyframes mfRingSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* v612: i bottoni al centro del palmo (il palmo ora e' in alto, le dita in giu') */
+.pills-hero .hand-pill{top:31%}
+
+/* v615: la mappa di giorno e' chiara, di notte scura (il tema lo cambia il JS) */
+.leaflet-container{background:#e8ecf0}
+
+/* v615b: di notte le tessere OSM vengono scurite con un velo, di giorno restano chiare */
+/* v629: la mappa di notte si scurisce con il filtro, di giorno resta quella di OSM */
+.leaflet-container.map-night{background:#0f120e}
+.leaflet-container.map-night .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.86) contrast(1.06) saturate(.55)}
+
+/* v618: copertina tematica dei ricordi senza foto */
+/* v631: copertina senza foto: alone colorato del tema, anello sottile e icona luminosa */
+.past-cover{--c:rgba(200,255,61,.38);position:relative;overflow:hidden;width:56px;height:56px;flex:none;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:radial-gradient(circle at 30% 22%,var(--c),transparent 68%),linear-gradient(150deg,#1c2a1a,#0c100c);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 6px 18px rgba(0,0,0,.35)}
+.past-cover::before{content:"";position:absolute;inset:6px;border-radius:12px;border:1px solid rgba(255,255,255,.08);pointer-events:none}
+.past-cover .cat-ic{width:28px;height:28px;position:relative;filter:drop-shadow(0 0 8px var(--c))}
+.past-cover i{font-style:normal;font-size:8.5px;letter-spacing:.3px;text-transform:uppercase;color:rgba(226,238,206,.62);max-width:52px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.past-cover--big{width:100%;height:120px;margin:10px 0;border-radius:20px}
+.past-cover--big::before{inset:10px;border-radius:14px}
+.past-cover--big .cat-ic{width:52px;height:52px}
+.past-cover--big i{font-size:11px}
+.past-cover[data-cat="sport"]{--c:rgba(251,146,60,.5)}
+.past-cover[data-cat="musica"]{--c:rgba(244,114,182,.5)}
+.past-cover[data-cat="cinema"]{--c:rgba(192,132,252,.5)}
+.past-cover[data-cat="natura"]{--c:rgba(74,222,128,.45)}
+.past-cover[data-cat="benessere"]{--c:rgba(56,189,248,.45)}
+.past-cover[data-cat="serate"]{--c:rgba(250,204,21,.45)}
+.past-cover[data-cat="sociale"]{--c:rgba(45,212,191,.45)}
+.past-cover[data-cat="viaggi"]{--c:rgba(94,234,212,.42)}
+.past-cover[data-cat="animali"]{--c:rgba(251,113,133,.45)}
+.past-cover[data-cat="creativita"]{--c:rgba(168,85,247,.5)}
+
+/* v618: i gruppi delle statistiche, chiusi restano una riga */
+.st-group{margin:12px 0;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);overflow:hidden}
+.st-group>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 14px;font-weight:800;font-size:13.5px;letter-spacing:.2px}
+.st-group>summary::-webkit-details-marker{display:none}
+.st-group>summary::after{content:"›";font-size:18px;line-height:1;opacity:.5;transform:rotate(90deg);transition:transform .18s}
+.st-group[open]>summary::after{transform:rotate(-90deg)}
+.st-group .st-n{font-style:normal;font-size:11.5px;font-weight:800;color:#c8ff3d;margin-left:auto;margin-right:4px}
+.st-group>summary>span{flex:1}
+.st-group>*:not(summary){margin-left:12px;margin-right:12px}
+.st-group>*:not(summary):last-child{margin-bottom:12px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#c8ff3d;box-shadow:0 0 8px #c8ff3d;flex:none}
+
+/* v618b: nel ricordo piccolo solo l'icona (il nome della categoria starebbe stretto) */
+.past-cover:not(.past-cover--big) i{display:none}
+
+/* v618c: sottogruppi dentro i gruppi: si apre solo quello che interessa */
+.st-sub{margin:6px 0;border-radius:12px;background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.05)}
+.st-sub>summary{list-style:none;cursor:pointer;padding:10px 12px;font-size:12.5px;font-weight:700;color:rgba(238,245,225,.86);display:flex;justify-content:space-between;align-items:center}
+.st-sub>summary::-webkit-details-marker{display:none}
+.st-sub>summary::after{content:"+";font-size:15px;opacity:.6}
+.st-sub[open]>summary::after{content:"–"}
+.st-sub>*:not(summary){padding:0 12px 10px}
+
+/* v620b: la mascotte sta sopra i pannelli: se arriva mentre leggi, si vede */
+.mascot-bubble{z-index:70}
+/* v620b: nel ricordo grande il nome della categoria si legge tutto */
+.past-cover--big i{max-width:none;white-space:normal;font-size:11px;letter-spacing:.4px;text-align:center;padding:0 10px;line-height:1.25}
+
+/* v622: due mani semplici che stringono i bottoni (palmo dietro, dita davanti) */
+.hand-row.pills-hero{display:flex!important;align-items:center;justify-content:center;gap:min(14px,3vw);height:auto!important;aspect-ratio:auto!important;max-height:none!important;margin:18px 0 4px!important;padding:0 6px}
+.hand-hold{position:relative;width:44%;max-width:200px;aspect-ratio:200/260;filter:drop-shadow(0 10px 26px rgba(40,255,120,.14))}
+.hand-hold .hand-bg,.hand-hold .hand-fg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
+.hand-hold .hand-bg{z-index:1}
+.hand-hold .hand-fg{z-index:3}
+.hand-hold--r .hand-bg,.hand-hold--r .hand-fg{transform:scaleX(-1)}
+.pills-hero .hand-pill{position:absolute!important;left:10%!important;top:14.2%!important;width:80%!important;height:21.5%!important;min-height:0!important;max-height:none!important;transform:none!important;z-index:2;padding:0 6px;border-radius:999px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.pills-hero .hand-pill:active{transform:scale(.97)!important}
+.pills-hero .hp-main{font-size:clamp(11px,3.4vw,14px);line-height:1.05;white-space:nowrap}
+.pills-hero .hp-sub{font-size:clamp(7.6px,2.3vw,9.6px);line-height:1.15;white-space:nowrap;font-weight:600;opacity:.92}
+.pills-hero .hand-pill.red .hp-main{font-size:clamp(11px,3.4vw,14px)}
+@media (max-width:400px){.hand-hold{width:45%;max-width:168px}.pills-hero .hand-pill{padding:0 4px}}
+
+/* v622: mascotte = logo identico + faccina dolce, che resta dentro il viso */
+.mascot-face{overflow:visible}
+.mf-plate{filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+.mf-eye{transform-box:fill-box;transform-origin:center;animation:mfBlink2 4.4s infinite}
+.mf-spark{animation:mfSpark 4.4s infinite}
+.mf-smile{transform-box:fill-box;transform-origin:center;animation:mfSmile2 3.6s ease-in-out infinite}
+.mf-cheek{transform-box:fill-box;transform-origin:center;animation:mfCheek2 3.6s ease-in-out infinite}
+.mf-plane{transform-box:view-box;transform-origin:80px 24px;animation:mfPlane2 4s ease-in-out infinite}
+.mf-ring{color:#f4f8ec}
+.mf-plane{color:#f4f8ec}
+@keyframes mfBlink2{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.12)}}
+@keyframes mfSpark{0%,92%,100%{opacity:.9}95%{opacity:0}}
+@keyframes mfSmile2{0%,100%{transform:translateY(0) scaleY(1)}50%{transform:translateY(.4px) scaleY(1.08)}}
+@keyframes mfCheek2{0%,100%{opacity:.55}50%{opacity:.8}}
+@keyframes mfPlane2{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-5deg)}}
+
+/* v627: retro illuminazione morbida dietro la mascotte */
+.ai-bubble.mascot{isolation:isolate}
+.ai-bubble.mascot::before{content:"";position:absolute;left:50%;top:50%;width:120%;height:120%;transform:translate(-50%,-50%);border-radius:50%;z-index:-1;background:radial-gradient(circle at 50% 50%,rgba(214,255,120,.78) 0%,rgba(200,255,61,.5) 26%,rgba(200,255,61,.24) 46%,rgba(200,255,61,.09) 62%,rgba(200,255,61,0) 74%);filter:blur(8px);animation:mfHalo 4.6s ease-in-out infinite;pointer-events:none}
+.ai-bubble.mascot::after{content:"";position:absolute;left:50%;top:50%;width:104%;height:104%;transform:translate(-50%,-50%);border-radius:50%;z-index:-1;border:1.5px solid rgba(200,255,61,.35);box-shadow:0 0 14px rgba(200,255,61,.45),inset 0 0 12px rgba(200,255,61,.28);animation:mfHaloRing 4.6s ease-in-out infinite;pointer-events:none}
+.ai-bubble.mascot .mascot-face{filter:drop-shadow(0 8px 16px rgba(0,0,0,.45)) drop-shadow(0 0 6px rgba(210,255,90,.85)) drop-shadow(0 0 16px rgba(200,255,61,.55))}
+@keyframes mfHalo{0%,100%{opacity:.8;transform:translate(-50%,-50%) scale(.96)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.07)}}
+@keyframes mfHaloRing{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.98)}50%{opacity:.95;transform:translate(-50%,-50%) scale(1.04)}}
+
+/* v629: i segnaposto degli eventi hanno un fondo pieno, cosi' l'icona non sembra trasparente */
+.mk-event{background:#10150c;border:2px solid #c8ff3d;border-radius:14px;color:#c8ff3d;box-shadow:0 0 0 4px rgba(10,12,8,.55),0 6px 16px rgba(0,0,0,.6),0 0 18px rgba(200,255,61,.28)}
+.mk-event .cat-ic{width:22px;height:22px;filter:none}
+.mk-event .n{background:#c8ff3d;color:#0a0a0a;border-color:#10150c}
+
+/* v634: mascotte con espressioni animate (sorriso, denti, lingua) e bottoni in stile Matrix */
+.mascot-face .mf-mouthg{transform-origin:50px 62px;transform-box:view-box;animation:mfExpr 7s ease-in-out infinite}
+.mascot-face .mf-mouth,.mascot-face .mf-teeth,.mascot-face .mf-tongue{transform-box:fill-box;transform-origin:center}
+.mascot-face .mf-teeth{animation:mfTeeth 7s ease-in-out infinite}
+.mascot-face .mf-tongue{animation:mfTongue 7s ease-in-out infinite}
+.mascot-face .mf-mouth{animation:mfMouth 7s ease-in-out infinite}
+.mascot-face .mf-plate{animation:mfBreathe 3.2s ease-in-out infinite}
+@keyframes mfExpr{0%,100%{transform:translateY(0) scaleX(1)}30%{transform:translateY(0) scaleX(1.08)}60%{transform:translateY(-.4px) scaleX(.95)}85%{transform:translateY(0) scaleX(1.04)}}
+@keyframes mfMouth{0%,100%{transform:scaleY(1)}30%{transform:scaleY(1.35)}60%{transform:scaleY(.7)}85%{transform:scaleY(1.2)}}
+@keyframes mfTeeth{0%,25%,100%{opacity:0}30%,58%{opacity:1}62%,85%{opacity:0}}
+@keyframes mfTongue{0%,62%,100%{opacity:0;transform:translateY(-2px)}66%,82%{opacity:1;transform:translateY(0)}86%{opacity:0}}
+@keyframes mfBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+
+.hero-pill{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:64px;padding:10px 14px;border-radius:14px;border:1px solid #c8ff3d;cursor:pointer;color:#c8ff3d;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;text-shadow:0 0 6px rgba(200,255,61,.7);background:linear-gradient(180deg,rgba(10,20,6,.92),rgba(3,8,2,.96)),repeating-linear-gradient(0deg,rgba(200,255,61,.06) 0 1px,transparent 1px 4px);box-shadow:0 0 0 1px rgba(200,255,61,.15) inset,0 0 18px rgba(200,255,61,.22),0 10px 22px rgba(0,0,0,.55);overflow:hidden;transition:transform .15s,box-shadow .2s}
+.hero-pill::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 0%,rgba(200,255,61,.18) 50%,transparent 100%);transform:translateY(-100%);animation:mxScan 2.8s linear infinite;pointer-events:none}
+.hero-pill .hp-main{font-size:15px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.hero-pill .hp-sub{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.75}
+.hero-pill.blue{color:#7fe3ff;border-color:#7fe3ff;text-shadow:0 0 6px rgba(127,227,255,.7);box-shadow:0 0 0 1px rgba(127,227,255,.15) inset,0 0 18px rgba(127,227,255,.22),0 10px 22px rgba(0,0,0,.55)}
+.hero-pill:active{transform:scale(.97)}
+@keyframes mxScan{to{transform:translateY(100%)}}
+
+.mascot-bubble{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:linear-gradient(180deg,rgba(6,14,4,.97),rgba(2,6,2,.98)),repeating-linear-gradient(0deg,rgba(200,255,61,.07) 0 1px,transparent 1px 4px)!important;color:#c8ff3d!important;border:1px solid #c8ff3d!important;text-shadow:0 0 5px rgba(200,255,61,.6)}
+.mascot-bubble .mb-txt{color:#c8ff3d}
+.mascot-bubble .mb-si,.mascot-bubble .mb-no{text-transform:uppercase;letter-spacing:.1em;border-radius:8px!important;padding:8px 0!important;font-family:inherit!important}
+.mascot-bubble .mb-si{background:#c8ff3d!important;color:#020802!important;box-shadow:0 0 14px rgba(200,255,61,.5)}
+.mascot-bubble .mb-no{background:rgba(200,255,61,.06)!important;color:#c8ff3d!important;border:1px solid rgba(200,255,61,.5)!important}
+.hand-row.pills-hero{height:auto!important;aspect-ratio:auto!important;max-height:none!important;display:grid!important;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0 0!important}
+.hand-row.pills-hero .pills-glow,.hand-row.pills-hero::after{display:none}
+.hero-pill{width:100%}
+/* v635: "Salva nei preferiti" accanto a Partecipo */
+.det-actions .fav-inline{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:0 14px;border:1.5px solid #c8ff3d;color:#c8ff3d;font-weight:700;white-space:nowrap}
+.det-actions .fav-inline span{font-size:14px}
+
+/* v636: "Crea" rosso vivo e "Partecipa" blu acceso, colori pieni (stesso effetto Matrix) */
+.hero-pill.red{color:#fff2ef;border-color:#ff4d3d;text-shadow:0 0 9px rgba(255,80,60,.9),0 1px 0 rgba(0,0,0,.45);background:linear-gradient(180deg,rgba(255,66,50,.36) 0%,rgba(150,9,20,.68) 52%,rgba(76,0,8,.86) 100%),repeating-linear-gradient(0deg,rgba(255,150,130,.09) 0 1px,transparent 1px 4px);box-shadow:0 0 0 1px rgba(255,110,90,.34) inset,0 0 24px rgba(255,60,40,.5),0 10px 22px rgba(0,0,0,.55)}
+.hero-pill.red .hp-main{color:#fff;text-shadow:0 0 10px rgba(255,120,90,.95),0 1px 0 rgba(0,0,0,.5)}
+.hero-pill.red::before{background:linear-gradient(180deg,transparent 0%,rgba(255,200,185,.32) 50%,transparent 100%)}
+.hero-pill.blue{color:#eaf8ff;border-color:#35b7ff;text-shadow:0 0 9px rgba(70,185,255,.95),0 1px 0 rgba(0,0,0,.45);background:linear-gradient(180deg,rgba(44,166,255,.36) 0%,rgba(6,64,160,.7) 52%,rgba(2,24,80,.88) 100%),repeating-linear-gradient(0deg,rgba(140,210,255,.09) 0 1px,transparent 1px 4px);box-shadow:0 0 0 1px rgba(100,195,255,.34) inset,0 0 24px rgba(40,155,255,.52),0 10px 22px rgba(0,0,0,.55)}
+.hero-pill.blue .hp-main{color:#fff;text-shadow:0 0 10px rgba(130,210,255,.95),0 1px 0 rgba(0,0,0,.5)}
+.hero-pill.blue::before{background:linear-gradient(180deg,transparent 0%,rgba(190,232,255,.32) 50%,transparent 100%)}
+
+/* v636: la mascotte bianca con i tratti verdi, le guance rosse e due mani che seguono l'emozione */
+.mf-plate{fill:#f8fdf2;stroke:rgba(200,255,61,.6);stroke-width:1.1}
+.mf-ring,.mf-plane{color:#c8ff3d}
+.mf-nose,.mf-mouth{stroke:#1f9d3a}
+.mf-cheek{fill:#ff5f7a}
+.mf-hearts{opacity:0}
+.mf-heart{transform-box:fill-box;transform-origin:center}
+.mf-hand{transform-box:view-box;transform-origin:15px 68px}
+.mf-hand-r{transform-origin:85px 68px}
+.mascot-face .mf-hand-l{animation:mfHandL 11s ease-in-out infinite}
+.mascot-face .mf-hand-r{animation:mfHandR 11s ease-in-out infinite}
+.mascot-face .mf-cheek{animation:mfCheek636 11s ease-in-out infinite}
+.mascot-face .mf-mouthg{animation:mfExpr636 11s ease-in-out infinite}
+.mascot-face .mf-mouth{animation:mfMouth636 11s ease-in-out infinite}
+.mascot-face .mf-teeth{animation:mfTeeth636 11s ease-in-out infinite}
+.mascot-face .mf-tongue{animation:none;opacity:0}
+.mascot-face .mf-hearts{animation:mfHearts636 11s ease-in-out infinite}
+.mascot-face .mf-eye{animation:mfBlink2 4.4s infinite,mfEyeFade636 11s ease-in-out infinite}
+@keyframes mfHandL{0%,16%{transform:rotate(0) translate(0,0)}20%,34%{transform:rotate(-30deg) translate(-3px,-5px)}38%,56%{transform:rotate(-5deg) translate(0,3px)}60%,74%{transform:rotate(16deg) translate(-3px,-9px)}86%,100%{transform:rotate(0) translate(0,0)}}
+@keyframes mfHandR{0%,16%{transform:rotate(0) translate(0,0)}20%,34%{transform:rotate(30deg) translate(3px,-5px)}38%,56%{transform:rotate(-26deg) translate(-26px,-5px)}60%,74%{transform:rotate(-16deg) translate(3px,-9px)}86%,100%{transform:rotate(0) translate(0,0)}}
+@keyframes mfExpr636{0%,16%{transform:translateY(0)}38%,56%{transform:translateY(1px)}86%,100%{transform:translateY(0)}}
+@keyframes mfMouth636{0%,16%{transform:scale(1,1)}20%,34%{transform:scale(.6,.5)}38%,56%{transform:scale(.8,.42)}60%,74%{transform:scale(1.06,1.5)}86%,100%{transform:scale(1,1)}}
+@keyframes mfTeeth636{0%,58%,100%{opacity:0}62%,76%{opacity:1}80%,100%{opacity:0}}
+@keyframes mfCheek636{0%,16%{opacity:.5;transform:scale(1)}20%,34%{opacity:.26;transform:scale(.85)}38%,56%{opacity:.2;transform:scale(.82)}60%,74%{opacity:1;transform:scale(1.32)}86%,100%{opacity:.5;transform:scale(1)}}
+@keyframes mfHearts636{0%,56%{opacity:0;transform:scale(.4)}62%,76%{opacity:1;transform:scale(1)}82%,100%{opacity:0;transform:scale(.7)}}
+@keyframes mfEyeFade636{0%,56%{opacity:1}62%,76%{opacity:0}82%,100%{opacity:1}}
+/* quando parla saluta, quando cerca qualcosa si tiene il mento */
+.ai-bubble.mascot.mf-chat .mascot-face .mf-hand-l{animation:mfWaveL 1.5s ease-in-out infinite}
+.ai-bubble.mascot.mf-chat .mascot-face .mf-hand-r{animation:mfWaveR 1.5s ease-in-out infinite}
+.ai-bubble.mascot.mf-pensa .mascot-face .mf-hand-l{animation:none;transform:rotate(-5deg) translate(0,3px)}
+.ai-bubble.mascot.mf-pensa .mascot-face .mf-hand-r{animation:none;transform:rotate(-26deg) translate(-26px,-5px)}
+.ai-bubble.mascot.mf-pensa .mascot-face .mf-cheek{animation:mfCheek636 2.2s ease-in-out infinite}
+@keyframes mfWaveL{0%,100%{transform:rotate(10deg) translate(2px,-2px)}50%{transform:rotate(-18deg) translate(-4px,-7px)}}
+@keyframes mfWaveR{0%,100%{transform:rotate(-10deg) translate(-2px,-2px)}50%{transform:rotate(20deg) translate(4px,-9px)}}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260">
+  <defs>
+    <linearGradient id="palm" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34d06b"/>
+      <stop offset="1" stop-color="#11803a"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#palm)" fill-opacity=".28" stroke="#2bbf5d" stroke-width="6" stroke-linejoin="round" stroke-linecap="round">
+    <!-- palmo e polso in un'unica sagoma, il polso si restringe -->
+    <path d="M44 148c0-12 10-22 22-22h68c12 0 22 10 22 22v34c0 16-6 30-14 40-6 8-6 22-6 34H64c0-12 0-26-6-34-8-10-14-24-14-40Z"/>
+    <!-- piega del palmo -->
+    <path d="M78 172c13 11 31 11 44 0" fill="none" opacity=".55"/>
+  </g>
+</svg>

@@ -75,6 +75,7 @@ hero.todayN|Ci sono {n} eventi oggi: scegli il tuo.|There are {n} events today: 
 hero.week1|Un evento ti aspetta questa settimana.|One event is waiting this week.|Un evento te espera esta semana.|Um evento espera por você esta semana.
 hero.weekN|{n} eventi ti aspettano questa settimana.|{n} events are waiting this week.|{n} eventos te esperan esta semana.|{n} eventos esperam por você esta semana.
 hero.laterN|{n} eventi in arrivo nei prossimi giorni.|{n} events coming in the next days.|{n} eventos en los próximos días.|{n} eventos nos próximos dias.
+hero.later1|C'è un evento in arrivo nei prossimi giorni.|There's one event coming in the next days.|Hay un evento en los próximos días.|Há um evento nos próximos dias.
 hero.none|Ancora niente in zona. Crea il primo evento: vediamo chi si unisce.|Nothing here yet. Create the first event and see who joins.|Aún nada por aquí. Crea el primer evento y mira quién se apunta.|Ainda nada por aqui. Crie o primeiro evento e veja quem aparece.
 hero.noneAnon|Entra e scopri chi c'è stasera.|Join and see who's out tonight.|Entra y descubre quién hay esta noche.|Entre e descubra quem está hoje à noite.
 hero.find|Trova qualcosa da fare|Find something to do|Encuentra algo que hacer|Encontre algo para fazer

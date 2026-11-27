@@ -11,25 +11,26 @@
 <meta property="og:title" content="FUORI — Cosa ti va di fare oggi?">
 <meta property="og:description" content="Eventi, persone e idee per uscire. In Sicilia, a due passi da dove sei.">
 <meta property="og:url" content="https://fuori.fuori-catania.workers.dev/">
-<meta property="og:image" content="https://fuori.fuori-catania.workers.dev/og.png">
+<meta property="og:image" content="https://fuori.fuori-catania.workers.dev/og.png?v=587b">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="FUORI — Cosa ti va di fare oggi?">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="FUORI — Cosa ti va di fare oggi?">
 <meta name="twitter:description" content="Eventi, persone e idee per uscire. In Sicilia, a due passi da dove sei.">
-<meta name="twitter:image" content="https://fuori.fuori-catania.workers.dev/og.png">
+<meta name="twitter:image" content="https://fuori.fuori-catania.workers.dev/og.png?v=587b">
 <meta name="twitter:image:alt" content="FUORI — eventi in Sicilia">
 <meta name="theme-color" content="#060606">
 <meta name="color-scheme" content="dark">
-<link rel="manifest" href="/manifest.webmanifest?v=95b621e8">
-<link rel="icon" href="/icons/favicon-32.png?v=95b621e8" sizes="32x32">
-<link rel="icon" href="/icons/favicon-192.png?v=95b621e8" sizes="192x192">
-<link rel="apple-touch-icon" href="/icons/icon-180.png?v=95b621e8">
+<link rel="manifest" href="/manifest.webmanifest?v=636">
+<link rel="icon" href="/icons/fuori-favicon-32.png" sizes="32x32">
+<link rel="icon" href="/icons/fuori-favicon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/icons/fuori-app-180.png">
 <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
-<script src="/boot.js?v=560"></script>
-<link rel="stylesheet" href="/styles.css?v=560">
-<link rel="preload" as="script" href="/app.min.js?v=560">
+<script src="/boot.js?v=636"></script>
+<link rel="stylesheet" href="/styles.css?v=636">
+<link rel="preload" as="script" href="/app.min.js?v=636">
+<link rel="preload" as="image" href="/hand-fingers.svg?v=636" fetchpriority="high">
 </head>
 <body>
 
@@ -51,13 +52,17 @@
         <span id="langLabel">IT</span>
         <span class="caret" aria-hidden="true">▾</span>
       </button>
+      <button id="bellBtn" class="me bell-btn" type="button" aria-label="Avvisi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 9a6 6 0 1 0-12 0c0 6-2.4 7.5-2.4 7.5h16.8S18 15 18 9Z"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/></svg>
+        <span id="bellCount" class="bell-count" hidden></span>
+      </button>
       <button id="meBtn" class="me" type="button" aria-label="Profilo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20c1.3-3.4 4.2-5 7.5-5s6.2 1.6 7.5 5"/></svg></button>
     </div>
   </header>
 
   <button id="helpBtn" class="help-strip" type="button">
     <span class="q" aria-hidden="true">?</span>
-    <span data-i="help.btn">Come funziona l'app</span>
+    <span data-i="help.btn">Come funziona FUORI?</span>
     <span class="hs-go" aria-hidden="true">›</span>
   </button>
 
@@ -68,22 +73,22 @@
   <section class="hero">
     <div class="hero-top">
       <p class="kicker" id="heroHi">Ciao</p>
-      <button class="hero-zone" id="heroZone" type="button" title="Aggiorna la posizione" aria-label="Aggiorna la posizione" hidden></button>
+      <span class="hero-zone" id="heroZone" hidden></span>
     </div>
-    <h1 data-i="hero.title">Cosa ti va di fare oggi?</h1>
+    <h1 data-i="hero.title">Cosa ti va di fare oggi? </h1>
     <p class="sub" id="heroSub"></p>
   <div class="hand-row pills-hero">
-    <img class="pills-photo" data-nozoom src="/hero-hands-photo.webp?v=560" alt="Due mani vere aperte, una accanto all'altra" loading="eager" decoding="async">
     <span class="pills-glow" aria-hidden="true"></span>
-    <button id="heroFind" class="hand-pill blue pill-right" type="button">
-      <span class="hp-main" data-i="hero.pillTake">Partecipa a un evento</span>
-      <span class="hp-sub" data-i="hero.pillTakeSub">guarda cosa c'è</span>
+    <button id="heroCreate" class="hero-pill red" type="button">
+      <span class="hp-main" data-i="hero.pillMake2">Crea</span>
+      <span class="hp-sub" data-i="hero.pillMake3">il tuo evento</span>
     </button>
-    <button id="heroCreate" class="hand-pill red pill-left" type="button">
-      <span class="hp-main" data-i="hero.pillMake">Crea il tuo evento</span>
-      <span class="hp-sub" data-i="hero.pillMakeSub">prima guarda cosa ti va</span>
+    <button id="heroFind" class="hero-pill blue" type="button">
+      <span class="hp-main" data-i="hero.pillTake2">Partecipa</span>
+      <span class="hp-sub" data-i="hero.pillTake3">a un evento</span>
     </button>
   </div>
+    <p class="hero-explain">Trovi eventi vicino a te, o crei il tuo e aspetti che si unisca qualcuno. Ogni evento ha data, luogo e chi partecipa.</p>
     <div class="hero-social">
       <button class="hero-share" id="heroShareBtn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.4 15.4 6.6M8.6 13.6l6.8 3.8"/></svg>
@@ -98,29 +103,26 @@
 
 
 
-  <section class="mood-card" id="moodCard">
-    <h2 class="mood-q" data-i="mood.q">Come ti senti oggi?</h2>
-    <p class="mood-sub" data-i="mood.sub"></p>
-    <p class="tiny mood-where" id="moodWhere"></p>
-    <div class="mood-chips" id="moodChips"></div>
-    <button class="mood-other" id="moodOther" type="button"><span data-i="mood.other">Valuta altro</span><span aria-hidden="true">↓</span></button>
-    <div class="mood-ideas" id="moodIdeas" hidden></div>
-  </section>
-
   <section class="tools tools-radius">
     <div class="radius-box">
       <div class="radius-top">
-        <label class="radius-lbl" for="radiusRange" data-i="radius.pick">Quanto lontano vuoi cercare?</label>
+        <label class="radius-lbl" for="radiusRange" data-i="radius.pick">Quanto lontano vuoi cercare? </label>
         <b class="radius-val" id="radiusVal"></b>
       </div>
-      <input id="radiusRange" class="range" type="range" min="0" max="300" step="10" value="0" aria-label="Raggio">
+      <input id="radiusRange" class="range" type="range" min="0" max="300" step="1" value="0" aria-label="Raggio">
       <p class="hint" id="radiusNote"></p>
     </div>
   </section>
 
+  <div id="moodSay" class="mood-say" hidden>
+    <span class="ms-emoji" id="moodSayEmoji" aria-hidden="true"></span>
+    <span class="ms-txt" id="moodSayTxt"></span>
+    <button class="ms-btn" id="moodSayBtn" type="button"></button>
+  </div>
+
   <section class="matrix-wrap">
-    <p class="kicker" data-i="matrix.title">Cosa ti va di fare?</p>
-    <div id="catMatrix" class="matrix"></div>
+    <p class="kicker" data-i="matrix.railTitle">Esplora per categoria</p>
+    <div id="catMatrix" class="matrix cat-rail"></div>
     <button id="mapBtn" class="map-btn big" type="button">
       <span class="map-ico" aria-hidden="true">🗺</span>
       <span data-i="map.explore">Esplora la mappa</span>
@@ -128,15 +130,11 @@
     </button>
     <p class="wx" id="wxLine" hidden></p>
     <p class="hint" id="forYouNote" hidden></p>
-    <button id="actJump" class="act-jump" type="button">
-      <span class="aj-main" data-i="actList.jump">Vuoi qualche idea?</span>
-      <small class="aj-sub" data-i="actList.jumpSub">Scegli l'attività che preferisci</small>
-      <span class="aj-go" aria-hidden="true">↓</span>
-    </button>
   </section>
 
-  <section class="events-wrap">
-    <p class="kicker" data-i="actList.title">Ecco le attività in programma</p>
+  <!-- v610: la lista piatta "Ecco le attivita'" e' sparita: tutto e' nella matrice sopra (macro + micro + eventi) -->
+  <section class="events-wrap" hidden>
+    <p class="kicker" data-i="actList.title">Ecco le attività in programma </p>
     <p class="hint act-index-sub" data-i="actList.sub">Gli eventi già creati, vicino a te. Tocca uno per vedere chi c'è.</p>
     <div class="ord-row">
       <label class="ord-lbl" for="ordineSel" data-i="ord.label">Ordina per</label>
@@ -149,11 +147,6 @@
     <button id="moreBtn" class="more" type="button" hidden data-i="home.more">Mostra altri</button>
   </section>
 
-  <section class="act-index-wrap" id="actIndexWrap" hidden>
-    <p class="kicker" data-i="actList.actsTitle">Tutte le attività</p>
-    <p class="hint act-index-sub" data-i="actList.actsSub">L'elenco completo, diviso per categoria. Tocca un'attività per creare l'evento.</p>
-    <div id="actIndex" class="act-index"></div>
-  </section>
   <footer class="foot">
     <div class="foot-row">
       <button id="privacyBtn" class="tiny" type="button" data-i="privacy.title">Dati e privacy</button>
@@ -173,9 +166,9 @@
     <div class="feed-head">
       <div>
         <p class="kicker" data-i="feed.kicker">Community</p>
-        <h1 class="feed-title" data-i="feed.title">Quello che succede fuori</h1>
+        <h1 class="feed-title" data-i="feed.title">Quello che succede fuori </h1>
       </div>
-      <button id="newPostBtn" class="btn primary feed-new" type="button" data-i="feed.new">Pubblica</button>
+      <button id="newPostBtn" class="btn primary feed-new" type="button"><span data-i="feed.new">Pubblica</span></button>
     </div>
     <p class="hint feed-hint" data-i="feed.hint">Foto vere, di persone vere. Metti il like, commenta, o pubblica tu.</p>
     <div id="pastBox" class="past-box" hidden></div>
@@ -207,7 +200,51 @@
     <span data-i="tab.profile">Profilo</span>
   </button>
 </nav>
-<button id="aiBtn" class="ai-bubble" type="button" aria-label="Assistente">AI</button>
+<button id="aiBtn" class="ai-bubble mascot" type="button" aria-label="Assistente FUORI">
+  <!-- la mascotte e' il logo FUORI uguale, con gli occhi che sbattono e il sorrisetto -->
+  <!-- il logo FUORI identico (anello + aeroplanino), con una faccina dentro -->
+  <svg class="mascot-face" viewBox="0 0 100 100" aria-hidden="true">
+    <circle class="mf-plate" cx="50" cy="54" r="26.5" fill="#f8fdf2"/>
+    <g class="mf-face">
+      <circle class="mf-cheek" cx="34.5" cy="62" r="4" fill="#ff5f7a"/>
+      <circle class="mf-cheek" cx="65.5" cy="62" r="4" fill="#ff5f7a"/>
+      <g class="mf-eye"><ellipse cx="41" cy="51" rx="3.4" ry="3.9" fill="#1f9d3a"/><circle class="mf-spark" cx="42.4" cy="49.6" r="1.1" fill="#fff"/></g>
+      <g class="mf-eye"><ellipse cx="59" cy="51" rx="3.4" ry="3.9" fill="#1f9d3a"/><circle class="mf-spark" cx="60.4" cy="49.6" r="1.1" fill="#fff"/></g>
+      <g class="mf-hearts">
+        <path class="mf-heart" d="M41 49.4c-1.7-1.9-4.5-.7-4.5 1.8 0 2 2.6 3.7 4.5 5.2 1.9-1.5 4.5-3.2 4.5-5.2 0-2.5-2.8-3.7-4.5-1.8Z" fill="#ff3d5e"/>
+        <path class="mf-heart" d="M59 49.4c-1.7-1.9-4.5-.7-4.5 1.8 0 2 2.6 3.7 4.5 5.2 1.9-1.5 4.5-3.2 4.5-5.2 0-2.5-2.8-3.7-4.5-1.8Z" fill="#ff3d5e"/>
+      </g>
+      <path class="mf-nose" d="M48.5 55.5q1.5 2 3 0" fill="none" stroke="#1f9d3a" stroke-width="1.8" stroke-linecap="round"/>
+      <g class="mf-mouthg">
+        <path class="mf-mouth" d="M40 61q10 6 20 0q-10 3-20 0Z" fill="#0f4d22" stroke="#1f9d3a" stroke-width="1.8" stroke-linejoin="round"/>
+        <path class="mf-teeth" d="M42 61.6q8 3.2 16 0v1.6q-8 2.2-16 0Z" fill="#fff"/>
+        <path class="mf-tongue" d="M47 65.5q3-3 6 0q-3 3-6 0Z" fill="#ff6b81"/>
+      </g>
+    </g>
+    <g class="mf-hand mf-hand-l">
+      <ellipse class="mf-palm" cx="15" cy="68" rx="6.4" ry="7.4" fill="#f8fdf2" stroke="#1f9d3a" stroke-width="1.3"/>
+      <circle class="mf-thumb" cx="20.2" cy="62.6" r="2.5" fill="#f8fdf2" stroke="#1f9d3a" stroke-width="1.1"/>
+    </g>
+    <g class="mf-hand mf-hand-r">
+      <ellipse class="mf-palm" cx="85" cy="68" rx="6.4" ry="7.4" fill="#f8fdf2" stroke="#1f9d3a" stroke-width="1.3"/>
+      <circle class="mf-thumb" cx="79.8" cy="62.6" r="2.5" fill="#f8fdf2" stroke="#1f9d3a" stroke-width="1.1"/>
+    </g>
+    <!-- esattamente l'anello e l'aeroplanino del logo -->
+    <path class="mf-ring" d="M82 54A32 32 0 1 1 50 22" fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="butt"/>
+    <g class="mf-plane" fill="currentColor">
+      <path d="M96 10 56.8 29.7 70.8 32.1Z"/>
+      <path d="M96 10 70.8 32.1 71.2 46.3Z" fill-opacity=".72"/>
+    </g>
+  </svg>
+</button>
+<div id="mascotBubble" class="mascot-bubble" hidden>
+  <span class="mb-x" id="mascotClose" role="button" tabindex="0" aria-label="Chiudi">×</span>
+  <span class="mb-txt" id="mascotTxt"></span>
+  <span class="mb-ans">
+    <button type="button" id="mascotSi" class="mb-si">Sì</button>
+    <button type="button" id="mascotNo" class="mb-no">No</button>
+  </span>
+</div>
 
 <div class="sheet" id="photoSheet" hidden>
   <div class="sheet-in">
@@ -344,6 +381,7 @@
     <h2 id="createTitle" data-i="create.title">Nuovo evento</h2>
     <p class="muted" id="createSub" data-i="create.sub"></p>
     <form id="createForm" novalidate>
+      <p class="sec-t" data-i="create.secBase">Cosa fai</p>
       <label class="field"><span data-i="create.name"></span><input name="title" maxlength="80" data-ph="create.namePh" required></label>
       <div class="field" id="evPhotosField">
         <span data-i="create.photos"></span>
@@ -363,7 +401,8 @@
       </div>
       <label class="field"><span data-i="create.when"></span><input name="when" type="datetime-local" required></label>
       <div class="rep-box">
-        <label class="field"><span data-i="create.repTitle"></span>
+        <p class="sec-t" data-i="create.repTitle">Si ripete?</p>
+        <label class="field">
           <select name="mode" id="repMode">
             <option value="single" data-i="create.repSingle"></option>
             <option value="range" data-i="create.repRange"></option>
@@ -403,11 +442,32 @@
         <button class="tiny left" id="createNearBtn" type="button" data-i="place.near"></button>
       </label>
       <label class="field"><span data-i="create.desc"></span><textarea name="description" rows="3" maxlength="500" data-ph="create.descPh"></textarea></label>
+      <p class="sec-t" data-i="create.secMood">Come sarà</p>
+      <div class="field">
+        <span data-i="create.vibe">Che aria si respira</span>
+        <div class="chips pick" id="vibePick">
+          <button class="chip" type="button" data-vibe="calmo">Calmo</button>
+          <button class="chip" type="button" data-vibe="sociale">Sociale</button>
+          <button class="chip" type="button" data-vibe="vivace">Vivace</button>
+          <button class="chip" type="button" data-vibe="avventura">Avventuroso</button>
+        </div>
+        <input type="hidden" name="vibe" id="vibeValue" value="">
+      </div>
+      <div class="field">
+        <span data-i="create.comfort">Quanto osa chi partecipa</span>
+        <div class="chips pick" id="comfortPick">
+          <button class="chip" type="button" data-comfort="comodo">Comodo</button>
+          <button class="chip" type="button" data-comfort="medio">Nel mezzo</button>
+          <button class="chip" type="button" data-comfort="osa">Fuori comfort zone</button>
+        </div>
+        <input type="hidden" name="comfort" id="comfortValue" value="">
+      </div>
+      <p class="sec-t" data-i="create.secWho">Chi può partecipare</p>
       <div class="row">
-        <label class="field"><span data-i="create.capacity"></span><input name="capacity" type="number" min="2" max="500" value="12" inputmode="numeric"></label>
+        <label class="field"><span data-i="create.capacityTitle">Numero partecipanti</span><input name="capacity" type="number" min="2" max="500" value="12" inputmode="numeric"></label>
         <label class="field"><span data-i="create.host"></span><input name="host" maxlength="40" data-ph="create.host"></label>
       </div>
-      <label class="field"><span data-i="create.age"></span>
+      <label class="field"><span data-i="create.age">Fascia d'età</span>
         <div class="ageslide" id="ageSlide">
           <div class="ageslide-track"><b id="ageFill"></b></div>
           <input type="range" id="ageMin" min="18" max="90" step="1" value="18" aria-label="Età minima">
@@ -415,30 +475,31 @@
         </div>
         <span class="hint" id="ageHint" data-i="create.ageHint"></span>
       </label>
-      <label class="field"><span data-i="create.access"></span>
+      <label class="field"><span data-i="create.accessTitle">Chi può entrare</span>
         <select name="access">
-
-          <option value="photo" data-i="create.accessPhoto"></option>
           <option value="verified" data-i="create.accessVerified"></option>
           <option value="invite" data-i="create.accessInvite"></option>
         </select>
       </label>
-      <label class="field"><span data-i="create.approval"></span>
+      <label class="field"><span data-i="create.approvalTitle">Chi si può aggiungere</span>
         <select name="approval">
           <option value="0" data-i="create.approvalAll"></option>
           <option value="1" data-i="create.approvalMine"></option>
         </select>
       </label>
-      <label class="field"><span data-i="create.deadline"></span>
+      <p class="sec-t" data-i="create.secWhen">Quando chiudono le iscrizioni</p>
+      <label class="field"><span data-i="create.deadline">Iscrizioni chiuse</span>
         <select name="signupHours">
           <option value="0" data-i="create.deadline0"></option>
           <option value="2" data-i="create.deadline2"></option>
+          <option value="4" data-i="create.deadline4"></option>
+          <option value="6" data-i="create.deadline6"></option>
           <option value="12" data-i="create.deadline12"></option>
           <option value="24" data-i="create.deadline24"></option>
         </select>
       </label>
       <p class="err" id="formError" hidden></p>
-      <button class="btn primary wide" id="publishBtn" type="submit" data-i="create.publish"></button>
+      <button class="btn primary wide" id="publishBtn" type="submit"><span data-i="create.publish"></span></button>
     </form>
   </div>
 </div>
@@ -509,22 +570,98 @@
 <div class="sheet" id="help" hidden>
   <div class="sheet-in">
     <button class="x" data-close type="button" aria-label="Chiudi">×</button>
-    <h2 data-i="help.title"></h2>
-    <p class="muted" data-i="help.sub"></p>
-    <div class="help-body">
-      <div class="help-sec">
-        <h3 data-i="help.f1t">A cosa serve</h3>
-        <p class="body" data-i="help.f1p"></p>
-      </div>
-      <div class="help-sec">
-        <h3 data-i="help.f2t">Foto profilo e verifica</h3>
-        <p class="body" data-i="help.f2p"></p>
-      </div>
-      <div class="help-sec">
-        <h3 data-i="help.f3t">Partecipare e creare</h3>
-        <p class="body" data-i="help.f3p"></p>
-      </div>
+    <p class="kicker">La guida</p>
+    <h2>Come funziona FUORI?</h2>
+    <p class="body">Esci dalla routine, scopri nuove esperienze e incontra persone nuove.</p>
+    <p class="body">FUORI ti permette di trovare eventi, crearne di tuoi e condividere esperienze con persone che hanno i tuoi stessi interessi.</p>
+    <div class="guida-nav">
+      <a href="#guida-home" data-guida="home">Home</a>
+      <a href="#guida-crea" data-guida="crea">Crea un evento</a>
+      <a href="#guida-partecipa" data-guida="partecipa">Partecipa</a>
+      <a href="#guida-community" data-guida="community">Community</a>
+      <a href="#guida-ricordi" data-guida="ricordi">Ricordi</a>
+      <a href="#guida-preferiti" data-guida="preferiti">Preferiti</a>
+      <a href="#guida-profilo" data-guida="profilo">Profilo</a>
+      <a href="#guida-ai" data-guida="ai">Assistente AI</a>
+      <a href="#guida-privacy" data-guida="privacy">Privacy</a>
     </div>
+    <div class="help-body">
+
+      <div class="help-sec" id="guida-home">
+        <h3>🏠 HOME – Cosa ti va di fare?</h3>
+        <p class="body">È il punto di partenza per esplorare le attività.</p>
+        <ul class="glist">
+          <li><b>Crea un evento</b>: organizza qualcosa di nuovo e invita altre persone.</li>
+          <li><b>Partecipa a un evento</b>: scopri le attività disponibili e unisciti a quelle che preferisci.</li>
+          <li><b>Come ti senti oggi</b>: scegli il tuo stato d'animo e ricevi suggerimenti di attività già pronti.</li>
+          <li><b>Categorie</b>: esplora eventi per argomento, dalle attività sportive alla musica, dai viaggi alla cultura.</li>
+          <li><b>Mappa</b>: visualizza gli eventi in base alla loro posizione.</li>
+          <li><b>Vuoi qualche idea?</b>: consulta tante proposte per trovare ispirazione.</li>
+        </ul>
+        <p class="body">Puoi filtrare gli eventi per distanza, categoria e preferenze oppure esplorarli tutti.</p>
+      </div>
+
+      <div class="help-sec" id="guida-crea">
+        <h3>➕ CREA UN EVENTO</h3>
+        <p class="body">Premi il pulsante + al centro per organizzare la tua attività.</p>
+        <p class="body">Scegli titolo, fotografie, categoria, date, luogo e descrizione. Puoi anche stabilire il numero di partecipanti, i requisiti di accesso, le modalità di approvazione e la scadenza delle iscrizioni.</p>
+        <p class="body">Una volta pubblicato, gli altri utenti potranno scoprirlo e partecipare secondo le condizioni che hai stabilito.</p>
+      </div>
+
+      <div class="help-sec" id="guida-partecipa">
+        <h3>📅 PARTECIPA A UN EVENTO</h3>
+        <p class="body">Apri un evento per conoscere tutti i dettagli e richiedere la partecipazione, quando necessario.</p>
+        <p class="body">Una volta ammesso, potrai accedere alla chat di gruppo, conoscere gli altri partecipanti e organizzarti prima dell'incontro.</p>
+        <p class="body">Con <b>Portami lì</b> puoi aprire direttamente il navigatore e raggiungere il luogo dell'evento.</p>
+      </div>
+
+      <div class="help-sec" id="guida-community">
+        <h3>👥 COMMUNITY</h3>
+        <p class="body">Condividi fotografie dei tuoi eventi, scopri quelle pubblicate dagli altri utenti, commenta e rivivi insieme i momenti più belli.</p>
+      </div>
+
+      <div class="help-sec" id="guida-ricordi">
+        <h3>🕒 RICORDI</h3>
+        <p class="body">Qui trovi gli eventi conclusi, puoi vedere chi ha partecipato e lasciare una valutazione. I tuoi giudizi aiutano gli altri a scegliere le esperienze e gli organizzatori.</p>
+        <p class="body">Sono disponibili filtri per trovare facilmente ciò che cerchi.</p>
+      </div>
+
+      <div class="help-sec" id="guida-preferiti">
+        <h3><svg class="help-heart" viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="heartGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5d8f"/><stop offset=".55" stop-color="#ff3b6b"/><stop offset="1" stop-color="#ff7a3d"/></linearGradient></defs><path d="M12 20.6C9.1 18.6 2.8 13.9 2.8 8.9c0-3 2.2-5.1 4.9-5.1 1.8 0 3.5 1 4.3 2.6.8-1.6 2.5-2.6 4.3-2.6 2.7 0 4.9 2.1 4.9 5.1 0 5-6.3 9.7-9.2 11.7z" fill="url(#heartGrad)" stroke="#ffd0de" stroke-width="1"/></svg> PREFERITI</h3>
+        <p class="body">Ritrova tutti gli eventi che hai salvato per consultarli o partecipare in un secondo momento.</p>
+      </div>
+
+      <div class="help-sec" id="guida-profilo">
+        <h3>👤 PROFILO</h3>
+        <p class="body">Completa il tuo profilo con una fotografia personale, età, genere e una breve descrizione di te, delle tue passioni e dei tuoi interessi.</p>
+        <p class="body">La verifica tramite selfie conferma che la fotografia del profilo ti rappresenta. È richiesta per partecipare e organizzare eventi e contribuisce a rendere gli incontri più trasparenti.</p>
+        <p class="body">Dalle impostazioni puoi aggiornare i tuoi interessi e gestire le preferenze dell'app.</p>
+      </div>
+
+      <div class="help-sec" id="guida-ai">
+        <h3>✨ ASSISTENTE AI</h3>
+        <p class="body">Hai bisogno di un'idea? Chiedi all'assistente!</p>
+        <p class="body">Puoi ricevere suggerimenti su eventi, attività, luoghi, sport, esperienze, organizzazione e preparazione delle tue iniziative.</p>
+        <p class="body">Puoi chiedere consigli, esplorare nuove possibilità e trovare ispirazione. L'assistente è specializzato nel mondo delle attività e del tempo libero.</p>
+      </div>
+
+      <div class="help-sec" id="guida-privacy">
+        <h3>🔒 PRIVACY E AUTORIZZAZIONI</h3>
+        <p class="body">Puoi consultare le condizioni di utilizzo, l'informativa sulla privacy e gestire le autorizzazioni dalle impostazioni.</p>
+        <ul class="glist">
+          <li><b>Posizione</b>: per trovare eventi vicino a te.</li>
+          <li><b>Fotocamera</b>: per scattare foto e verificare il profilo.</li>
+          <li><b>Galleria</b>: per caricare le tue fotografie.</li>
+          <li><b>Microfono</b>: per utilizzare le funzioni vocali dell'assistente.</li>
+          <li><b>Notifiche</b>: per ricevere aggiornamenti su eventi, messaggi e partecipazioni.</li>
+        </ul>
+        <p class="body">Ogni autorizzazione viene richiesta quando serve alla relativa funzionalità. Puoi gestirla anche dalle impostazioni del telefono.</p>
+        <p class="body">I tuoi dati vengono trattati secondo l'informativa sulla privacy e i consensi prestati.</p>
+      </div>
+
+    </div>
+    <p class="body" style="margin-top:14px">FUORI è il tuo spazio per uscire, conoscere persone e vivere esperienze nuove.</p>
+    <p class="body">Non serve sapere già con chi andare. Basta sapere cosa ti va di fare!</p>
     <button class="btn ghost wide" id="helpLang" type="button" data-i="help.lang"></button>
     <button class="btn primary wide" id="helpAccount" type="button" data-i="help.account"></button>
   </div>
@@ -587,10 +724,9 @@
       <div class="prof-id">
         <p class="prof-name" id="profileName"></p>
         <div class="badges" id="profileBadges"></div>
-        <p class="hint" data-i="prof.realHint"></p>
+        <p class="hint" data-i="prof.realHint"> </p>
         <p class="warn-red" id="photoBadBox" hidden>Questa foto non va bene: qui serve una foto vera del tuo viso, scattata a te. Caricala e verifica il viso per creare o partecipare agli eventi.</p>
-        <button class="tiny" id="groupsBtn" type="button" data-i="mute.groupsBtn"></button>
-      </div>
+        </div>
     </div>
     <div class="row">
       <label class="field"><span data-i="prof.age"></span><input id="profileAge" type="number" min="18" max="99" inputmode="numeric"></label>
@@ -600,11 +736,23 @@
     <label class="field"><span data-i="prof.looking"></span><textarea id="profileLooking" rows="2" maxlength="200" data-ph="prof.lookingPh"></textarea></label>
     <label class="field"><span data-i="prof.done"></span><textarea id="profileDone" rows="2" maxlength="300" data-ph="prof.donePh"></textarea></label>
     <button class="btn primary wide" id="profileSave" type="button" data-i="prof.save">Salva</button>
-    <button class="btn ghost wide" id="interestsBtn" type="button" data-i="prof.interests">Cosa ti interessa</button>
-    <button class="btn ghost wide" id="verifyBtn" type="button" hidden>Verifica il tuo viso</button>
+    <button class="btn ghost wide" id="interestsBtn" type="button"><span data-i="prof.interests">Cosa ti interessa</span></button>
+    <button class="btn ghost wide" id="verifyBtn" type="button" hidden><span>Verifica il tuo viso</span></button>
     <button class="btn ghost wide" id="statsBtn" type="button" hidden>Statistiche</button>
-    <button class="btn ghost wide" id="permsBtn" type="button" data-i="perm.open">Autorizzazioni</button>
+    <button class="btn ghost wide" id="permsBtn" type="button"><span data-i="perm.open">Autorizzazioni</span></button>
     <button class="btn ghost wide" id="logoutBtn" type="button" data-i="prof.logout">Esci</button>
+  </div>
+</div>
+
+<div class="sheet" id="moodDaily" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <p class="kicker" data-i="mood.kicker">Una volta al giorno</p>
+    <h2 data-i="mood.q">Come ti senti oggi?</h2>
+    <p class="muted" data-i="mood.dailySub">Un tocco e basta: da qui scelgo gli eventi che hanno più senso per te.</p>
+    <div class="mood-chips" id="moodChips"></div>
+    <p class="tiny mood-where" id="moodWhere"></p>
+    <button class="tiny center" id="moodSkip" type="button" data-i="mood.skip">Oggi salto</button>
   </div>
 </div>
 
@@ -660,30 +808,66 @@
 <div class="sheet" id="stats" hidden>
   <div class="sheet-in">
     <button class="x" data-close type="button" aria-label="Chiudi">×</button>
-    <h2>I numeri di FUORI</h2>
-    <p class="muted">Solo tu li vedi. Ogni persona conta una volta sola, anche se ricarica o reinstalla.</p>
-    <p class="muted" id="statsOwn"></p>
-    <div id="statsLive"></div>
+    <p class="kicker">Solo per te</p>
+    <h2>La community, adesso</h2>
+    <p class="muted">Numeri delle altre persone. Tu e l'assistente restate fuori; una persona conta una volta sola anche se cambia telefono.</p>
+    <div id="statsAdesso"></div>
     <div class="seg" id="statsRange">
       <button type="button" data-d="7" class="on">7 giorni</button>
       <button type="button" data-d="30">30 giorni</button>
     </div>
-    <div id="statsLetture"></div>
-    <div class="nums" id="statsNums"></div>
-    <div id="statsSerie"></div>
-    <div id="statsTrend"></div>
-    <div id="statsFunnel"></div>
-    <div id="faceBox"></div>
-    <div id="pushBox"></div>
-    <div id="addioBox"></div>
-    <div id="segnalazioniBox"></div>
+
+    <!-- v618: tutto raggruppato e chiudibile, così non diventa un muro di numeri -->
+    <details class="st-group" open>
+      <summary><span>Chi c'è adesso</span><i class="st-n" id="statsOnlineN"></i></summary>
+      <div id="statsOnline"></div>
+    </details>
+
+    <details class="st-group" open>
+      <summary><span>Chi ha votato</span><i class="st-n" id="statsVotiN"></i></summary>
+      <div id="statsVoti"></div>
+    </details>
+
+    <details class="st-group" open>
+      <summary><span>Cosa stanno facendo</span><i class="st-n" id="statsLiveN"></i></summary>
+      <div id="statsLive"></div>
+    </details>
+
+    <details class="st-group">
+      <summary><span>Numeri della community</span></summary>
+      <div id="statsLetture"></div>
+      <div class="nums" id="statsNums"></div>
+    </details>
+
+    <details class="st-group">
+      <summary><span>Andamento nel tempo</span></summary>
+      <details class="st-sub"><summary>Persone diverse, giorno per giorno</summary><div id="statsSerie"></div></details>
+      <details class="st-sub"><summary>Settimana, mesi e anni</summary><div id="statsTrend"></div></details>
+    </details>
+
+    <details class="st-group">
+      <summary><span>Eventi e categorie</span></summary>
+      <details class="st-sub"><summary>Gli eventi che si stanno riempiendo</summary><div id="statsTop" class="stat-block"></div></details>
+      <details class="st-sub"><summary>Categorie, zone, età, generi, lingue</summary><div id="statsCharts"></div></details>
+    </details>
+
+    <details class="st-group">
+      <summary><span>Le persone</span></summary>
+      <div id="statsMood" class="stat-block"></div>
+      <h3 class="stat-block-t">Chi c'è</h3>
+      <p class="muted">Tutte le persone in un posto solo: dentro puoi ordinarle e filtrare per foto e verifica.</p>
+      <div id="statsPeople"></div>
+    </details>
+
+    <details class="st-group">
+      <summary><span>Sicurezza e avvisi</span></summary>
+      <div id="statsSecurity" class="stat-block"></div>
+      <div id="faceBox"></div>
+      <div id="pushBox"></div>
+      <div id="segnalazioniBox"></div>
+    </details>
     <button class="btn ghost wide" id="fotoDaVerificare" type="button" hidden>Foto da verificare</button>
-    <div id="statsCharts"></div>
-    <h3 class="stat-block-t">Chi c'è</h3>
-    <p class="muted">Tutte le persone in un posto solo: dentro puoi ordinarle e filtrare per foto e verifica.</p>
-    <div id="statsPeople"></div>
-    <div id="statsFriction"></div>
-    <button class="btn ghost wide" id="statsRefresh" type="button">Aggiorna</button>
+    <button class="btn ghost wide" id="statsRefresh" type="button">Aggiorna adesso</button>
   </div>
 </div>
 
@@ -706,23 +890,23 @@
     <p class="hint" data-i="perm.androidHint"></p>
     <div class="perms">
       <div class="perm-row">
-        <div class="perm-txt"><b data-i="perm.geo"></b><span class="perm-state" id="perm-geo-state"></span></div>
+        <div class="perm-txt"><b data-i="perm.geo"></b> <span class="why" data-why="privacy.posizione" role="button" tabindex="0" aria-label="Come funziona">?</span><span class="perm-state" id="perm-geo-state"></span></div>
         <button class="btn ghost sm" type="button" id="perm-geo-btn"></button>
       </div>
       <div class="perm-row">
-        <div class="perm-txt"><b data-i="perm.mic"></b><span class="perm-state" id="perm-mic-state"></span></div>
+        <div class="perm-txt"><b data-i="perm.mic"></b> <span class="why" data-why="privacy.microfono" role="button" tabindex="0" aria-label="Come funziona">?</span><span class="perm-state" id="perm-mic-state"></span></div>
         <button class="btn ghost sm" type="button" id="perm-mic-btn"></button>
       </div>
       <div class="perm-row">
-        <div class="perm-txt"><b data-i="perm.cam"></b><span class="perm-state" id="perm-cam-state"></span></div>
+        <div class="perm-txt"><b data-i="perm.cam"></b> <span class="why" data-why="privacy.fotocamera" role="button" tabindex="0" aria-label="Come funziona">?</span><span class="perm-state" id="perm-cam-state"></span></div>
         <button class="btn ghost sm" type="button" id="perm-cam-btn"></button>
       </div>
       <div class="perm-row">
-        <div class="perm-txt"><b data-i="perm.gallery"></b><span class="perm-state" id="perm-gallery-state"></span></div>
+        <div class="perm-txt"><b data-i="perm.gallery"></b> <span class="why" data-why="privacy.galleria" role="button" tabindex="0" aria-label="Come funziona">?</span><span class="perm-state" id="perm-gallery-state"></span></div>
         <button class="btn ghost sm" type="button" id="perm-gallery-btn"></button>
       </div>
       <div class="perm-row">
-        <div class="perm-txt"><b data-i="perm.push"></b><span class="perm-state" id="perm-push-state"></span></div>
+        <div class="perm-txt"><b data-i="perm.push"></b> <span class="why" data-why="privacy.notifiche" role="button" tabindex="0" aria-label="Come funziona">?</span><span class="perm-state" id="perm-push-state"></span></div>
         <button class="btn ghost sm" type="button" id="perm-push-btn"></button>
       </div>
     </div>
@@ -738,7 +922,27 @@
     <button class="x" data-close type="button" aria-label="Chiudi">×</button>
     <h2 id="glossTitle"></h2>
     <p class="muted" id="glossText"></p>
+    <button class="btn ghost wide" id="glossGuida" type="button">Leggi nella guida</button>
     <button class="btn primary wide" data-close type="button" data-i="common.close"></button>
+  </div>
+</div>
+
+<div class="sheet" id="share" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2 data-i="share.pick">Dove lo condividi?</h2>
+    <p class="share-preview" id="sharePreview"></p>
+    <div class="share-grid">
+      <button class="share-app" data-share="whatsapp" type="button"><span class="sa-ico wa" aria-hidden="true">W</span><span>WhatsApp</span></button>
+      <button class="share-app" data-share="telegram" type="button"><span class="sa-ico tg" aria-hidden="true">➤</span><span>Telegram</span></button>
+      <button class="share-app" data-share="instagram" type="button"><span class="sa-ico ig" aria-hidden="true">IG</span><span>Instagram</span></button>
+      <button class="share-app" data-share="facebook" type="button"><span class="sa-ico fb" aria-hidden="true">f</span><span>Facebook</span></button>
+      <button class="share-app" data-share="x" type="button"><span class="sa-ico xx" aria-hidden="true">X</span><span>X</span></button>
+      <button class="share-app" data-share="mail" type="button"><span class="sa-ico ml" aria-hidden="true">✉</span><span>Email</span></button>
+      <button class="share-app" data-share="sms" type="button"><span class="sa-ico sms" aria-hidden="true">✉</span><span>SMS</span></button>
+      <button class="share-app" data-share="copia" type="button"><span class="sa-ico cp" aria-hidden="true">⧉</span><span data-i="share.copy">Copia il link</span></button>
+    </div>
+    <button class="btn ghost wide" data-close type="button" data-i="common.close">Chiudi</button>
   </div>
 </div>
 
@@ -816,6 +1020,23 @@
   <button class="iconbtn" id="pushAskNo" type="button" aria-label="Chiudi">×</button>
 </div>
 
+<div class="sheet" id="notif" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2>Avvisi</h2>
+    <p class="muted">Quello che succede mentre non guardi l'app: messaggi, richieste, eventi che cominciano.</p>
+    <div id="notifList" class="notif-list"><p class="muted">Un attimo…</p></div>
+    <button class="btn primary wide" id="notifTestBtn" type="button">Mandami una prova adesso</button>
+    <p class="hint" id="notifTestOut"></p>
+  </div>
+</div>
+
+<div id="inAppNotif" class="inapp-notif" hidden>
+  <div class="ian-txt"><b id="ianTitle"></b><span id="ianBody"></span></div>
+  <button class="ian-open" id="ianOpen" type="button">Apri</button>
+  <button class="ian-x" id="ianClose" type="button" aria-label="Chiudi">×</button>
+</div>
+
 <div class="sheet" id="mute" hidden>
   <div class="sheet-in">
     <button class="x" data-close type="button" aria-label="Chiudi">×</button>
@@ -832,7 +1053,7 @@
 <div class="sheet" id="assistant" hidden>
   <div class="sheet-in">
     <button class="x" data-close type="button" aria-label="Chiudi">×</button>
-    <h2 data-i="ai.title">Assistente</h2>
+    <h2 data-i="ai.title">Assistente <span class="why" data-why="ai" role="button" tabindex="0" aria-label="Come funziona">?</span></h2>
     <p class="muted" data-i="ai.sub"></p>
     <div id="aiList" class="chat-list ai-list"></div>
     <button class="btn ghost wide" id="aiStop" type="button" hidden>■ Ferma la voce</button>
@@ -848,7 +1069,7 @@
       <p class="dialog-state" id="aiConvState">Tocca per iniziare: ti ascolto, rispondo e resto in ascolto.</p>
       <p class="hint" id="aiConvHelp" data-i="ai.convHelp">Come funziona: tocchi il pulsante e diventa rosso, così parli tu. Lo tocchi di nuovo: mi fermo e rispondo io. Quando ho finito la parola torna a te.</p>
     </div>
-    <button id="aiVoice" class="ai-toggle wide" type="button"><span class="spk" aria-hidden="true">🔈</span><span id="aiVoiceLabel" data-i="ai.voice"></span></button>
+    <button id="aiVoice" class="ai-toggle wide" type="button"><span class="spk" aria-hidden="true">🔈</span><span id="aiVoiceLabel" data-i="ai.voice"></span><span class="why" data-why="ai.voce" aria-hidden="true">?</span></button>
     <form id="aiForm" class="chat-form">
       <input id="aiInput" maxlength="400" autocomplete="off" data-ph="ai.ph">
       <button class="btn primary sm" type="submit" data-i="chat.send"></button>
@@ -869,8 +1090,10 @@
       <button type="button" class="chip" data-mf="scelti" data-i="map.filtScelti">Scegli quali…</button>
       <button type="button" class="chip" data-mf="interessi" data-i="map.filtInteressi">Solo per i miei interessi</button>
     </div>
+    <p class="tiny" id="mapScope"></p>
     <p class="tiny" id="mapConta"></p>
     <div id="mapCanvas" class="map-canvas"></div>
+    <p class="hint map-world-hint">Pizzica e allontana con due dita per arrivare fino al mondo intero: la mappa si adatta da sola a dove sei.</p>
     <div class="map-legend">
       <span class="lg"><i class="dot me"></i><span data-i="map.you"></span></span>
       <span class="lg"><i class="dot ppl"></i><span data-i="map.legendPeople"></span></span>
@@ -887,6 +1110,17 @@
     <p class="muted" data-i="map.sceltaSub">Tocca quelli che vuoi vedere: sulla mappa restano solo questi.</p>
     <div id="mapSceltaList"></div>
     <button class="btn primary wide" type="button" id="mapSceltaOk" data-i="map.sceltaOk">Mostra questi</button>
+  </div>
+</div>
+
+<div class="sheet" id="delEvent" hidden>
+  <div class="sheet-in">
+    <button class="x" data-close type="button" aria-label="Chiudi">×</button>
+    <h2>Perché annulli l'evento?</h2>
+    <p class="muted">Il motivo arriva a tutti gli iscritti, anche a chi l'aveva salvato. Senza motivo non si annulla.</p>
+    <textarea id="delWhy" maxlength="180" rows="3" placeholder="Per esempio: piove e lo spostiamo a domenica"></textarea>
+    <p class="hint" id="delErr" hidden></p>
+    <button class="btn primary wide" id="delOk" type="button">Annulla l'evento e avvisa tutti</button>
   </div>
 </div>
 
@@ -979,7 +1213,7 @@
 <div class="sheet" id="privacy" hidden>
   <div class="sheet-in">
     <button class="x" data-close type="button" aria-label="Chiudi">×</button>
-    <h2 data-i="privacy.title">Dati e privacy</h2>
+    <h2 data-i="privacy.title">Dati e privacy <span class="why" data-why="privacy" role="button" tabindex="0" aria-label="Come funziona">?</span></h2>
     <p class="body" data-i="privacy.body"></p>
     <p class="body" data-i="privacy.ip"></p>
     <button class="btn ghost wide" id="privacyFeedback" type="button" data-i="home.feedback"></button>
@@ -1015,6 +1249,6 @@
 </div>
 
 <div class="toast" id="toast" hidden></div>
-<script src="/app.min.js?v=560" defer></script>
+<script src="/app.min.js?v=636" defer></script>
 </body>
 </html>

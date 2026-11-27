@@ -35,11 +35,11 @@ const VAPID_PUBLIC =
 
 let ready = false;
 
-const SCHEMA_V = 13;
+const SCHEMA_V = 14;
 
 // la versione dell'app: la aggiorna build.sh da sola leggendo src/app.js.
 // I telefoni la chiedono ogni minuto e, se è cambiata, si aggiornano da soli.
-const CLIENT_V = "560";
+const CLIENT_V = "636";
 
 async function initDb(env) {
   if (ready) return;
@@ -395,6 +395,8 @@ async function initDb(env) {
 
   await addColumns(env, "leads", [
     ["first_name", "TEXT"],
+    // impronta della foto profilo: serve a fermare la stessa foto usata da due profili
+    ["photo_hash", "TEXT"],
     ["last_name", "TEXT"],
     ["phone", "TEXT"],
     ["interests", "TEXT"],
@@ -443,6 +445,9 @@ async function initDb(env) {
     ["owner_email", "TEXT"],
     // da 1 a 3 foto dell'evento (elenco di chiavi delle immagini)
     ["photos", "TEXT"],
+    // come si vive l'evento: energia e quanto porta fuori dalla comfort zone
+    ["vibe", "TEXT"],
+    ["comfort", "TEXT"],
   ]);
   await addColumns(env, "participants", [
     ["status", "TEXT NOT NULL DEFAULT 'going'"],
@@ -492,6 +497,12 @@ async function initDb(env) {
     `CREATE INDEX IF NOT EXISTS idx_typing_event ON typing(event_id)`,
     `CREATE INDEX IF NOT EXISTS idx_posts_event ON posts(event_id)`,
     `CREATE INDEX IF NOT EXISTS idx_peek_device ON peek(device, at)`,
+    // ricerche che girano a ogni apertura: senza indice diventano lente con tanti eventi
+    `CREATE INDEX IF NOT EXISTS idx_leads_photo_hash ON leads(photo_hash)`,
+    `CREATE INDEX IF NOT EXISTS idx_past_starts ON past_events(starts_at)`,
+    `CREATE INDEX IF NOT EXISTS idx_storia_event ON storia(event_id)`,
+    `CREATE INDEX IF NOT EXISTS idx_events_device ON events(device)`,
+    `CREATE INDEX IF NOT EXISTS idx_events_created ON events(created_at)`,
     `CREATE INDEX IF NOT EXISTS idx_sessioni_device ON sessioni(device, start_at)`,
   ]) {
     try { await env.DB.prepare(sql).run(); } catch {}
@@ -887,19 +898,24 @@ async function liveFeed(env, url, request) {
   if (!ok) return json({ error: "Solo il padrone." }, 403);
   const now = Date.now();
   const mio = ownerEmail(env);
-  const mioNome = String(
-    (await env.DB.prepare(`SELECT first_name FROM leads WHERE lower(email) = ? LIMIT 1`).bind(mio).first().catch(() => null))
-      ?.first_name || ""
-  ).toLowerCase();
+  const mioLead = await env.DB.prepare(
+    `SELECT first_name, COALESCE(first_name,'') || ' ' || COALESCE(last_name,'') AS nome FROM leads WHERE lower(email) = ? LIMIT 1`
+  )
+    .bind(mio)
+    .first()
+    .catch(() => null);
+  const mioNome = String(mioLead?.first_name || "").toLowerCase();
+  const mioNomeIntero = String(mioLead?.nome || "").toLowerCase();
   const { results } = await env.DB.prepare(
     `SELECT id, kind, who, detail, event_id, at FROM activity
       WHERE id > ?
         AND lower(COALESCE(who, '')) <> ?
         AND lower(COALESCE(who, '')) <> ?
+        AND lower(COALESCE(who, '')) <> ?
         AND lower(COALESCE(who, '')) NOT LIKE '%prova%'
       ORDER BY id DESC LIMIT 40`
   )
-    .bind(since, mio, mioNome)
+    .bind(since, mio, mioNome, mioNomeIntero)
     .all();
   // solo quelle davvero da guardare: chi ha già il viso verificato non è più in attesa
   const pending = await env.DB.prepare(`SELECT COUNT(*) AS n FROM leads WHERE face_pending = 1 AND verified_face = 0 AND face_selfie IS NOT NULL`).first();
@@ -938,6 +954,9 @@ async function liveFeed(env, url, request) {
             SUM(CASE WHEN end_at IS NULL AND last_at >= ?3 THEN 1 ELSE 0 END) AS dentro
        FROM sessioni
       WHERE start_at >= ?2 AND device <> ''
+        AND device NOT IN (SELECT device FROM owner_dev)
+        AND device NOT IN (SELECT device FROM ignora)
+        AND device NOT LIKE 'prova%' AND device NOT LIKE 'test%' AND device NOT LIKE 'demo%'
       GROUP BY device
       ORDER BY sec DESC LIMIT 40`
   )
@@ -957,9 +976,67 @@ async function liveFeed(env, url, request) {
   const secondiTotali = tempi.reduce((a, r) => a + r.sec, 0);
   const media = tempi.length ? Math.round(secondiTotali / tempi.length) : 0;
 
+  // chi è online adesso, con il nome: tu resti fuori (device, mail e dispositivi tuoi)
+  const onlineRows = await env.DB
+    .prepare(
+      `SELECT p.device, p.seen_at,
+              COALESCE(
+                (SELECT COALESCE(NULLIF(TRIM(COALESCE(l.first_name,'') || ' ' || COALESCE(l.last_name,'')), ''), l.email)
+                   FROM leads l WHERE l.device = p.device ORDER BY l.created_at DESC LIMIT 1),
+                (SELECT pd.email FROM person_dev pd WHERE pd.device = p.device LIMIT 1),
+                'Ospite'
+              ) AS chi,
+              (SELECT o.mode FROM opens o WHERE o.device = p.device) AS modo
+         FROM presence p
+        WHERE p.seen_at >= ?
+          AND p.device <> ?
+          AND p.device NOT IN (SELECT device FROM owner_dev)
+          AND p.device NOT IN (SELECT device FROM ignora)
+          AND p.device NOT LIKE 'prova%' AND p.device NOT LIKE 'test%' AND p.device NOT LIKE 'demo%'
+        ORDER BY p.seen_at DESC LIMIT 20`
+    )
+    .bind(now - 3 * 60 * 1000, device)
+    .all()
+    .catch(() => ({ results: [] }));
+  const online = (onlineRows.results || [])
+    .filter((r) => !mioNome || String(r.chi || "").toLowerCase() !== mioNome)
+    .map((r) => ({ chi: r.chi || "Ospite", at: Number(r.seen_at) || 0, modo: r.modo || "" }));
+
+  // chi ha votato qualcosa, e cosa: non solo un numero, ma i nomi e il voto
+  await ensureRatings(env).catch(() => {});
+  const votiRows = await env.DB
+    .prepare(
+      `SELECT r.event_id, r.stars, r.vote, r.at,
+              (SELECT COALESCE(NULLIF(pe.title,''), NULLIF(e.title,''), 'Ricordo') FROM past_events pe LEFT JOIN events e ON e.id = pe.id WHERE pe.id = r.event_id LIMIT 1) AS titolo,
+              COALESCE(
+                (SELECT COALESCE(NULLIF(TRIM(COALESCE(l.first_name,'') || ' ' || COALESCE(l.last_name,'')), ''), l.email)
+                   FROM leads l WHERE l.device = r.device ORDER BY l.created_at DESC LIMIT 1),
+                (SELECT pd.email FROM person_dev pd WHERE pd.device = r.device LIMIT 1),
+                'Ospite'
+              ) AS chi
+         FROM event_ratings r
+        WHERE r.device <> ?
+          AND r.device NOT IN (SELECT device FROM owner_dev)
+          AND r.device NOT IN (SELECT device FROM ignora)
+          AND r.device NOT LIKE 'prova%' AND r.device NOT LIKE 'test%' AND r.device NOT LIKE 'demo%'
+        ORDER BY r.at DESC LIMIT 20`
+    )
+    .bind(device)
+    .all()
+    .catch(() => ({ results: [] }));
+  const voti = (votiRows.results || []).map((r) => ({
+    chi: r.chi || "Ospite",
+    titolo: r.titolo || "",
+    stelle: Number(r.stars) || 0,
+    pollice: Number(r.vote) || 0,
+    at: Number(r.at) || 0,
+  }));
+
   return json({
     items: results || [],
     ops,
+    online,
+    voti,
     tempi,
     media,
     tempoTotale: secondiTotali,
@@ -1117,6 +1194,35 @@ async function pushState(env, url) {
     stato: primo ? { status: primo.last_status || 0, ok: primo.last_ok || 0, fail: primo.last_fail || 0 } : null,
     vapid: Boolean(env.VAPID_PRIVATE),
   });
+}
+
+// l'iscrizione push cambia da sola (scade): qui sposto i dati del vecchio endpoint al nuovo
+async function pushRenew(env, request) {
+  const body = await request.json().catch(() => null);
+  const sub = body?.subscription;
+  const oldEp = String(body?.oldEndpoint || "").slice(0, 500);
+  if (!sub?.endpoint || !sub?.keys?.p256dh || !sub?.keys?.auth || !oldEp) return bad("renew");
+  const email = isEmail(body.email) || "";
+  const device = text(body.device ?? "", 0, 64) || "";
+  const row = await env.DB.prepare(`SELECT email, categories, device FROM push_subs WHERE endpoint = ?`).bind(oldEp).first().catch(() => null);
+  await env.DB.prepare(
+    `INSERT INTO push_subs (endpoint, email, categories, device, created_at, p256dh, auth) VALUES (?, ?, ?, ?, ?, ?, ?)
+     ON CONFLICT(endpoint) DO UPDATE SET email = excluded.email, categories = excluded.categories,
+       device = excluded.device, p256dh = excluded.p256dh, auth = excluded.auth`
+  )
+    .bind(
+      sub.endpoint.slice(0, 500),
+      email || row?.email || "",
+      row?.categories || '["ALL"]',
+      device || row?.device || "",
+      Date.now(),
+      String(sub.keys.p256dh || "").slice(0, 200),
+      String(sub.keys.auth || "").slice(0, 100)
+    )
+    .run()
+    .catch(() => {});
+  await env.DB.prepare(`DELETE FROM push_subs WHERE endpoint = ?`).bind(oldEp).run().catch(() => {});
+  return json({ ok: true });
 }
 
 async function pushTest(env, request, origin) {
@@ -1989,6 +2095,25 @@ async function uploadPhoto(env, request, origin, ctx) {
     return json({ error: "In questa foto ci sono più persone. Per il profilo serve una foto con solo il tuo viso." }, 400);
   }
 
+  // la stessa foto non può stare su due profili: basta scaricarla e usarla due volte.
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  const impronta = [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  const giaUsata = await env.DB.prepare(
+    `SELECT email FROM leads WHERE photo_hash = ? AND lower(email) <> ? LIMIT 1`
+  )
+    .bind(impronta, email)
+    .first()
+    .catch(() => null);
+  if (giaUsata) {
+    return json(
+      {
+        error:
+          "Questa foto è già usata da un altro profilo. Serve una tua foto vera: se è la stessa persona, entra con quel profilo.",
+      },
+      409
+    );
+  }
+
   const key = `${crypto.randomUUID()}.${match[2]}`;
   await putBlob(env, key, bytes, match[1], match[3]);
 
@@ -1999,9 +2124,9 @@ async function uploadPhoto(env, request, origin, ctx) {
 
   // foto nuova = verifica da rifare, contro questa foto qui
   await env.DB.prepare(
-    `UPDATE leads SET photo = ?, photo_face = ?, verified_face = 0, face_pending = 0, face_selfie = NULL, photo_bad = 0 WHERE email = ?`
+    `UPDATE leads SET photo = ?, photo_face = ?, photo_hash = ?, verified_face = 0, face_pending = 0, face_selfie = NULL, photo_bad = 0 WHERE email = ?`
   )
-    .bind(key, vector ? JSON.stringify(vector) : null, email)
+    .bind(key, vector ? JSON.stringify(vector) : null, impronta, email)
     .run();
 
   await logActivity(env, "photo", email, "Ha cambiato la foto profilo", null);
@@ -2168,7 +2293,7 @@ async function ownerFace(env, url, request) {
       email: r.email,
       name: [r.first_name, r.last_name].filter(Boolean).join(" ") || r.email,
       photo: r.photo ? `/api/photo/${r.photo}` : "",
-      selfie: r.face_selfie ? `/api/photo/${r.face_selfie}` : "",
+      selfie: r.face_selfie ? `/api/photo/${r.face_selfie}?token=${encodeURIComponent(url.searchParams.get("token") || "")}` : "",
       phone: r.phone || "",
       city: r.city || "",
       age: r.age || null,
@@ -2200,10 +2325,17 @@ async function ownerFace(env, url, request) {
   return json({ ok: true });
 }
 
-async function servePhoto(env, key) {
+async function servePhoto(env, key, url) {
+  // i selfie della verifica non sono foto pubbliche: li vede solo chi amministra.
+  if (String(key).startsWith("selfie-")) {
+    const ok = url ? await isOwner(env, url).catch(() => false) : false;
+    if (!ok) return new Response("not found", { status: 404 });
+  }
+  const privata = String(key).startsWith("selfie-");
   const head = (type) => ({
     "content-type": type || "image/jpeg",
-    "cache-control": "public, max-age=31536000, immutable",
+    // i selfie non restano in nessuna cache: né del telefono, né di un proxy
+    "cache-control": privata ? "private, no-store" : "public, max-age=86400",
   });
   if (env.FILES) {
     const object = await env.FILES.get(key);
@@ -2488,6 +2620,8 @@ function shape(row, joined, mine, pending, hidePlace) {
     ageHi: row.age_hi ?? null,
     access: row.access === "verified" || row.access === "invite" ? row.access : "photo",
     inviteCode: mine ? row.invite_code || "" : "",
+    vibe: String(row.vibe || "").slice(0, 16),
+    comfort: String(row.comfort || "").slice(0, 16),
     joined,
     pending: pending || 0,
     mine: Boolean(mine),
@@ -2838,7 +2972,9 @@ async function pastRated(env, url) {
       persone: Number(r.people) || 0,
       foto: puoVedere && chiavi[0] ? `/api/photo/${chiavi[0]}` : "",
       fotos: puoVedere ? chiavi.map((k) => `/api/photo/${k}`) : [],
-      descrizione: puoVedere ? String(r.description || "").slice(0, 400) : "",
+      // la descrizione e i nomi sono la parte intima del ricordo: li vedono solo
+      // le persone che c'erano (o chi amministra). Gli altri vedono che è successo.
+      descrizione: puoVedere && (dentro || padrone) ? String(r.description || "").slice(0, 400) : "",
       privato,
       media: Number(r.media) || 0,
       stelle: Number(r.stelle_n) || 0,
@@ -2849,9 +2985,33 @@ async function pastRated(env, url) {
       modificabile: padrone || (dentro && creatore),
     };
   });
+  // chi c'era: i nomi delle persone si vedono solo a chi ha partecipato (o a chi amministra).
+  // Chi passa di lì vede che l'evento è esistito e quante persone c'erano, non chi sono.
+  const conElenco = righe.filter((x) => x.posso && x.id).map((x) => x.id);
+  const elenchi = {};
+  if (conElenco.length) {
+    const segni = conElenco.map(() => "?").join(",");
+    const { results: gente } = await env.DB.prepare(
+      `SELECT event_id, name, device FROM participants
+       WHERE event_id IN (${segni}) AND status = 'going'
+       ORDER BY created_at ASC LIMIT 500`
+    )
+      .bind(...conElenco)
+      .all()
+      .catch(() => ({ results: [] }));
+    for (const g of gente || []) {
+      const nome = String(g.name || "").trim().slice(0, 40);
+      if (!nome) continue;
+      (elenchi[g.event_id] = elenchi[g.event_id] || []).push({ nome, io: g.device === device });
+    }
+  }
   const numeri = await ratingsDi(env, righe.map((x) => x.id), device);
   return json({
-    passati: righe.map((x) => ({ ...x, voti: numeri[x.id] || { media: x.media, stelle: x.stelle, like: 0, dislike: 0, mio: 0, mie: 0 } })),
+    passati: righe.map((x) => ({
+      ...x,
+      elenco: elenchi[x.id] || [],
+      voti: numeri[x.id] || { media: x.media, stelle: x.stelle, like: 0, dislike: 0, mio: 0, mie: 0 },
+    })),
     padrone,
   });
 }
@@ -3724,6 +3884,80 @@ async function reverseTown(lat, lng) {
   return paese;
 }
 
+// il paese esatto dove sono: lo chiede la home quando arriva una posizione nuova.
+// La risposta resta in cache mezz'ora, così non si tempesta il servizio.
+let DB = null;
+async function whereAt(url) {
+  const lat = Number(url.searchParams.get("lat"));
+  const lng = Number(url.searchParams.get("lng"));
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return json({ town: "", label: "" });
+  const det = await reversePlace(lat, lng).catch(() => null);
+  const town = (det && det.town) || (await reverseTown(lat, lng).catch(() => ""));
+  const label = det && det.label ? det.label : town;
+  const short = det && det.short ? det.short : town;
+  // conteggi per la mappa: nel tuo paese, nel mondo. Gli eventi hanno solo
+  // lat/lng, quindi si conta in base al paese di ciascun evento.
+  let perPaese = {}, mondo = 0;
+  try {
+    const rows = await DB.prepare("SELECT lat, lng FROM events WHERE lat IS NOT NULL AND lng IS NOT NULL").all();
+    for (const r of rows.results || []) {
+      mondo++;
+      const det2 = await reversePlace(Number(r.lat), Number(r.lng)).catch(() => null);
+      const code = (det2 && det2.paeseCode) || "?";
+      perPaese[code] = (perPaese[code] || 0) + 1;
+    }
+  } catch {}
+  return new Response(JSON.stringify({ town, label, short, ...(det || {}), perPaese, mondo }), {
+    status: 200,
+    headers: { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=1800" },
+  });
+}
+
+// il posto esatto: non solo il comune, anche la frazione e la provincia.
+// Cosi' la mappa dice "Riposto (CT)" e non un generico "Catania".
+const placeCacheSec = new Map();
+async function reversePlace(lat, lng) {
+  const k = `${Number(lat).toFixed(3)},${Number(lng).toFixed(3)}`;
+  if (placeCacheSec.has(k)) return placeCacheSec.get(k);
+  let out = null;
+  const pulito = (v) => tidyPlace(v);
+  try {
+    const p = new URLSearchParams({
+      format: "jsonv2", lat: String(lat), lon: String(lng), zoom: "18",
+      "accept-language": "it", addressdetails: "1",
+    });
+    const r = await fetch("https://nominatim.openstreetmap.org/reverse?" + p.toString(), {
+      headers: { "user-agent": "FUORI/1.0 (fuori.app)", accept: "application/json" },
+      signal: AbortSignal.timeout(2600),
+    });
+    if (r.ok) {
+      const j = await r.json();
+      const a = j.address || {};
+      const town = pulito(a.city || a.town || a.village || a.municipality || a.county || j.name || "");
+      // la frazione/il quartiere vero prima di tutto, mai il generico "Municipio 1":
+      // frazione (hamlet/village) > quartiere > zona > sobborgo amministrativo
+      const quartiere = pulito(a.quarter || a.neighbourhood || "");
+      const fraz = pulito(a.hamlet || a.village || "") || quartiere || pulito(a.locality || "") || pulito(a.suburb || a.city_district || "");
+      const prov = pulito(a.county || "").replace(/^Citta metropolitana di /i, "").replace(/^Libero consorzio comunale di /i, "");
+      const reg = pulito(a.state || a.region || "");
+      const paese = pulito(a.country || "");
+      const sigla = String(a["ISO3166-2-lvl6"] || "").split("-").pop() || "";
+      // "Brera, Milano (MI), Lombardia": il quartiere, poi la citta', poi la provincia
+      const testa = fraz && town && fraz.toLowerCase() !== town.toLowerCase() ? `${fraz}, ${town}` : town || fraz;
+      const label = [testa ? testa + (prov && prov.toLowerCase() !== String(town).toLowerCase() ? " (" + prov + ")" : "") : "", reg, paese !== "Italia" ? paese : ""]
+        .filter(Boolean).join(", ");
+      // nome breve per la testata: la frazione/quartiere dove sei, poi la sigla della provincia
+      const provincia = sigla || "";
+      const posto = fraz && town && fraz.toLowerCase() !== town.toLowerCase() ? fraz : (town || fraz);
+      const short = posto ? (provincia ? `${posto}, ${provincia}` : posto) : "";
+      out = { town, fraz, quartiere, prov, reg, paese, paeseCode: String(a.country_code || "").toLowerCase(), sigla, label, short };
+    }
+  } catch {}
+  if (placeCacheSec.size > 400) placeCacheSec.clear();
+  placeCacheSec.set(k, out);
+  return out;
+}
+
 async function placeCoords(place) {
   const q = String(place || "").trim();
   if (q.length < 3) return null;
@@ -3923,6 +4157,11 @@ async function createEvent(env, request, origin, ctx) {
   // invite (privato: indirizzo nascosto e si entra solo col link d'invito)
   // la foto profilo è la base di FUORI: non esiste più l'evento "aperto a tutti"
   const access = ["verified", "invite"].includes(String(body.access || "")) ? String(body.access) : "photo";
+  // energia e comfort zone: due scelte libere, servono a trovare la compagnia giusta
+  const VIBES = ["calmo", "sociale", "vivace", "avventura"];
+  const COMFORT = ["comodo", "medio", "osa"];
+  const vibe = VIBES.includes(String(body.vibe || "")) ? String(body.vibe) : "";
+  const comfort = COMFORT.includes(String(body.comfort || "")) ? String(body.comfort) : "";
   const inviteCode = access === "invite" ? crypto.randomUUID().replace(/-/g, "").slice(0, 10) : null;
   const signupHours = Number(body.signupHours);
   // fascia d'età: due pallini. Se manca o copre tutto, l'evento è per tutti.
@@ -4009,10 +4248,10 @@ async function createEvent(env, request, origin, ctx) {
 
   const id = crypto.randomUUID().slice(0, 8);
   await env.DB.prepare(
-    `INSERT INTO events (id, title, category, description, starts_at, place, capacity, host, city, device, created_at, approval, signup_until, activity, lat, lng, age_min, age_max, access, invite_code, owner_email, ends_at, days, weekly_day, repeat_until, weekdays, photos)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO events (id, title, category, description, starts_at, place, capacity, host, city, device, created_at, approval, signup_until, activity, lat, lng, age_min, age_max, access, invite_code, owner_email, ends_at, days, weekly_day, repeat_until, weekdays, photos, vibe, comfort)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   )
-    .bind(id, title, category, description, rip.startsAt || startsAt, place, capacity, host, cittaEvento, device, now, approval, signupUntil, activity, latEvento, lngEvento, ageMin, ageMax, access, inviteCode, person.email || null, rip.endsAt, rip.days ? JSON.stringify(rip.days) : null, rip.weeklyDay, rip.repeatUntil, rip.weekdays ? JSON.stringify(rip.weekdays) : null, JSON.stringify(await fotoEsistenti(env, body.photos)))
+    .bind(id, title, category, description, rip.startsAt || startsAt, place, capacity, host, cittaEvento, device, now, approval, signupUntil, activity, latEvento, lngEvento, ageMin, ageMax, access, inviteCode, person.email || null, rip.endsAt, rip.days ? JSON.stringify(rip.days) : null, rip.weeklyDay, rip.repeatUntil, rip.weekdays ? JSON.stringify(rip.weekdays) : null, JSON.stringify(await fotoEsistenti(env, body.photos)), vibe, comfort)
     .run();
 
   await env.DB.prepare(
@@ -4065,7 +4304,7 @@ async function eventDetail(env, id, url) {
   // tutto quello che serve, chiesto insieme: una sola attesa invece di cinque
   const [lead, parts, org] = await Promise.all([
     device
-      ? env.DB.prepare(`SELECT email FROM leads WHERE device = ? ORDER BY created_at DESC LIMIT 1`)
+      ? env.DB.prepare(`SELECT email, interests, city FROM leads WHERE device = ? ORDER BY created_at DESC LIMIT 1`)
           .bind(device)
           .first()
           .catch(() => null)
@@ -4142,6 +4381,43 @@ async function eventDetail(env, id, url) {
     };
   }
 
+  // affinità: quante cose avete in comune, senza mai dire quali.
+  // Serve a far nascere un discorso, non a classificare le persone.
+  let affinita = new Map();
+  if (known && !owner && device && lead) {
+    const miei = new Set(parseList(lead.interests).map((x) => String(x).toLowerCase()));
+    const insiemeRows = await env.DB.prepare(
+      `SELECT b.device, COUNT(*) n
+         FROM participants a JOIN participants b ON b.event_id = a.event_id AND b.device <> a.device
+        WHERE a.device = ? AND a.status = 'going' AND b.status = 'going'
+        GROUP BY b.device`
+    )
+      .bind(device)
+      .all()
+      .catch(() => ({ results: [] }));
+    const insieme = new Map((insiemeRows.results || []).map((r) => [r.device, Number(r.n) || 0]));
+    for (const p of all) {
+      if (p.device === device) continue;
+      const suoi = parseList(p.interests).map((x) => String(x).toLowerCase());
+      const comuni = suoi.filter((x) => miei.has(x)).length;
+      const statiInsieme = insieme.get(p.device) || 0;
+      const stessaCitta = Boolean(p.city && lead.city && p.city === lead.city);
+      const punti = Math.min(99, comuni * 16 + statiInsieme * 22 + (stessaCitta ? 8 : 0));
+      if (comuni || statiInsieme) {
+        affinita.set(p.device, {
+          comuni,
+          punti,
+          testo:
+            comuni >= 3
+              ? `molto in comune (${comuni} interessi)`
+              : comuni > 0
+                ? `${comuni} ${comuni === 1 ? "interesse" : "interessi"} in comune`
+                : "siete stati allo stesso evento",
+        });
+      }
+    }
+  }
+
   // le stelle servono ai preferiti ("più votati") e alla scheda dell'evento
   const numeri = await ratingsDi(env, [id], device).catch(() => ({}));
   const ev = shape(row, going, owner, pending, hide);
@@ -4170,6 +4446,7 @@ async function eventDetail(env, id, url) {
       faceVerified: Boolean(p.verified_face),
       city: p.city || "",
       since: p.created_at || null,
+      affinita: affinita.get(p.device) || null,
       interests: parseList(p.interests),
       goals: parseList(p.goals),
       outings: parseList(p.outings),
@@ -4339,14 +4616,19 @@ async function joinEvent(env, id, request, origin, ctx) {
     .bind(id, device)
     .first();
 
-  // evento privato: si passa solo col codice che ha in mano chi organizza
+  // evento privato: si passa col codice che ha in mano chi organizza,
+  // oppure chiedendo di entrare: la richiesta arriva a chi organizza
+  let richiestaInvito = false;
   if ((row.access || "open") === "invite" && !already) {
     const code = String(body.invite || "").trim().toLowerCase().slice(0, 32);
     if (!row.invite_code || code !== String(row.invite_code).toLowerCase()) {
-      return json(
-        { error: "Questo evento è privato: si entra solo con l'invito di chi organizza. Chiedi il link a chi lo ha creato.", needInvite: true },
-        403
-      );
+      if (body.request !== true) {
+        return json(
+          { error: "Questo evento è privato: si entra con l'invito di chi organizza, oppure chiedendo di partecipare.", needInvite: true },
+          403
+        );
+      }
+      richiestaInvito = true;
     }
   }
 
@@ -4354,7 +4636,7 @@ async function joinEvent(env, id, request, origin, ctx) {
     return json({ error: "Posti finiti. La prossima volta.", full: true }, 409);
   }
 
-  const status = row.approval ? "pending" : "going";
+  const status = row.approval || richiestaInvito ? "pending" : "going";
   const message = text(body.message ?? "", 0, 200) ?? "";
 
   await env.DB.prepare(
@@ -4454,7 +4736,43 @@ async function leaveEvent(env, id, request) {
   return json({ ok: true });
 }
 
-async function deleteEvent(env, id, request) {
+// i telefoni di un elenco di persone: serve per gli avvisi che non si possono perdere
+async function endpointsForDevices(env, devices) {
+  const list = [...new Set(devices || [])].filter(Boolean);
+  if (!list.length) return [];
+  try {
+    const { results } = await env.DB.prepare(
+      `SELECT endpoint FROM push_subs WHERE device IN (${list.map(() => "?").join(",")})`
+    )
+      .bind(...list)
+      .all();
+    return (results || []).map((r) => r.endpoint).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+
+// chi ha a che fare con un evento: dentro, nei preferiti, o l'ha solo guardato
+async function chiSegueLEvento(env, id, titolo) {
+  const devices = new Set();
+  const prendi = async (q, ...args) => {
+    try {
+      const { results } = await env.DB.prepare(q).bind(...args).all();
+      for (const r of results || []) if (r.device) devices.add(r.device);
+    } catch {}
+  };
+  await prendi(`SELECT device FROM participants WHERE event_id = ?`, id);
+  await prendi(`SELECT device FROM saved WHERE event_id = ?`, id);
+  if (titolo)
+    await prendi(
+      `SELECT DISTINCT device FROM peek WHERE kind = 'evento_aperto' AND detail = ? AND at > ?`,
+      titolo,
+      Date.now() - 30 * 864e5
+    );
+  return devices;
+}
+
+async function deleteEvent(env, id, request, ctx) {
   const body = await request.json().catch(() => null);
   const device = text(body?.device, 8, 64);
   if (!device) return bad("device");
@@ -4463,6 +4781,26 @@ async function deleteEvent(env, id, request) {
   const padrone = await sonoPadrone(env, device);
   if (!padrone && !isMyEvent(row, device, await viewerEmail(env, device)))
     return json({ error: "Questo evento non è tuo." }, 403);
+  // prima di toglierlo: chi partecipa, chi l'ha salvato, chi l'ha guardato
+  // deve sapere che non c'è più. Arriva come notifica, anche ad app chiusa.
+  const titolo = String(row.title || "").slice(0, 80);
+  // il motivo lo scrive chi annulla: senza, non si annulla (lo chiede l'app)
+  const motivo = String(body?.motivo || "").replace(/\s+/g, " ").trim().slice(0, 180);
+  if (motivo.length < 5) return json({ error: "Scrivi perché annulli l'evento: lo leggono tutti gli iscritti." }, 400);
+  const chi = await chiSegueLEvento(env, id, titolo);
+  chi.delete(device);
+  const avviso = {
+    title: "Evento annullato",
+    body: `“${titolo || "L'evento"}” non c'è più. Motivo: ${motivo}`,
+    url: "/",
+    motivo,
+  };
+  const mandaAvviso = (async () => {
+    const eps = await endpointsForDevices(env, [...chi]);
+    return deliverEndpoints(env, eps, avviso, new URL(request.url).origin);
+  })().catch(() => 0);
+  if (ctx && ctx.waitUntil) ctx.waitUntil(mandaAvviso);
+  else await mandaAvviso;
   // se l'evento è già passato finisce nei ricordi con la sua descrizione, non sparisce
   if (Number(row.starts_at) <= Date.now()) {
     await ensurePast(env).catch(() => {});
@@ -4599,14 +4937,18 @@ async function updateEvent(env, id, request) {
   await env.DB.prepare(
     `UPDATE events SET city = ?, title = ?, category = ?, description = ?, starts_at = ?, place = ?, capacity = ?,
       host = ?, approval = ?, signup_until = ?, activity = ?, lat = ?, lng = ?, age_min = ?, age_max = ?, access = ?,
-      invite_code = ?, updated_at = ?, ends_at = ?, days = ?, weekly_day = ?, repeat_until = ?, weekdays = ?, photos = ?
+      invite_code = ?, updated_at = ?, ends_at = ?, days = ?, weekly_day = ?, repeat_until = ?, weekdays = ?, photos = ?,
+      vibe = ?, comfort = ?
      WHERE id = ?`
   )
     .bind(
       cittaEvento, title, category, description, rip.startsAt || startsAt, place, capacity, host, approval, signupUntil,
       activity, latEvento, lngEvento, ageMin, ageMax, access, inviteCode, Date.now(),
       rip.endsAt, rip.days ? JSON.stringify(rip.days) : null, rip.weeklyDay, rip.repeatUntil, rip.weekdays ? JSON.stringify(rip.weekdays) : null,
-      JSON.stringify(await fotoEsistenti(env, body.photos)), id
+      JSON.stringify(await fotoEsistenti(env, body.photos)),
+      ['calmo', 'sociale', 'vivace', 'avventura'].includes(String(body.vibe || '')) ? String(body.vibe) : (row.vibe || null),
+      ['comodo', 'medio', 'osa'].includes(String(body.comfort || '')) ? String(body.comfort) : (row.comfort || null),
+      id
     )
     .run();
 
@@ -4695,11 +5037,87 @@ async function mailReset(env, to, link) {
   }
 }
 
+/* ---------- tentativi sul mio account: chi li fa, da dove, e cosa decido io ---------- */
+let secOk = false;
+async function ensureSecurity(env) {
+  if (secOk) return;
+  secOk = true;
+  try {
+    await env.DB.prepare(
+      `CREATE TABLE IF NOT EXISTS security_alerts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        che TEXT NOT NULL, esito TEXT NOT NULL, email TEXT, device TEXT, ip TEXT, ua TEXT, nota TEXT, at INTEGER NOT NULL
+      )`
+    ).run();
+    await env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_sec_at ON security_alerts(at)`).run();
+  } catch { secOk = false; }
+}
+
+async function securityNote(env, a) {
+  await ensureSecurity(env);
+  const at = Date.now();
+  const che = String(a.che || "Tentativo").slice(0, 80);
+  await env.DB.prepare(
+    `INSERT INTO security_alerts (che, esito, email, device, ip, ua, nota, at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+  )
+    .bind(che, String(a.esito || "da valutare").slice(0, 16), String(a.email || "").slice(0, 80), String(a.device || "").slice(0, 64), String(a.ip || "").slice(0, 48), String(a.ua || "").slice(0, 120), String(a.nota || "").slice(0, 160), at)
+    .run()
+    .catch(() => {});
+  // un avviso sul telefono, al massimo uno ogni 5 minuti
+  try {
+    const ultimo = await env.DB.prepare(`SELECT v FROM meta WHERE k = 'sec_push'`).first();
+    if (a.esito === "bloccato" && (!ultimo || at - Number(ultimo.v) > 5 * 60 * 1000)) {
+      await env.DB.prepare(`INSERT INTO meta (k, v) VALUES ('sec_push', ?) ON CONFLICT(k) DO UPDATE SET v = ?`)
+        .bind(String(at), String(at))
+        .run();
+      await notifyOwner(env, { title: "Tentativo sul tuo account", body: `${che}: bloccato. È negli insight.`, url: "/?sicurezza=1" }, a.origin || "https://fuori.fuori-catania.workers.dev");
+    }
+  } catch {}
+}
+
+async function ownerAlerts(env, url) {
+  const device = text(url.searchParams.get("device"), 8, 64);
+  const permesso = (await isOwner(env, url)) || (device && (await sonoPadrone(env, device)));
+  if (!permesso) return json({ error: "Non trovato." }, 404);
+  await ensureSecurity(env);
+  const { results } = await env.DB.prepare(
+    `SELECT che, esito, nota, ip, ua, at FROM security_alerts ORDER BY at DESC LIMIT 30`
+  )
+    .all()
+    .catch(() => ({ results: [] }));
+  return json({
+    alerts: (results || []).map((r) => ({
+      che: r.che,
+      esito: r.esito,
+      nota: r.nota,
+      dove: r.ip ? `rete ${r.ip}` : "",
+      at: r.at,
+    })),
+  });
+}
+
 async function forgot(env, request) {
   const body = await request.json().catch(() => null);
   const email = isEmail(body?.email);
   // stessa risposta sempre: non diciamo a nessuno chi è iscritto
   if (!email) return json({ ok: true, mail: false });
+  // il mio account non si resetta da solo: il link non parte mai e il tentativo
+  // finisce nei miei insight, con il telefono e la rete da cui è arrivato
+  if (email === ownerEmail(env)) {
+    const device = text(body?.device, 8, 64);
+    await securityNote(env, {
+      che: "Reset password del tuo account",
+      esito: "bloccato",
+      email,
+      device,
+      ip: clientIp(request),
+      ua: request.headers.get("user-agent") || "",
+      nota: "Password non inviata: il tuo account si sblocca solo dal tuo telefono.",
+      origin: new URL(request.url).origin,
+      env,
+    }).catch(() => {});
+    return json({ ok: true, mail: false, known: true });
+  }
   const row = await env.DB.prepare(`SELECT email FROM leads WHERE email = ?`).bind(email).first();
   if (!row) return json({ ok: true, mail: false, known: false });
   const tok = randTok(24);
@@ -5066,6 +5484,21 @@ async function login(env, request) {
   }
 
   const device = text(body.device, 8, 64);
+  // il mio account entra solo dal mio telefono: da un altro, la password non basta
+  if (email === ownerEmail(env) && !(await isOwnerDevice(env, device))) {
+    await securityNote(env, {
+      che: "Accesso al tuo account da un altro telefono",
+      esito: "bloccato",
+      email,
+      device,
+      ip: clientIp(request),
+      ua: request.headers.get("user-agent") || "",
+      nota: "Password corretta, ma il telefono non è il tuo: accesso negato.",
+      origin: new URL(request.url).origin,
+      env,
+    }).catch(() => {});
+    return json({ error: "Email o password sbagliati." }, 401);
+  }
   if (device) {
     await adoptDevice(env, email, row.device, device);
     await env.DB.prepare(`UPDATE leads SET device = ?, last_seen = ? WHERE email = ?`)
@@ -5582,7 +6015,7 @@ async function noteDownload(env, request, url) {
 /* ---------- assistente (Gemini) ---------- */
 
 // 3.5-flash risponde in ~2s e parla un italiano naturale; il lite è la scorta veloce
-const GEMINI_MODELS = ["gemini-3-flash-preview"];
+const GEMINI_MODELS = ["gemini-3-flash-preview", "gemini-2.5-flash"];
 // modelli sul binding AI di Cloudflare: funzionano senza altre chiavi
 // mistral parla italiano molto meglio degli altri: è il primo della fila
 const WORKERS_MODELS = ["@cf/mistralai/mistral-small-3.1-24b-instruct", "@cf/meta/llama-3.3-70b-instruct-fp8-fast", "@cf/meta/llama-3.1-8b-instruct-fast"];
@@ -5591,61 +6024,38 @@ const LANG_NAMES = { it: "italiano", en: "inglese", es: "spagnolo", pt: "portogh
 function askPrompt(lang, eventsBlock, nowIso, nowLocal = "", timeLocal = "", chiedeAiuto = false, sessoUtente = "") {
   const righe = [
     "Sei l'assistente di FUORI, l'app degli eventi tra persone a Catania e in Sicilia.",
-    "Sei sveglia e simpatica: parli come un amico che conosce la città. Una battuta leggera ogni tanto, mai a spese di chi parla. Divertente sì, ma sempre utile: la prima cosa è rispondere a quello che ti hanno chiesto.",
-    "Non aprire con un saluto tipo Ciao, Salve o Buongiorno: entra nel discorso. Se però ti chiede come stai o come va, rispondi di te con naturalezza e positività, come farebbe un amico.",
-    "Massimo 35 parole e due frasi. Vai dritto al punto: prima la risposta, poi al massimo una domanda breve. Scrivi come si parla: punteggiatura vera, niente elenchi, asterischi, titoli, emoji o parentesi, perché la risposta viene letta ad alta voce.",
-    "Se ti chiedono cosa c'è da fare stasera, oggi o questa settimana, guarda gli eventi in programma e il meteo, poi proponi due o tre cose concrete: un evento se c'è, altrimenti qualcosa che si può fare con quel tempo (mare o passeggiata se è sereno, un posto al coperto se piove). Tieni conto della zona in cui sta la persona.",
-    "Prima di dire che un evento è stasera controlla il giorno e l'ora nell'elenco: se è un altro giorno, dillo con il giorno giusto. Non dire che non c'è niente se nell'elenco c'è qualcosa adatto.",
-    "Se il meteo non ti è arrivato, non inventarlo e non parlarne: non dire che fa caldo, freddo, che piove o che è nuvoloso. Proponi qualcosa che va bene comunque e non fare domande sul tempo.",
-    "Se ti chiedono cosa c'era o com'è andata, usa anche gli eventi appena passati: puoi dire che ieri sera c'era questo e quante persone sono andate.",
-    "Se vogliono solo due chiacchiere, fagli compagnia: chiedi com'è andata la giornata, cosa gli piace mangiare, che musica ascolta. Solo dopo, se viene naturale, buttaci dentro un evento.",
-    "Quando si chiacchiera, rispondi come una persona vera: prima la tua risposta, poi una sola domanda all'altra persona. A «come va?», «come stai?» o «tutto bene?» rispondi prima di te, con positività: «Alla grande, grazie! E tu come stai?». Varia le parole, non rigirare subito la domanda e non fare più di una domanda. Non usare «sembra che», non parlare in terza persona e non dire «come sta». Questi esempi sono in italiano: traduci nella lingua in cui ti scrive la persona e non rispondere in italiano se lei scrive in un'altra lingua.",
-    "Se ti dice che è felice o che è andata bene, rallegrati e chiedi cosa è successo. Se ti dice che è giù, prima accoglilo con una frase breve e calda, senza consigli e senza eventi; poi chiedi se vuole raccontarti. Non inventare tue esperienze o ricordi.",
-    "Gli eventi su invito esistono: puoi dire che c'è una cosa su invito, ma l'indirizzo non lo dici mai e non lo inventi.",
-    "Non inventare nomi di locali, prezzi, orari o persone: se un dettaglio non lo sai, dillo in una riga o fai una domanda.",
-    "Rispondi prima di tutto a quello che ti hanno chiesto: se la domanda non c'entra con gli eventi, non tirare in mezzo gli eventi. Mai numeri interni, email, telefoni o nomi di iscritti. Niente salute, soldi, legge o politica: una riga e riporta su qualcosa di leggero.",
-    // qui la parte che conta: pensare, non leggere
-    "Prima di parlare, capisci cosa vuole davvero: spesso la domanda è un pretesto per chiacchierare o per farsi consigliare. Rispondi al senso, non alle parole.",
-    "Quando proponi un evento dì SEMPRE: il titolo esatto, cosa si fa in due parole tue, il giorno, l'ora e la zona. Mai dire \"c'è un evento\" senza dire quale: chi legge non vede l'elenco e non capisce.",
-    "L'elenco degli eventi che hai sotto serve a te, non va letto: scegli solo quello che serve, raccontalo con parole tue e dì perché potrebbe piacergli. Non copiare titoli, orari e posti uno dietro l'altro.",
-    "Ragiona come una persona: se una cosa non torna, dillo; se due idee si somigliano, scegline una; se il tempo è brutto, proponi qualcosa al coperto senza fare la lezione.",
-    "Quando fai una domanda metti sempre il punto interrogativo: se scrivi \"ti va di uscire.\" sembra un ordine, non una domanda.",
-    "Ogni tanto fai una domanda di ritorno, una sola e alla fine: come sta o cosa gli va di fare. Poi ascolta davvero quello che ti risponde.",
-    "Se ti sembra stanco, nervoso o giù di corda, prima tirala su: una frase calda e vera, senza frasi fatte e senza subito proporre eventi. Poi, se serve, una cosa piccola e facile da fare oggi. Non fare il terapeuta e non dire che capisci tutto.",
-    "Se è felice o entusiasta, condividi la gioia come farebbe un amico: rallegrati davvero, chiedi cosa è successo, non smontarla con i ma. Se è su di giri, puoi stare al suo ritmo e scherzare con lei.",
-    "Se uno dei suoi eventi ha avuto tanti iscritti o è andato bene, fagli i complimenti su qualcosa di preciso che leggi nei dati (il numero, il tipo di serata). Complimenti sinceri, brevi: niente adulazione a vuoto.",
-    "Puoi proporti tu: se in città manca qualcosa, butta lì un'idea di evento da creare, tipo un titolo e un giorno, con la leggerezza di un consiglio e non di un compito.",
-    "Il meteo dillo solo se il dato c'è, come lo direbbe un amico: fa caldo, tira vento, viene giù acqua. Se non c'è, non parlarne e non dare consigli su come vestirsi.",
-    "Una battuta ogni tanto sì, breve e mai sul fisico o sui gusti di chi parla. Se non ti viene, meglio una frase semplice che una freddura forzata.",
-    "Parlando di te non dire se sei maschio o femmina: usa frasi neutre (che bello, sono qui per te) e evita sia 'sono contento' sia 'sono contenta'.",
+    "Parli come un amico che conosce la città: semplice e diretto, una battuta leggera ogni tanto. Mai volgare, mai invadente.",
+    "LUNGHEZZA: massimo due frasi e 35 parole. Prima la risposta, poi al massimo una domanda breve.",
+    "Rispondi SOLO a quello che ti hanno chiesto. Se non hai capito, chiedi di ripetere in una riga: non inventare.",
+    "Usa le parole esatte della persona: se dice padel non rispondere di pallavolo, se dice sushi non rispondere di pizza. Se una parola è ambigua o sembra trascritta male, chiedi conferma invece di indovinare.",
+    "Non ripetere la domanda cambiandola: rispondi a quella, non a una simile che ti sembra più comoda.",
+    "Se non hai un dato certo, dillo in una frase (non lo so, non ce l'ho qui) e proponi cosa si può fare nell'app.",
+    "Non aprire con Ciao o Salve: entra nel discorso. Se ti chiedono come stai, rispondi di te con positività e chiedi come sta la persona.",
+    "Scrivi come si parla: punteggiatura normale, niente elenchi, asterischi, titoli, emoji o parentesi. Gli orari sempre completi: 20:30, non 20.",
+    "Se proponi un evento dì sempre titolo, cosa si fa, giorno, ora e zona. Scegli UN evento dall'elenco qui sotto e raccontalo con parole tue.",
+    "L'elenco degli eventi serve a te: non copiarlo, non leggere titoli e orari in fila.",
+    "Non inventare mai eventi, locali, indirizzi, prezzi, orari, persone o meteo. Se un dato non è nell'elenco, non c'è: dillo o fai una domanda.",
+    "Se il meteo non è scritto qui sotto, non parlarne e non dare consigli su come vestirsi.",
+    "Se ti chiedono cosa c'era o com'è andata, puoi usare gli eventi passati nell'elenco e dire quante persone sono andate.",
+    "Ti fai un'idea della persona da quello che sai di lei nell'app (interessi, eventi a cui partecipa o che ha creato, zona, meteo) e adatti i consigli a lei: mai consigli uguali per tutti.",
+    "Se vogliono solo chiacchierare, fagli compagnia: una frase tua e una domanda. Non tirare in mezzo gli eventi se non c'entrano.",
+    "Se la persona è giù, prima una frase calda e breve, senza consigli e senza eventi; poi chiedi se vuole raccontarti.",
+    "Dai sempre del tu. Non dire mai se sei maschio o femmina e non inventare ricordi o esperienze fatte insieme.",
+    "Se chiedono come si usa FUORI, spiega in due righe: guarda gli eventi, tocca Partecipo, oppure crea il tuo con il +.",
     sessoUtente === "m"
-      ? "Chi ti scrive è un uomo: parla di lui al maschile (come stai, sei stanco, sei contento, te ne intendi). Mai al femminile."
+      ? "Chi ti scrive è un uomo: parla di lui al maschile (sei stanco, sei contento)."
       : sessoUtente === "f"
-        ? "Chi ti scrive è una donna: parla di lei al femminile (come stai, sei stanca, sei contenta). Mai al maschile."
-        : "Non sai se chi ti scrive è un uomo o una donna: usa frasi neutre, senza aggettivi riferiti a chi parla.",
-    "Dai sempre del tu, anche a chi non conosci: mai «lei», mai «come sta», mai parlare in terza persona.",
-    "Non hai memoria delle volte prima e non hai mai fatto niente insieme alla persona: mai dire di essere stata a un evento con lei, mai ricordare episodi passati. Se ti chiede come stai, rispondi con un tono positivo e genuino, poi chiedi come sta la persona; non partire con gli eventi.",
-    "Scrivi con le maiuscole giuste: la prima parola di ogni frase e i nomi dei posti e degli eventi. Niente tutto minuscolo.",
-    "Scrivi gli orari completi, con i minuti: 10:00, 16:00, 20:30. Mai troncare l'ora o i minuti.",
-    "Scrivi le parole in italiano corretto, senza lettere o sillabe doppie per sbaglio: rileggi la frase prima di mandarla, perché viene letta ad alta voce e una parola storta si sente subito.",
-    "Non proporre di fare le cose insieme a te: tu non sei lì, dai consigli e basta. Niente noi due, niente ci vediamo.",
-    "Nomi di posti e locali solo se sono scritti nell'elenco: se non c'è, parla di zona o di tipo di posto, senza inventare insegne.",
-    "Se ti chiede di FARE una cosa, la fai tu: creare un evento a suo nome o invitare persone. Quando lo fai, dopo la risposta metti in fondo una riga sola che comincia con AZIONE= e contiene solo il JSON dell'azione.",
-    `Per creare un evento: AZIONE={"tipo":"crea_evento","titolo":"...","giorno":"AAAA-MM-GG","ora":"HH:MM","posto":"...","citta":"...","categoria":"...","descrizione":"...","posti":20,"accesso":"verified"}. La categoria sceglila fra: ${CATEGORIES.join(", ")}. L'accesso è "verified" (serve la verifica del viso) oppure "invite" (solo su invito).`,
-    `Per invitare: AZIONE={"tipo":"invita","eventi":["titolo esatto"],"chi":"tutti"} — oppure "chi":"interessi" per chi ha i suoi stessi interessi, oppure "chi":["email@esempio.it"] per persone precise. Se non dice a chi, chiediglielo.`,
-    "Nel JSON la data va scritta AAAA-MM-GG con l'anno giusto e nel futuro: l'anno è quello di oggi, scritto qui sopra. Se la persona dice 'mercoledì', calcola il prossimo mercoledì.",
-    "Prima di mettere AZIONE= abbi in mano titolo, giorno, ora e posto. Se manca qualcosa non inventarlo: fai una domanda breve, una sola, e NON mettere la riga AZIONE.",
-    "Quando metti AZIONE= scrivi due righe come se stessi già facendo quella cosa, senza spiegare il codice, e chiudi con la riga AZIONE: la conferma la mostra l'app.",
-    "Se ti chiede cosa c'è in un paese o in una zona, cerca nell'elenco per città e posto: dì cosa c'è, che giorno e a che ora. Se non c'è niente, dillo chiaro e proponi la cosa più vicina che leggi nell'elenco.",
-    "REGOLA FINALE: massimo due frasi e 35 parole. Prima rispondi alla domanda; poi, solo se serve, una domanda semplice. Ogni frase deve avere un senso compiuto: se non sai una cosa, non inventarla e non contraddirti.",
-  ];
-  if (chiedeAiuto) righe.push(COME_FUNZIONA);
-  righe.push(
+        ? "Chi ti scrive è una donna: parla di lei al femminile (sei stanca, sei contenta)."
+        : "Non sai se chi ti scrive è un uomo o una donna: usa frasi neutre.",
+    "Non puoi iscrivere nessuno a un evento, non puoi creare eventi e non puoi invitare persone al posto loro: sono cose che fa la persona dall'app. Se te lo chiede, dillo in una frase semplice, per esempio «Devi toccare Partecipo tu: io non posso farlo per te», e spiegale dove sta il pulsante.",
+    "Resti dentro FUORI: non apri altre app, mappe o collegamenti e non dai indicazioni stradali. Se serve, dì alla persona dove toccare nell'app.",
+    "Non scrivere mai comandi, codice o JSON nel testo: la persona deve leggere solo frasi normali.",
     `Rispondi SEMPRE in ${LANG_NAMES[lang] || "italiano"}, anche se la domanda è in un'altra lingua.`,
     `Oggi a Catania è ${nowLocal} (Europe/Rome). Ora locale: ${timeLocal}.`,
-    eventsBlock
-  );
-  return righe.join("\n");
+    chiedeAiuto ? COME_FUNZIONA : "",
+    eventsBlock,
+  ];
+  return righe.filter(Boolean).join("\n");
 }
 
 const COME_FUNZIONA =
@@ -5658,10 +6068,12 @@ function askPromptSemplice(lang, eventsBlock, nowLocal, timeLocal, sessoUtente) 
     "Sei l'assistente di FUORI, l'app di eventi tra persone a Catania e in Sicilia.",
     `Rispondi SEMPRE in ${LANG_NAMES[lang] || "italiano"}, con parole semplici e naturali, come un amico. Massimo due frasi e 35 parole.`,
     "Rispondi prima alla domanda. Se ti chiede come stai, rispondi con una frase positiva e chiedi come sta la persona: non usare frasi senza senso.",
+    "Non cambiare le parole della persona (padel non è pallavolo, sushi non è pizza): se non capisci, chiedi in una riga.",
     "Se ti chiede cosa fare, scegli uno o due eventi veri dall'elenco e dì titolo, giorno, ora e zona. Se non c'è niente, dillo chiaramente e proponi una cosa semplice.",
     "Non inventare eventi, locali, orari o meteo. Se il meteo non è scritto nell'elenco, non parlarne e non dare consigli su vestiti, caldo o freddo.",
     "Non contraddirti e non fare domande strane. Fai una sola domanda semplice e pertinente. Niente elenchi, asterischi, titoli o emoji. Scrivi gli orari completi: 10:00, 16:00, 20:30, mai troncati.",
     "Dai del tu. Non dire se sei maschio o femmina e non inventare ricordi.",
+    "Non puoi iscrivere, creare o invitare al posto della persona: dille che deve toccare lei il pulsante nell'app.",
     sessoUtente === "m"
       ? "Chi ti scrive è un uomo: parla di lui al maschile."
       : sessoUtente === "f"
@@ -5783,7 +6195,7 @@ function domandeGiuste(t) {
 
 // una risposta scritta bene si sente anche ad alta voce: maiuscola e punto finale
 function rifinisci(t) {
-  let s = domandeGiuste(paroleGiuste(String(t || "").replace(/\n?\s*AZIONE=\{[\s\S]*$/i, "").trim()));
+  let s = domandeGiuste(paroleGiuste(String(t || "").replace(/\n?\s*AZIONE\s*[=:]?\s*\{[\s\S]*$/i, "").replace(/\n?\s*AZIONE\s*[=:]?\s*$/im, "").trim()));
   if (!s) return s;
   s = s.replace(/\s+/g, " ").replace(/\s+([,.!?;:])/g, "$1");
   s = s.charAt(0).toUpperCase() + s.slice(1);
@@ -5958,6 +6370,36 @@ async function azioneAI(env, request, origin) {
     }
     const nomi = scelti.map((e) => `«${e.title}»`).join(", ");
     return json({ ok: true, fatto: `Ho invitato ${devices.length} ${devices.length === 1 ? "persona" : "persone"} a ${nomi}.` });
+  }
+
+  // l'iscrizione non la faccio io: toccare Partecipo è un gesto della persona,
+  // con i suoi controlli (foto, viso, età, posti, invito). Qui rispondo e basta.
+  if (tipo === "iscrivi") {
+    return json({
+      ok: false,
+      error: "L'iscrizione devi farla tu: apri l'evento e tocca «Partecipo». Io non posso premere quei pulsanti al posto tuo.",
+    });
+  }
+
+  // navigatore: il client apre Google o Apple Maps con il percorso verso l'evento
+  if (tipo === "naviga") {
+    const titolo = String(a.evento || "").toLowerCase().trim();
+    if (!titolo) return json({ error: "Dimmi a quale evento vuoi andare." });
+    const { results } = await env.DB.prepare(
+      `SELECT id, title, place, city, lat, lng FROM events WHERE starts_at >= ? ORDER BY starts_at LIMIT 200`
+    )
+      .bind(Date.now() - 3600000)
+      .all();
+    const trovato = (results || []).find((e) => {
+      const t = String(e.title || "").toLowerCase();
+      return t === titolo || t.includes(titolo) || titolo.includes(t);
+    });
+    if (!trovato) return json({ error: "Non trovo un evento con questo nome. Dimmi il titolo esatto." });
+    return json({
+      ok: true,
+      percorso: { titolo: trovato.title, place: trovato.place, city: trovato.city || CITY, lat: trovato.lat, lng: trovato.lng },
+      fatto: `Ecco il percorso per «${trovato.title}».`,
+    });
   }
 
   return json({ error: "Questa cosa non la so fare." });
@@ -6967,6 +7409,8 @@ async function ownerStats(env, url) {
       ?.first_name || "Christian"
   ).toLowerCase();
   const days = Math.min(30, Math.max(1, Number(url?.searchParams?.get("days")) || 7));
+  // il telefono da cui guardi i numeri non conta mai: sei tu
+  const ioSql = String(url?.searchParams?.get("device") || "").replace(/'/g, "''");
   const now = Date.now();
   const key = (ts) => new Date(ts).toISOString().slice(0, 10);
   const today = key(now);
@@ -6978,7 +7422,10 @@ async function ownerStats(env, url) {
   const NON_VERI = `v.device NOT IN (SELECT device FROM owner_dev)
         AND v.device NOT IN (SELECT device FROM ignora)
         AND v.device NOT LIKE 'prova%' AND v.device NOT LIKE 'test%' AND v.device NOT LIKE 'demo%'`;
+  // fuori i profili di prova, i miei dispositivi e la mia mail: qui contano solo le altre persone
+  const mioSql = String(mio || "").replace(/'/g, "''");
   const NON_PROVA = `email NOT LIKE 'prova%' AND email NOT LIKE 'test%' AND email NOT LIKE '%@esempio.%'
+        AND lower(COALESCE(email, '')) <> '${mioSql}'
         AND COALESCE(device, '') NOT IN (SELECT device FROM owner_dev)
         AND COALESCE(device, '') NOT IN (SELECT device FROM ignora)`;
   const PERSONE = `FROM visits v LEFT JOIN person_dev pd ON (pd.device = v.device)
@@ -7032,6 +7479,7 @@ async function ownerStats(env, url) {
     one(
       `SELECT COUNT(*) n FROM presence WHERE seen_at >= ?
         AND device NOT IN (SELECT device FROM owner_dev) AND device NOT IN (SELECT device FROM ignora)
+        AND device <> '${ioSql}'
         AND device NOT LIKE 'prova%' AND device NOT LIKE 'test%' AND device NOT LIKE 'demo%'`,
       now - 3 * 60 * 1000
     ),
@@ -7254,21 +7702,182 @@ async function ownerStats(env, url) {
     });
   } catch {}
 
-  // due righe di lettura, in italiano, per non lasciarti solo coi numeri
-  const letture = [];
+  // ---- statistiche della community: solo le altre persone.
+  // Tu e l'assistente restate fuori da ogni numero e da ogni frase.
+  const community = {
+    persone: 0, eventi: 0, inProgramma: 0, partecipazioni: 0,
+    mediaPartecipanti: 0, categorie: [], citta: [], ricordi: { tot: 0, conFoto: 0, conDescrizione: 0, votoMedio: 0 },
+    chat: { messaggi: 0, eventi: 0 }, ritornoPersone: 0,
+    adesso: { online: 0, inCorso: 0, prossime24: 0, oggiNuovi: 0, msgOra: 0 },
+    crescita: { nuovi: { ora: 0, prima: 0, perc: 0 }, eventi: { ora: 0, prima: 0, perc: 0 }, partecipazioni: { ora: 0, prima: 0, perc: 0 } },
+    etaMedia: 0, giorni: [], fasce: [], accesso: [], riempimento: 0, top: [],
+  };
+  try {
+    // nessun numero sulle mie cose: solo device e mail degli altri
+    const ALTRI = `COALESCE(device, '') NOT IN (SELECT device FROM owner_dev) AND COALESCE(device, '') NOT IN (SELECT device FROM ignora)`;
+    const ALTRI_E = `COALESCE(e.device, '') NOT IN (SELECT device FROM owner_dev) AND COALESCE(e.device, '') NOT IN (SELECT device FROM ignora)`;
+    const [
+      gente, tuttiEventi, inProg, presi, perCat, perCitta, msg, chatEv, tornati,
+      onlineOra, inCorso, prossime24, oggiNuovi, nuoviSett, nuoviPrima,
+      evSett, evPrima, parteSett, partePrima, etaMedia, perGiorno, perFascia,
+      accessi, capTot, postiPresi, topEv, msgOra,
+    ] = await Promise.all([
+      one(`SELECT COUNT(*) n FROM leads WHERE ${NON_PROVA}`),
+      one(`SELECT COUNT(*) n FROM events WHERE ${ALTRI}`),
+      one(`SELECT COUNT(*) n FROM events WHERE starts_at >= ? AND ${ALTRI}`, now),
+      one(`SELECT COUNT(*) n FROM participants WHERE status = 'going' AND ${ALTRI}`),
+      all(`SELECT COALESCE(NULLIF(category,''),'altro') k, COUNT(*) n FROM events WHERE ${ALTRI} GROUP BY k ORDER BY n DESC`),
+      all(`SELECT COALESCE(NULLIF(city,''),'Catania') k, COUNT(*) n FROM events WHERE ${ALTRI} GROUP BY k ORDER BY n DESC LIMIT 8`),
+      one(`SELECT COUNT(*) n FROM messages WHERE ${ALTRI}`),
+      one(`SELECT COUNT(DISTINCT event_id) n FROM messages WHERE ${ALTRI}`),
+      one(`SELECT COUNT(*) n FROM (SELECT device FROM participants WHERE status = 'going' AND ${ALTRI} GROUP BY device HAVING COUNT(*) > 1)`),
+      // adesso
+      one(
+        `SELECT COUNT(*) n FROM presence WHERE seen_at >= ? AND device <> '${ioSql}' AND ${ALTRI}`,
+        now - 3 * 60 * 1000
+      ),
+      one(`SELECT COUNT(*) n FROM events WHERE starts_at BETWEEN ? AND ? AND ${ALTRI}`, now - 3 * 3600e3, now),
+      one(`SELECT COUNT(*) n FROM events WHERE starts_at BETWEEN ? AND ? AND ${ALTRI}`, now, now + 24 * 3600e3),
+      one(
+        `SELECT COUNT(*) n FROM leads WHERE substr(date(created_at/1000,'unixepoch'),1,10) = ? AND ${NON_PROVA}`,
+        today
+      ),
+      // questa settimana contro quella prima
+      one(`SELECT COUNT(*) n FROM leads WHERE created_at >= ? AND ${NON_PROVA}`, now - 7 * 864e5),
+      one(`SELECT COUNT(*) n FROM leads WHERE created_at >= ? AND created_at < ? AND ${NON_PROVA}`, now - 14 * 864e5, now - 7 * 864e5),
+      one(`SELECT COUNT(*) n FROM events WHERE created_at >= ? AND ${ALTRI}`, now - 7 * 864e5),
+      one(`SELECT COUNT(*) n FROM events WHERE created_at >= ? AND created_at < ? AND ${ALTRI}`, now - 14 * 864e5, now - 7 * 864e5),
+      one(`SELECT COUNT(*) n FROM participants WHERE status = 'going' AND created_at >= ? AND ${ALTRI}`, now - 7 * 864e5),
+      one(`SELECT COUNT(*) n FROM participants WHERE status = 'going' AND created_at >= ? AND created_at < ? AND ${ALTRI}`, now - 14 * 864e5, now - 7 * 864e5),
+      one(`SELECT ROUND(AVG(age)) n FROM leads WHERE age > 0 AND ${NON_PROVA}`),
+      // quando si esce: giorno della settimana e fascia oraria (ultimi 90 giorni)
+      all(
+        `SELECT CAST(strftime('%w', starts_at/1000, 'unixepoch') AS INTEGER) k, COUNT(*) n
+           FROM events WHERE starts_at >= ? AND starts_at < ? AND ${ALTRI}
+          GROUP BY k ORDER BY k`,
+        now - 90 * 864e5, now + 90 * 864e5
+      ),
+      all(
+        `SELECT CASE
+           WHEN h < 6 THEN 'notte' WHEN h < 12 THEN 'mattina'
+           WHEN h < 18 THEN 'pomeriggio' ELSE 'sera' END k, COUNT(*) n
+         FROM (SELECT CAST(strftime('%H', starts_at/1000, 'unixepoch') AS INTEGER) h
+                 FROM events WHERE starts_at >= ? AND starts_at < ? AND ${ALTRI})
+         GROUP BY k`,
+        now - 90 * 864e5, now + 90 * 864e5
+      ),
+      all(`SELECT COALESCE(NULLIF(access,''),'open') k, COUNT(*) n FROM events WHERE ${ALTRI} GROUP BY k ORDER BY n DESC`),
+      one(`SELECT SUM(capacity) n FROM events WHERE starts_at >= ? AND capacity > 0 AND ${ALTRI}`, now),
+      one(
+        `SELECT COUNT(*) n FROM participants p JOIN events e ON e.id = p.event_id
+          WHERE p.status = 'going' AND e.starts_at >= ? AND ${ALTRI_E}
+            AND p.device NOT IN (SELECT device FROM owner_dev)`,
+        now
+      ),
+      all(
+        `SELECT e.id, e.title, e.city, e.capacity, COUNT(p.device) going
+           FROM events e LEFT JOIN participants p
+             ON p.event_id = e.id AND p.status = 'going'
+            AND p.device NOT IN (SELECT device FROM owner_dev)
+          WHERE e.starts_at >= ? AND e.device NOT IN (SELECT device FROM owner_dev)
+          GROUP BY e.id ORDER BY going DESC, e.starts_at ASC LIMIT 6`,
+        now
+      ),
+      one(`SELECT COUNT(*) n FROM messages WHERE created_at >= ? AND ${ALTRI}`, now - 3600e3),
+    ]);
+
+    const perc = (a, b) => (Number(b) > 0 ? Math.round(((Number(a) - Number(b)) / Number(b)) * 100) : Number(a) > 0 ? 100 : 0);
+    community.persone = Number(gente) || 0;
+    community.eventi = Number(tuttiEventi) || 0;
+    community.inProgramma = Number(inProg) || 0;
+    community.partecipazioni = Number(presi) || 0;
+    community.mediaPartecipanti = community.eventi
+      ? Math.round((community.partecipazioni / community.eventi) * 10) / 10
+      : 0;
+    community.etaMedia = Number(etaMedia) || 0;
+    community.adesso = {
+      online: Number(onlineOra) || 0,
+      inCorso: Number(inCorso) || 0,
+      prossime24: Number(prossime24) || 0,
+      oggiNuovi: Number(oggiNuovi) || 0,
+      msgOra: Number(msgOra) || 0,
+    };
+    community.crescita = {
+      nuovi: { ora: Number(nuoviSett) || 0, prima: Number(nuoviPrima) || 0, perc: perc(nuoviSett, nuoviPrima) },
+      eventi: { ora: Number(evSett) || 0, prima: Number(evPrima) || 0, perc: perc(evSett, evPrima) },
+      partecipazioni: { ora: Number(parteSett) || 0, prima: Number(partePrima) || 0, perc: perc(parteSett, partePrima) },
+    };
+
+    const totaleCat = (perCat || []).reduce((a, r) => a + (Number(r.n) || 0), 0) || 1;
+    community.categorie = (perCat || []).map((r) => ({
+      k: String(r.k || ""), n: Number(r.n) || 0, perc: Math.round(((Number(r.n) || 0) / totaleCat) * 100),
+    }));
+    const totaleCitta = (perCitta || []).reduce((a, r) => a + (Number(r.n) || 0), 0) || 1;
+    community.citta = (perCitta || []).map((r) => ({
+      k: String(r.k || ""), n: Number(r.n) || 0, perc: Math.round(((Number(r.n) || 0) / totaleCitta) * 100),
+    }));
+
+    // giorni della settimana: lunedì primo, domenica ultima
+    const nomiGiorni = ["lun", "mar", "mer", "gio", "ven", "sab", "dom"];
+    const contaGiorno = new Map((perGiorno || []).map((r) => [Number(r.k), Number(r.n) || 0]));
+    const totGiorni = [...contaGiorno.values()].reduce((a, b) => a + b, 0) || 1;
+    community.giorni = [1, 2, 3, 4, 5, 6, 0].map((w) => {
+      const n = contaGiorno.get(w) || 0;
+      return { k: nomiGiorni[(w + 6) % 7], n, perc: Math.round((n / totGiorni) * 100) };
+    });
+
+    // fasce della giornata, in ordine
+    const fascia = new Map((perFascia || []).map((r) => [String(r.k), Number(r.n) || 0]));
+    const totFasce = [...fascia.values()].reduce((a, b) => a + b, 0) || 1;
+    community.fasce = ["mattina", "pomeriggio", "sera", "notte"].map((k) => {
+      const n = fascia.get(k) || 0;
+      return { k, n, perc: Math.round((n / totFasce) * 100) };
+    });
+
+    const nomiAccesso = { photo: "con foto", verified: "viso verificato", invite: "solo invito", open: "aperto a tutti" };
+    const totAcc = (accessi || []).reduce((a, r) => a + (Number(r.n) || 0), 0) || 1;
+    community.accesso = (accessi || []).map((r) => ({
+      k: nomiAccesso[String(r.k)] || String(r.k || "altro"),
+      n: Number(r.n) || 0,
+      perc: Math.round(((Number(r.n) || 0) / totAcc) * 100),
+    }));
+
+    community.riempimento = Number(capTot) > 0 ? Math.round((Number(postiPresi) / Number(capTot)) * 100) : 0;
+    community.top = (topEv || []).map((r) => ({
+      id: String(r.id || ""),
+      title: String(r.title || ""),
+      city: String(r.city || ""),
+      going: Number(r.going) || 0,
+      capacity: Number(r.capacity) || 0,
+      perc: Number(r.capacity) > 0 ? Math.round((Number(r.going) / Number(r.capacity)) * 100) : 0,
+    }));
+
+    const ric = await env.DB.prepare(
+      `SELECT COUNT(*) n,
+         SUM(CASE WHEN COALESCE(photos,'[]') NOT IN ('[]','') THEN 1 ELSE 0 END) conf,
+         SUM(CASE WHEN COALESCE(description,'') <> '' THEN 1 ELSE 0 END) cond
+       FROM past_events`
+    )
+      .first()
+      .catch(() => null);
+    const voto = await env.DB.prepare(`SELECT ROUND(AVG(stars),1) m FROM event_ratings WHERE stars > 0`)
+      .first()
+      .catch(() => null);
+    community.ricordi = {
+      tot: Number(ric?.n) || 0,
+      conFoto: Number(ric?.conf) || 0,
+      conDescrizione: Number(ric?.cond) || 0,
+      votoMedio: Number(voto?.m) || 0,
+    };
+    community.chat = { messaggi: Number(msg) || 0, eventi: Number(chatEv) || 0 };
+    // quante persone sono state a più di un evento: è il segno che la community tiene
+    community.ritornoPersone = community.persone
+      ? Math.round(((Number(tornati) || 0) / community.persone) * 100)
+      : 0;
+  } catch {}
+
   const tot = Number(personePeriodo) || sum("unici");
   const ritorno = tot > 0 ? Math.round(((tot - sum("nuovi")) / tot) * 100) : 0;
-  if (tot > 0) {
-    const chiTorna = ritorno > 0 ? `Il ${ritorno}% torna.` : "Per ora nessuno è tornato: normale all'inizio, guarda la curva nei prossimi giorni.";
-    letture.push(`${tot} persone diverse negli ultimi ${days} giorni, ${sum("views")} schermate aperte. ${chiTorna}`);
-  }
-  if (sum("unici") > 0 && giorni(serie).calo) letture.push("Negli ultimi giorni siete calati: guarda se coincide con un cambio fatto nell'app.");
-  if (attrito2.length) letture.push(`Il punto più fastidioso: ${attrito2[0].kind.toLowerCase()}${attrito2[0].detail ? " (" + attrito2[0].detail + ")" : ""}, ${attrito2[0].n} volte.`);
-  if (fVisite > 0 && fRegistra > 0) {
-    const perc = Math.round((fRegistra / fVisite) * 100);
-    letture.push(`Su 100 che entrano, ${perc} aprono la registrazione.`);
-  }
-  if (fVisite > 0 && fIscrizione > 0) letture.push(`Su 100 visite, ${Math.round((fIscrizione / fVisite) * 100)} arrivano a iscriversi a un evento.`);
 
   return json({
     giorni: days,
@@ -7299,6 +7908,7 @@ async function ownerStats(env, url) {
       anni,
     },
     app,
+    community,
     sesso, eta, lingue, citta, interessi, percorsi, ore,
     imbuto: [
       { k: "Hanno aperto l'app", n: fVisite },
@@ -7308,7 +7918,6 @@ async function ownerStats(env, url) {
       { k: "Si sono iscritti a un evento", n: fIscrizione },
     ],
     attrito: attrito2,
-    letture,
     ultimiFeedback,
   });
 }
@@ -7317,6 +7926,83 @@ function giorni(serie) {
   const ult = serie.slice(-3).reduce((a, r) => a + r.unici, 0);
   const pre = serie.slice(-6, -3).reduce((a, r) => a + r.unici, 0);
   return { calo: pre > 0 && ult < pre * 0.6 };
+}
+
+/* ---------- come si sentono: una risposta al giorno, per gli insight ---------- */
+let moodsOk = false;
+async function ensureMoods(env) {
+  if (moodsOk) return;
+  moodsOk = true;
+  try {
+    await env.DB.prepare(
+      `CREATE TABLE IF NOT EXISTS moods (
+        device TEXT NOT NULL,
+        day TEXT NOT NULL,
+        mood TEXT NOT NULL,
+        at INTEGER NOT NULL,
+        PRIMARY KEY (device, day)
+      )`
+    ).run();
+    await env.DB.prepare(`CREATE INDEX IF NOT EXISTS idx_moods_at ON moods(at)`).run();
+  } catch {}
+}
+
+async function noteMood(env, request) {
+  const body = await request.json().catch(() => null);
+  const device = text(body?.device, 8, 64);
+  const mood = text(body?.mood, 2, 24);
+  if (!device || !mood) return bad("mood");
+  // io e i telefoni di prova non entriamo mai nei numeri
+  if (telefonoProva(device)) return json({ ok: true, skip: true });
+  if (await sonoPadrone(env, device).catch(() => false)) return json({ ok: true, skip: true });
+  await ensureMoods(env);
+  const day = /^\d{4}-\d{2}-\d{2}$/.test(String(body?.day || "")) ? body.day : new Date().toISOString().slice(0, 10);
+  try {
+    await env.DB.prepare(
+      `INSERT INTO moods (device, day, mood, at) VALUES (?, ?, ?, ?)
+       ON CONFLICT(device, day) DO UPDATE SET mood = excluded.mood, at = excluded.at`
+    )
+      .bind(device, day, mood.slice(0, 24), Date.now())
+      .run();
+  } catch {}
+  return json({ ok: true });
+}
+
+async function moodStats(env, url) {
+  const device = text(url.searchParams.get("device"), 8, 64);
+  if (!device) return bad("device");
+  if (!(await sonoPadrone(env, device))) return json({ error: "Non trovato." }, 404);
+  await ensureMoods(env);
+  const days = Math.min(90, Math.max(1, Number(url.searchParams.get("days")) || 30));
+  const from = Date.now() - days * 864e5;
+  let moods = [];
+  try {
+    const { results } = await env.DB.prepare(
+      `SELECT m.mood, COUNT(*) AS n
+         FROM moods m LEFT JOIN leads l ON l.device = m.device
+        WHERE m.at >= ?
+          AND m.device NOT LIKE 'zz%'
+          AND COALESCE(l.email, '') <> ?
+          AND m.device NOT IN (SELECT device FROM owner_dev)
+        GROUP BY m.mood ORDER BY n DESC`
+    )
+      .bind(from, ownerEmail(env))
+      .all();
+    moods = results || [];
+  } catch {}
+  const oggi = new Date().toISOString().slice(0, 10);
+  const t = await env.DB.prepare(
+    `SELECT COUNT(*) AS n
+       FROM moods m LEFT JOIN leads l ON l.device = m.device
+      WHERE m.day = ?
+        AND m.device NOT LIKE 'zz%'
+        AND COALESCE(l.email, '') <> ?
+        AND m.device NOT IN (SELECT device FROM owner_dev)`
+  )
+    .bind(oggi, ownerEmail(env))
+    .first()
+    .catch(() => null);
+  return json({ moods, today: Number(t?.n) || 0, days });
 }
 
 /* ---------- router ---------- */
@@ -7377,6 +8063,8 @@ async function api(request, env, url, ctx) {
   if (parts[1] === "speak" && method === "POST") return speakText(env, request);
   if (parts[1] === "stt" && method === "POST") return speechToText(env, request);
   if (parts[1] === "geo" && method === "GET") return geocode(env, url);
+  DB = env.DB;
+  if (parts[1] === "where" && method === "GET") return whereAt(url);
   if (parts[1] === "weather" && method === "GET") return weather(url);
   if (parts[1] === "extras" && method === "GET") return listExtras(env);
   if (parts[1] === "extras" && method === "DELETE") {
@@ -7405,6 +8093,9 @@ async function api(request, env, url, ctx) {
     if (method === "GET") return json(await muteInfo(env, device));
     if (method === "POST") return setMute(env, request);
   }
+  if (parts[1] === "owner" && parts[2] === "alerts" && method === "GET") return ownerAlerts(env, url);
+  if (parts[1] === "mood" && method === "POST") return noteMood(env, request);
+  if (parts[1] === "moods" && method === "GET") return moodStats(env, url);
   if (parts[1] === "feedback" && method === "POST") return createFeedback(env, request);
   if (parts[1] === "error" && method === "POST") return autoReport(env, request);
   if (parts[1] === "owner" && parts[2] === "feedback" && (method === "GET" || method === "POST")) {
@@ -7482,11 +8173,12 @@ async function api(request, env, url, ctx) {
 
   if (parts[1] === "event" && parts[2] === "photo" && method === "POST") return uploadEventPhoto(env, request);
 
-  if (parts[1] === "photo" && method === "GET") return servePhoto(env, parts.slice(2).join("/"));
+  if (parts[1] === "photo" && method === "GET") return servePhoto(env, parts.slice(2).join("/"), url);
 
   if (parts[1] === "push") {
     if (parts[2] === "key" && method === "GET") return json({ publicKey: VAPID_PUBLIC, key: VAPID_PUBLIC });
     if (parts[2] === "subscribe" && method === "POST") return pushSubscribe(env, request);
+    if (parts[2] === "renew" && method === "POST") return pushRenew(env, request);
     if (parts[2] === "state" && method === "GET") return pushState(env, url);
     if (parts[2] === "test" && method === "POST") return pushTest(env, request, origin);
   }
@@ -7523,7 +8215,7 @@ async function api(request, env, url, ctx) {
       if (method === "POST" && action === "join") return joinEvent(env, id, request, origin, ctx);
       if (method === "POST" && action === "leave") return leaveEvent(env, id, request);
       if (method === "POST" && action === "decide") return decideRequest(env, id, request, origin, ctx);
-      if (method === "DELETE" && !action) return deleteEvent(env, id, request);
+      if (method === "DELETE" && !action) return deleteEvent(env, id, request, ctx);
       if ((method === "PUT" || method === "PATCH") && !action) return updateEvent(env, id, request);
     }
   }
@@ -7997,11 +8689,15 @@ async function remindSaved(env, origin) {
 
 export default {
   async scheduled(event, env, ctx) {
-    // una volta al giorno: "cosa ti va di fare oggi?"
+    const SITO = "https://fuori.fuori-catania.workers.dev";
+    // ogni mezz'ora: i promemoria degli eventi salvati che stanno per cominciare
     ctx.waitUntil(cleanOldEvents(env).catch(() => 0));
-    ctx.waitUntil(remindEveryone(env, "https://fuori.fuori-catania.workers.dev").catch(() => 0));
-    ctx.waitUntil(remindUnverified(env, "https://fuori.fuori-catania.workers.dev").catch(() => 0));
-    ctx.waitUntil(remindSaved(env, "https://fuori.fuori-catania.workers.dev").catch(() => 0));
+    ctx.waitUntil(remindSaved(env, SITO).catch(() => 0));
+    // una volta al giorno alle 9: "cosa ti va di fare oggi?" e il promemoria verifica
+    if (!event.cron || event.cron === "0 9 * * *") {
+      ctx.waitUntil(remindEveryone(env, SITO).catch(() => 0));
+      ctx.waitUntil(remindUnverified(env, SITO).catch(() => 0));
+    }
     // i miei telefoni restano fuori dai numeri anche se registro un telefono nuovo
     ctx.waitUntil(ensureIgnora(env).then(() => sincronizzaMiei(env)).catch(() => 0));
   },

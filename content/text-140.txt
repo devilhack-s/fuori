@@ -1,0 +1,13 @@
+mood.rotate|Cambiano ogni 15 minuti: se non ti va, toccane un'altra.|They change every 15 minutes: if you don't like one, tap another.|Cambian cada 15 minutos: si no te apetece una, toca otra.|Mudam a cada 15 minutos: se não gostar de uma, toque em outra.
+mood.refresh|Altre idee|More ideas|Más ideas|Mais ideias
+share.pick|Dove lo condividi?|Where do you want to share it?|¿Dónde lo compartes?|Onde você quer compartilhar?
+share.native|Altre app del telefono|Other apps on your phone|Otras apps del teléfono|Outros apps do telefone
+share.copy|Copia il link|Copy the link|Copiar el enlace|Copiar o link
+share.copyText|Copia il messaggio|Copy the message|Copiar el mensaje|Copiar a mensagem
+share.mailSub|Ti ho voluto tra i primi su FUORI|I wanted you among the first on FUORI|Te quise entre los primeros en FUORI|Quis você entre os primeiros no FUORI
+share.mailBody|Ciao! Ti ho voluto tra i primi su FUORI: apri il link e guarda cosa c'è stasera intorno a te.|Hey! I wanted you among the first on FUORI: open the link and see what's on tonight around you.|¡Hola! Te quise entre los primeros en FUORI: abre el enlace y mira qué hay esta noche cerca de ti.|Oi! Quis você entre os primeiros no FUORI: abra o link e veja o que tem hoje perto de você.
+where.exact|Sei a {z}|You are in {z}|Estás en {z}|Você está em {z}
+where.update|Posizione aggiornata da sola|Location updated by itself|Ubicación actualizada sola|Localização atualizada sozinha
+cat.see|Vedi gli eventi|See the events|Ver los eventos|Ver os eventos
+invite.ask|Chiedi di partecipare|Ask to join|Pide participar|Peça para participar
+invite.askHint|Evento privato: scrivi due righe a chi organizza e aspetta il suo sì. Se dice sì, sei dentro.|Private event: write a couple of lines to the host and wait for a yes. If they say yes, you're in.|Evento privado: escribe dos líneas a quien organiza y espera su sí. Si dice sí, estás dentro.|Evento privado: escreva duas linhas para quem organiza e espere o sim. Se disser sim, você está dentro.

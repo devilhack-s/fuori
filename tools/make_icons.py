@@ -1,11 +1,14 @@
-"""Marchio FUORI: un cerchio aperto, e un aereo di carta che esce dal varco.
+"""Marchio FUORI: un cerchio aperto bianco, e un aereo di carta lime che esce dal varco.
 Uso: python3 tools/make_icons.py
 """
 import math
 from PIL import Image, ImageDraw
 
 BG = (6, 6, 6, 255)
-LIME = (215, 255, 62, 255)
+WHITE = (242, 242, 238, 255)   # cerchio del logo (bianco panna, come nell'app)
+LIME = (215, 255, 62, 255)     # freccia
+LIME_DARK = (157, 185, 46, 255)  # seconda ala: lime al 72% sul fondo scuro
+BADGE_WHITE = (255, 255, 255, 255)
 SS = 4  # sovracampionamento
 
 RING_C = (50.0, 54.0)
@@ -21,7 +24,7 @@ PLANE = [(96.0, 10.0), (56.8, 29.7), (70.8, 32.1)]
 PLANE2 = [(96.0, 10.0), (70.8, 32.1), (71.2, 46.3)]
 
 
-def draw_mark(size, scale=1.0, bg=True):
+def draw_mark(size, scale=1.0, bg=True, mono=False):
     """Stesse forme del logo dentro l'app (viewBox 0 0 100 100)."""
     S = size * SS
     img = Image.new("RGBA", (S, S), BG if bg else (0, 0, 0, 0))
@@ -32,17 +35,21 @@ def draw_mark(size, scale=1.0, bg=True):
     def pt(p):
         return (off + p[0] * unit_len, off + p[1] * unit_len)
 
+    ring = BADGE_WHITE if mono else WHITE
+    wing = BADGE_WHITE if mono else LIME
+    wing2 = BADGE_WHITE if mono else LIME_DARK
+
     w = max(2, int(round(STROKE * unit_len)))
     cx, cy = RING_C
     r = RING_R
 
     # cerchio aperto: stesso arco del logo (varco in alto a destra)
     box = [pt((cx - r, cy - r)), pt((cx + r, cy + r))]
-    d.arc(box, GAP_B, GAP_A + 360.0, fill=LIME, width=w)
+    d.arc(box, GAP_B, GAP_A + 360.0, fill=ring, width=w)
 
     # aereo di carta: le due ali del logo, identiche
-    d.polygon([pt(p) for p in PLANE], fill=LIME)
-    d.polygon([pt(p) for p in PLANE2], fill=(166, 205, 44, 255))
+    d.polygon([pt(p) for p in PLANE], fill=wing)
+    d.polygon([pt(p) for p in PLANE2], fill=wing2)
 
     return img.resize((size, size), Image.LANCZOS)
 
@@ -60,6 +67,10 @@ if __name__ == "__main__":
     save(draw_mark(32), out + "favicon-32.png")
     save(draw_mark(192), out + "favicon-192.png")
     save(draw_mark(512, scale=0.62), out + "icon-maskable-512.png")
+    # badge delle notifiche: solo bianco su trasparente, lo colora il telefono
+    save(draw_mark(96, scale=0.82, bg=False, mono=True), out + "badge-96.png")
+    # icona dell'app Android (mipmap xxxhdpi): il launcher usa questo file
+    save(draw_mark(512, scale=0.86), "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png")
 
     # aggiorna manifest e collegamenti con un'impronta del disegno, così
     # l'app installata si accorge che l'icona è cambiata
@@ -73,13 +84,24 @@ if __name__ == "__main__":
         ic["src"] = ic["src"].split("?")[0] + "?v=" + h
     json.dump(data, open(mpath, "w"), ensure_ascii=False, indent=2)
     open(mpath, "a").write("\n")
-    hpath = "public/index.html"
-    html = open(hpath).read()
-    html = re.sub(r'href="(/icons/(?:favicon-32|favicon-192|icon-180)\.png)(?:\?v=[^"]*)?"',
-                  lambda m: 'href="%s?v=%s"' % (m.group(1), h), html)
-    html = re.sub(r'href="(/manifest\.webmanifest)(?:\?v=[^"]*)?"',
-                  'href="/manifest.webmanifest?v=%s"' % h, html)
-    open(hpath, "w").write(html)
+
+    for hpath in ("public/index.html", "public/invito.html"):
+        try:
+            html = open(hpath).read()
+        except FileNotFoundError:
+            continue
+        html = re.sub(r'href="(/(?:\./)?icons/(?:favicon-32|favicon-192|icon-180)\.png)(?:\?v=[^"]*)?"',
+                      lambda m: 'href="%s?v=%s"' % (m.group(1), h), html)
+        html = re.sub(r'href="(/(?:\./)?manifest\.webmanifest)(?:\?v=[^"]*)?"',
+                      lambda m: 'href="%s?v=%s"' % (m.group(1), h), html)
+        open(hpath, "w").write(html)
+
+    # notifiche push: icona grande e badge sempre fresche (i telefoni le tengono in cache)
+    spath = "public/sw.js"
+    sw = open(spath).read()
+    sw = re.sub(r'icon: "/icons/icon-512\.png(?:\?v=[^"]*)?"', 'icon: "/icons/icon-512.png?v=%s"' % h, sw)
+    sw = re.sub(r'badge: "/icons/badge-96\.png(?:\?v=[^"]*)?"', 'badge: "/icons/badge-96.png?v=%s"' % h, sw)
+    open(spath, "w").write(sw)
     print("icone firmate:", h)
 
     import os

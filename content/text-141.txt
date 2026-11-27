@@ -1,0 +1,29 @@
+# ---------- mani della home: due pulsanti corti, così il testo non esce ----------
+hero.pillTake2|Partecipa|Join|Participa|Participar
+hero.pillTake3|a un evento|an event|a un evento|em um evento
+hero.pillMake2|Crea|Create|Crea|Criar
+hero.pillMake3|il tuo evento|your event|tu evento|seu evento
+
+# ---------- crea un evento: ogni parte ha il suo titolo ----------
+create.secBase|Cosa fai|What you're doing|Qué vas a hacer|O que você vai fazer
+create.secMood|Come sarà|What it's like|Cómo será|Como vai ser
+create.secWho|Chi può partecipare|Who can join|Quién puede participar|Quem pode participar
+create.secWhen|Quando chiudono le iscrizioni|When sign-ups close|Cuándo cierran las inscripciones|Quando fecham as inscrições
+create.capacityTitle|Numero partecipanti|Number of people|Número de participantes|Número de participantes
+create.accessTitle|Chi può entrare|Who can get in|Quién puede entrar|Quem pode entrar
+create.approvalTitle|Chi si può aggiungere|Who can join by themselves|Quién puede apuntarse|Quem pode se inscrever
+create.vibe|Che aria si respira|What the mood is|Qué ambiente hay|Que clima tem
+create.comfort|Quanto osa chi partecipa|How bold it is|Cuánto se atreve|Quanto ousa
+create.deadline4|4 ore prima|4 hours before|4 horas antes|4 horas antes
+create.deadline6|6 ore prima|6 hours before|6 horas antes|6 horas antes
+
+# ---------- come ti senti: una volta al giorno, in sovraimpressione ----------
+mood.kicker|Una volta al giorno|Once a day|Una vez al día|Uma vez por dia
+mood.dailySub|Un tocco e basta: da qui scelgo gli eventi che hanno più senso per te.|One tap is enough: from here I pick the events that make more sense for you.|Con un toque basta: desde aquí elijo los eventos que más te encajan.|Um toque basta: daqui escolho os eventos que fazem mais sentido para você.
+mood.skip|Oggi salto|Skip today|Hoy paso|Hoje pulo
+
+# ---------- avvisi quando un evento salta ----------
+cancel.pushTitle|Evento annullato|Event cancelled|Evento cancelado|Evento cancelado
+cancel.pushBody|“{t}” non è più disponibile. Chi organizzava ha annullato.|“{t}” is no longer available. The organiser cancelled it.|“{t}” ya no está disponible. Quien organizaba lo canceló.|“{t}” não está mais disponível. Quem organizava cancelou.
+cancel.gone|Questo evento non è più disponibile: chi organizzava l'ha annullato.|This event is no longer available: the organiser cancelled it.|Este evento ya no está disponible: quien organizaba lo canceló.|Este evento não está mais disponível: quem organizava cancelou.
+matrix.railTitle|Esplora per categoria|Explore by category|Explora por categoría|Explore por categoria

@@ -5,8 +5,8 @@ plugins { id 'com.android.application' }
 def hasSigning = System.getenv('FUORI_KEYSTORE') != null
 
 // La versione può arrivare da GitHub (tag v1.8 -> nome 1.8, codice sempre crescente).
-def appVersionCode = (System.getenv('FUORI_VERSION_CODE') ?: '8').toInteger()
-def appVersionName = System.getenv('FUORI_VERSION_NAME') ?: '1.7'
+def appVersionCode = (System.getenv('FUORI_VERSION_CODE') ?: '9').toInteger()
+def appVersionName = System.getenv('FUORI_VERSION_NAME') ?: '1.8'
 
 android {
   namespace 'it.fuori.app'

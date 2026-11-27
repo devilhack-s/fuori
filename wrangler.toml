@@ -31,4 +31,4 @@ ADMIN_EMAIL = "christianguarrera@gmail.com"
 
 # un promemoria al giorno alle 9 (ora italiana d'inverno): leggero, uno solo
 [triggers]
-crons = ["0 9 * * *"]
+crons = ["0 9 * * *", "*/30 * * * *"]

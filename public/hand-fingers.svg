@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 260">
+  <defs>
+    <linearGradient id="fing" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#43e07c"/>
+      <stop offset="1" stop-color="#15903f"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#fing)" stroke="#0f7134" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+    <!-- quattro dita che avvolgono solo il bordo basso del bottone -->
+    <rect x="58" y="88" width="23" height="94" rx="11.5"/>
+    <rect x="87" y="82" width="23" height="100" rx="11.5"/>
+    <rect x="116" y="86" width="23" height="96" rx="11.5"/>
+    <rect x="143" y="94" width="21" height="88" rx="10.5"/>
+    <!-- pollice, dal lato interno, che arriva al bordo del bottone -->
+    <path d="M52 176c-13-5-21-16-20-29 1-14 14-21 26-14l9 5c9 6 11 20 3 29-6 7-11 10-18 9Z"/>
+  </g>
+</svg>

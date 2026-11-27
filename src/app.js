@@ -3,7 +3,7 @@
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const VERSION = "560";
+const VERSION = "636";
 // se arrivi da un link d'invito, il codice resta con te fino all'iscrizione
 const inviteFromUrl = (new URLSearchParams(location.search).get("invite") || "").trim();
 const LOCALES = { it: "it-IT", en: "en-GB", es: "es-ES", pt: "pt-BR" };
@@ -79,7 +79,11 @@ function t(key, vars) {
 
 function applyStatic() {
   document.documentElement.lang = lang === "pt" ? "pt-BR" : lang;
-  for (const el of $$("[data-i]")) el.textContent = t(el.dataset.i);
+  for (const el of $$("[data-i]")) {
+    const why = el.querySelector(":scope > .why");
+    el.textContent = t(el.dataset.i);
+    if (why) el.appendChild(why);
+  }
   for (const el of $$("[data-ph]")) el.placeholder = t(el.dataset.ph);
   $("#langLabel").textContent = lang.toUpperCase();
 }
@@ -558,8 +562,17 @@ function renderCats() {
     if (seen[chiave] === undefined) { seen[chiave] = 0; segnato = true; return `<span class="mc-new">${esc(t("matrix.new"))}</span>`; }
     return Number(ultimo) > Number(seen[chiave]) ? `<span class="mc-new">${esc(t("matrix.new"))}</span>` : "";
   };
+  // ordine: prima i tuoi interessi, poi chi ha piu' eventi, ultimo chi non ha niente
+  const mieiInteressi = catsDaInteressi();
+  const ordinate = [...taxonomy.categories].sort((a, b) => {
+    const ia = mieiInteressi.has(a.id) ? 0 : 1, ib = mieiInteressi.has(b.id) ? 0 : 1;
+    if (ia !== ib) return ia - ib;
+    const na = info(a.id).n || 0, nb = info(b.id).n || 0;
+    if (na !== nb) return nb - na;
+    return String(catName(a.id)).localeCompare(String(catName(b.id)), LOCALES[lang] || "it");
+  });
   // dentro ogni tessera al massimo tre nomi: se ce ne sono di più si apre la sottofinestra
-  const cards = taxonomy.categories.map((c, idx) => {
+  const cards = ordinate.map((c, idx) => {
     const d = info(c.id);
     const lista = d.atts || [];
     const atts = lista.slice(0, 3);
@@ -571,10 +584,10 @@ function renderCats() {
               `<span class="mact ${cat === c.id && actFilter === x.a ? "on" : ""}" data-cat="${c.id}" data-act="${esc(x.a)}" role="button" tabindex="0" title="${esc(x.a)}"><span class="mat">${esc(x.a)}</span><span class="mn">${x.n}</span>${tag("a:" + c.id + "|" + x.a, x.newest)}</span>`
           )
           .join("")}${resto > 0 ? `<span class="mc-more">+${resto}</span>` : ""}</span>`
-      : `<span class="mc-empty">${esc(t("matrix.none"))}</span>`;
+      : `<span class="mc-empty">${d.n ? `${d.n} ${d.n === 1 ? "evento" : "eventi"}` : esc(t("matrix.none"))}</span>`;
     return `<div class="mcat ${cat === c.id ? "on" : ""}" style="--k:${idx % 7}" data-cat="${c.id}" role="button" tabindex="0">
       ${tag("c:" + c.id, d.newest)}
-      <span class="mc-head"><span class="mc-emoji" aria-hidden="true">${CAT_EMOJI[c.id] || "✨"}</span><span class="mc-n">${d.n || 0}</span></span>
+      <span class="mc-head"><span class="mc-emoji" aria-hidden="true">${catIcon(c.id)}</span><span class="mc-n">${d.n || 0}</span></span>
       <span class="mc-name">${esc(catName(c.id))}</span>
       ${dentro}
       <span class="mc-open">${lista.length ? esc(t("matrix.open")) : ""}<i aria-hidden="true">›</i></span>
@@ -626,10 +639,10 @@ function renderActivityIndex() {
         .sort((a, b) => String(actName(a)).localeCompare(String(actName(b)), LOCALES[lang] || "it"));
       if (!lista.length) return "";
       return `<div class="act-group">
-        <p class="act-cat"><span aria-hidden="true">${CAT_EMOJI[c.id] || "✨"}</span>${esc(catName(c.id))}<span class="act-n">${lista.length}</span></p>
+        <p class="act-cat"><span class="act-ic" aria-hidden="true">${catIcon(c.id)}</span>${esc(catName(c.id))}<span class="act-n">${lista.length}</span></p>
         <div class="act-links">${lista
           .map(
-            (a) => `<button class="act-link" type="button" data-cat="${esc(c.id)}" data-act="${esc(a.it)}">${esc(actName(a))}</button>`
+            (a) => `<button class="act-link" type="button" data-cat="${esc(c.id)}" data-act="${esc(a.it)}">${esc(actName(a))}${whyHtml(a.it)}</button>`
           )
           .join("")}</div>
       </div>`;
@@ -645,6 +658,18 @@ function paintActIndex() {
   });
 }
 
+// una riga evento: con la foto chi ce l'ha, senza chi non ce l'ha
+function eventRow(ev) {
+  if (!ev) return "";
+  const foto = Array.isArray(ev.photos) && ev.photos.length
+    ? `<img src="${esc(ev.photos[0])}" alt="" loading="lazy" decoding="async">`
+    : `<span class="ev-emoji" aria-hidden="true">${catIcon(ev.category)}</span>`;
+  const genere = [catName(ev.category), ev.activity].filter(Boolean).join(" · ");
+  const che = String(ev.description || "").replace(/\s+/g, " ").trim().slice(0, 96) || luogoDi(ev);
+  return `<button class="ev-row" type="button" data-ev="${esc(ev.id)}">${foto}
+    <span class="ev-txt"><span class="ev-gen">${esc(genere)}</span><b>${esc(ev.title)}</b><span>${esc(che)}</span></span></button>`;
+}
+
 // la sottofinestra di una categoria: tutte le attività con il loro numero.
 // Si apre sempre, anche quando l'attività è una sola.
 function openCatSheet(id) {
@@ -652,7 +677,7 @@ function openCatSheet(id) {
   if (!c) return;
   const d = (conti && conti.cats || []).find((x) => x.id === id) || { n: 0, atts: [] };
   const emoji = $("#csEmoji"), title = $("#csTitle"), sub = $("#csSub"), list = $("#csList");
-  if (emoji) emoji.textContent = CAT_EMOJI[id] || "✨";
+  if (emoji) emoji.innerHTML = catIcon(id);
   if (title) title.textContent = catName(id);
   if (sub) sub.textContent = t("cat.sheetSub", { n: d.n || 0 });
   const rows = [];
@@ -664,9 +689,34 @@ function openCatSheet(id) {
     rows.push(`<button class="cs-row ${cat === id && actFilter === a.a ? "on" : ""}" type="button" data-cs-cat="${id}" data-cs-act="${esc(a.a)}"><span class="cs-name">${esc(a.a)}</span><span class="cs-n">${a.n}</span><span class="cs-go" aria-hidden="true">›</span></button>`);
   }
   if (!(d.atts || []).length) rows.push(`<div class="empty small"><b>${esc(t("cat.empty"))}</b></div>`);
+  rows.push(`<button class="cs-row cs-go-list" type="button" data-cs-go="1"><span class="cs-name">${esc(t("cat.see"))}</span><span class="cs-go" aria-hidden="true">↓</span></button>`);
   if (list) {
     list.innerHTML = rows.join("");
+    // sotto le attività, gli eventi di questa categoria: foto se ci sono,
+    // titolo, che genere è e di cosa si tratta. Toccandone uno si apre.
+    const evs = events.filter((e) => e && e.category === id).slice(0, 24);
+    if (evs.length) {
+      list.insertAdjacentHTML(
+        "beforeend",
+        `<div class="cs-events">${evs.map(eventRow).join("")}</div>`
+      );
+    }
     list.onclick = (e) => {
+      // un evento della lista: si chiude la finestra e si apre la sua scheda
+      const evb = e.target.closest("[data-ev]");
+      if (evb) {
+        // la categoria resta aperta sotto l'evento: chiudendolo torni qui,
+        // dentro la macro con gli altri eventi, non alla home
+        openDetail(evb.dataset.ev);
+        return;
+      }
+      // "vedi gli eventi": chiude solo quando lo chiedi tu
+      const vai = e.target.closest("[data-cs-go]");
+      if (vai) {
+        hide("catSheet");
+        setTimeout(() => { const l = $("#list"); if (l) l.scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
+        return;
+      }
       const b = e.target.closest("[data-cs-cat]");
       if (!b) return;
       const nuovoCat = b.dataset.csCat || "";
@@ -675,15 +725,13 @@ function openCatSheet(id) {
       const era = cat === nuovoCat && actFilter === nuovoAct;
       cat = era ? "" : nuovoCat;
       actFilter = era ? "" : nuovoAct;
-      const spento = !cat && !actFilter;
       segnaVisto(cat, actFilter);
-      hide("catSheet");
       onlySaved = false;
       renderCats();
       renderList();
       loadEvents(true);
-      // solo quando accendo un filtro accompagno alla lista: togliendolo resto qui
-      if (!spento) setTimeout(() => { const l = $("#list"); if (l) l.scrollIntoView({ behavior: "smooth", block: "start" }); }, 160);
+      // la sotto-matrice resta aperta: scegli e togli quanto vuoi
+      openCatSheet(id);
     };
   }
   // aprirla vuol dire che l'hai vista: il "New" di quella categoria sparisce
@@ -842,6 +890,10 @@ function spotsPill(ev) {
   return `<span class="pill">${esc(t("card.spots", { n: left }))}</span>`;
 }
 
+// come si vive un evento: l'energia e quanto porta fuori dalla comfort zone
+const EV_VIBE = { calmo: "😌 Calmo", sociale: "🙂 Sociale", vivace: "🔥 Vivace", avventura: "⛰ Avventuroso" };
+const EV_COMFORT = { comodo: "🛟 Comodo", medio: "⚖️ Nel mezzo", osa: "🚀 Fuori comfort zone" };
+
 function card(ev) {
   const c = filterCenter();
   const d = c ? distKm(c, eventPos(ev)) : null;
@@ -861,6 +913,9 @@ function card(ev) {
     bits.push(`<span class="pill">${esc(t(lo === hi ? "card.ageOne" : "card.ages", { a: lo, b: hi }))}</span>`);
   }
   if (ev.access && ev.access !== "open") bits.push(`<span class="pill">${esc(t("access." + ev.access))}</span>`);
+  // come si vive l'evento: si capisce subito se è nelle tue corde
+  if (ev.vibe && EV_VIBE[ev.vibe]) bits.push(`<span class="pill vibe-p">${EV_VIBE[ev.vibe]}</span>`);
+  if (ev.comfort && EV_COMFORT[ev.comfort]) bits.push(`<span class="pill vibe-p">${EV_COMFORT[ev.comfort]}</span>`);
   if (closed) bits.push(`<span class="pill done">${esc(t("card.closed"))}</span>`);
   else if (close) bits.push(`<span class="pill">${esc(t("card.closing", { when: close }))}</span>`);
   const newMsgs = Number(unread[ev.id] || 0);
@@ -888,10 +943,20 @@ function ultimoTocco(ev) {
   return Math.max(Number(ev.createdAt) || 0, Number(ev.updatedAt) || 0);
 }
 
+// se hai detto come ti senti, prima gli eventi che hanno a che fare con quello
+function moodFit(ev) {
+  if (!moodPick || !taxonomy || !ev) return 0;
+  const nome = String(ev.activity || "").toLowerCase().trim();
+  if (!nome) return 0;
+  const a = (taxonomy.activities || []).find((x) => String(x.it || "").toLowerCase() === nome);
+  return a && Array.isArray(a.m) && a.m.includes(moodPick) ? 1 : 0;
+}
+
 function applicaOrdine(shown) {
-  if (ordine === "prima") shown.sort((a, b) => prossimaVolta(a) - prossimaVolta(b));
-  else if (ordine === "dopo") shown.sort((a, b) => prossimaVolta(b) - prossimaVolta(a));
-  else shown.sort((a, b) => ultimoTocco(b) - ultimoTocco(a) || prossimaVolta(a) - prossimaVolta(b));
+  const umore = (a, b) => moodFit(b) - moodFit(a);
+  if (ordine === "prima") shown.sort((a, b) => umore(a, b) || prossimaVolta(a) - prossimaVolta(b));
+  else if (ordine === "dopo") shown.sort((a, b) => umore(a, b) || prossimaVolta(b) - prossimaVolta(a));
+  else shown.sort((a, b) => umore(a, b) || ultimoTocco(b) - ultimoTocco(a) || prossimaVolta(a) - prossimaVolta(b));
   return shown;
 }
 
@@ -916,6 +981,8 @@ function renderList() {
     return (ev.title + " " + ev.place + " " + (ev.description || "") + " " + (ev.activity || "") + " " + catName(ev.category)).toLowerCase().includes(term);
   });
   if (onlySaved) shown = shown.filter((ev) => savedIds.includes(ev.id));
+  // l'umore sceglie davvero cosa vedi: se hai chiesto "solo questi", resta solo quello
+  if (onlyMood) shown = shown.filter((ev) => moodFit(ev));
   applicaOrdine(shown);
   const note = $("#forYouNote");
   if (note) {
@@ -952,6 +1019,7 @@ function renderList() {
     list.innerHTML = shown.map(card).join("");
   }
   $("#moreBtn").hidden = !cursor || Boolean(term);
+  paintMoodSay();
 }
 
 // "salsa", "laser game": se è un'attività che conosciamo, non è una ricerca a vuoto
@@ -1203,6 +1271,30 @@ const CAT_EMOJI = {
   animali: "🐾", volontariato: "🤝", viaggi: "🧭",
 };
 
+/* icone di categoria stilizzate: tratto elegante, un gradiente per genere */
+const CAT_ICON = {
+  sport: { g: ["#ff9a3d", "#ff5d3d"], p: `<path d="M3 12.5h4l2.2-5.2 4 10.4 2.2-5.2H21"/>` },
+  sociale: { g: ["#5ac8fa", "#2f7bff"], p: `<circle cx="9" cy="8" r="3.4"/><path d="M3.5 19.5c.8-3.2 2.9-4.8 5.5-4.8s4.7 1.6 5.5 4.8"/><circle cx="16.5" cy="8.5" r="2.7"/><path d="M15.5 14.8c2.5.2 4.2 1.7 5 4.7"/>` },
+  cinema: { g: ["#e9b8ff", "#c084fc"], p: `<rect x="2.9" y="4.9" width="18.2" height="14.2" rx="3"/><path d="M7.5 4.9v14.2M16.5 4.9v14.2"/><path d="M11 8.7l4.4 3.3-4.4 3.3Z"/>` },
+  musica: { g: ["#ff5da2", "#c9184a"], p: `<path d="M9 18.2V6.5l11-2.3V15"/><circle cx="6.8" cy="18.2" r="2.6"/><circle cx="17.8" cy="15" r="2.6"/>` },
+  serate: { g: ["#ffd166", "#ff9e2c"], p: `<path d="M20 14.2A8.6 8.6 0 1 1 9.8 3.8a7.2 7.2 0 0 0 10.2 10.4Z"/><path d="M17.5 3.5v3M16 5h3"/>` },
+  giochi: { g: ["#4ade80", "#16a34a"], p: `<rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="8.8" cy="8.8" r="1.25" fill="currentColor" stroke="none"/><circle cx="15.2" cy="8.8" r="1.25" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.25" fill="currentColor" stroke="none"/><circle cx="8.8" cy="15.2" r="1.25" fill="currentColor" stroke="none"/><circle cx="15.2" cy="15.2" r="1.25" fill="currentColor" stroke="none"/>` },
+  creativita: { g: ["#ff7ad9", "#a855f7"], p: `<path d="M12 3.2 13.9 8.1l4.9 1.9-4.9 1.9L12 16.8l-1.9-4.9L5.2 10l4.9-1.9Z"/><path d="M18.6 15.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8Z"/>` },
+  natura: { g: ["#bbf7d0", "#4ade80"], p: `<path d="M5 19.5C5 10.8 11 4.8 20 4.2c0 9-6 15.3-14.5 15.3"/><path d="M5 19.5c2.8-6.4 7-10 12.5-12"/><path d="M14 9.5c1.2 1.2 1.2 3 0 4.2"/>` },
+  benessere: { g: ["#e0f2fe", "#7dd3fc"], p: `<path d="M12 19c-4.5-1.8-7-5.2-7.5-9.8 4.3.6 6.7 2.4 7.5 5.4.8-3 3.2-4.8 7.5-5.4-.5 4.6-3 8-7.5 9.8Z"/><path d="M12 19v-4.4"/><circle cx="12" cy="5" r="1.2" fill="currentColor" stroke="none"/>` },
+  lingue: { g: ["#fbbf24", "#f97316"], p: `<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.5 2.6 2.5 14.4 0 17M12 3.5c-2.5 2.6-2.5 14.4 0 17"/>` },
+  tech: { g: ["#67e8f9", "#6366f1"], p: `<path d="M8 6 3.5 12 8 18M16 6l4.5 6L16 18M13.5 4.5l-3 15"/>` },
+  animali: { g: ["#fda4af", "#e11d63"], p: `<ellipse cx="12" cy="15.5" rx="4.6" ry="3.8"/><circle cx="5.6" cy="9.5" r="1.9"/><circle cx="9.6" cy="6.8" r="1.9"/><circle cx="14.4" cy="6.8" r="1.9"/><circle cx="18.4" cy="9.5" r="1.9"/>` },
+  volontariato: { g: ["#99f6e4", "#2dd4bf"], p: `<circle cx="12" cy="8.1" r="3"/><path d="M7.6 19.6c.4-3.1 2.1-4.7 4.4-4.7s4 1.6 4.4 4.7"/><circle cx="5" cy="11.4" r="2.2"/><path d="M1.9 18.9c.3-2.5 1.5-3.9 3.1-3.9"/><circle cx="19" cy="11.4" r="2.2"/><path d="M22.1 18.9c-.3-2.5-1.5-3.9-3.1-3.9"/>` },
+  viaggi: { g: ["#5eead4", "#0d9488"], p: `<circle cx="12" cy="12" r="8.5"/><path d="M15.5 8.5 13 13l-4.5 2.5L11 11Z"/>` },
+};
+
+function catIcon(id) {
+  const d = CAT_ICON[id] || CAT_ICON.natura;
+  const gid = "cg-" + String(id || "x").replace(/[^a-z0-9]/gi, "");
+  return `<svg class="cat-ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="url(#${gid})" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${d.g[0]}"/><stop offset="1" stop-color="${d.g[1]}"/></linearGradient></defs>${d.p}</svg>`;
+}
+
 let lmap = null;
 let mapLayer = null;
 let mapTimer = null;
@@ -1339,7 +1431,7 @@ async function apriSceltaMappa() {
         .map(
           (ev) => `<label class="map-scelta-riga"><input type="checkbox" value="${esc(ev.id)}"${
             mapScelti.includes(ev.id) ? " checked" : ""
-          }><span class="ms-emoji">${CAT_EMOJI[ev.category] || "📍"}</span><span class="ms-txt"><b>${esc(
+          }><span class="ms-emoji">${catIcon(ev.category)}</span><span class="ms-txt"><b>${esc(
             ev.title
           )}</b><span>${esc(fmtWhen(prossimaVolta(ev)))} · ${esc(luogoDi(ev))}</span></span></label>`
         )
@@ -1370,33 +1462,49 @@ function drawMap(base, pos, data) {
   mapEvents = visibili;
   dipingiFiltro();
   for (const ev of visibili) {
-    const emoji = CAT_EMOJI[ev.category] || "📍";
+    const emoji = catIcon(ev.category);
     const n = ev.joined || 0;
     punti.push([ev.lat, ev.lng]);
     window.L.marker([ev.lat, ev.lng], { icon: mapIcon("mk-event", `${emoji}${n ? `<span class="n">${n}</span>` : ""}`), keyboard: false })
       .bindPopup(eventPopup(ev), { maxWidth: 250 })
       .addTo(mapLayer);
   }
+  aggiornaTemaMappa();
   // la prima volta li faccio stare tutti dentro lo schermo, anche quelli lontani
-  if (!mapFitted && punti.length) {
+  if (!mapFitted) {
     mapFitted = true;
+    // si apre sulla TUA zona, non sul mondo: centrata su di te, zoom di quartiere
     try {
-      lmap.fitBounds(punti, { padding: [30, 30], maxZoom: 14 });
-      return;
+      if (pos) {
+        lmap.setView([pos.lat, pos.lng], 14, { animate: false });
+      } else if (visibili.length && lastPos()) {
+        // niente GPS ora: ultima zona nota, mai la Sicilia di default
+        const lp = lastPos();
+        lmap.setView([lp.lat, lp.lng], 13, { animate: false });
+      } else {
+        lmap.setView([42.8333, 12.8333], 6, { animate: false });
+      }
     } catch {}
   }
-  if (pos) lmap.setView([pos.lat, pos.lng], 14, { animate: false });
-  else lmap.setView([base.lat, base.lng], 13, { animate: false });
+  paintMapScope();
 }
 
 let mapWarned = false;
 
+function lastPos() {
+  try {
+    const p = JSON.parse(localStorage.getItem("fuori.pos") || "null");
+    if (p && Number.isFinite(p.lat) && Number.isFinite(p.lng) && Date.now() - Number(p.at || 0) < 7 * 86400e3) return { lat: p.lat, lng: p.lng };
+  } catch {}
+  return null;
+}
+
 async function refreshMap({ pos, warn = false } = {}) {
   if (!lmap) return;
-  // la mappa deve disegnare subito: uso la posizione che ho già, senza
-  // aspettare il GPS (che su alcuni telefoni resta fermo sul permesso)
+  // la mappa segue dove sei DAVVERO: GPS ora, altrimenti ultima posizione
+  // salvata. Mai la Sicilia di default: quella spunta solo se sei in Sicilia.
   const here = pos === undefined ? myPos : pos;
-  const base = here || { lat: 37.5022, lng: 15.0873 };
+  const base = here || lastPos() || { lat: 42.8333, lng: 12.8333 };
   if (!here && warn && !mapWarned) { mapWarned = true; toast(t("map.needPos")); }
   // senza filtro la mappa copre la Sicilia; col filtro mostra solo il tuo raggio
   const r = radiusKm || 300;
@@ -1468,13 +1576,15 @@ async function openMap() {
   if (chk) chk.checked = mapShare;
   if (!lmap) {
     if (box) box.innerHTML = "";
-    lmap = window.L.map(box, { zoomControl: true, attributionControl: true, preferCanvas: false });
-    window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "© OpenStreetMap",
-    }).addTo(lmap);
+    lmap = window.L.map(box, { zoomControl: true, attributionControl: true, preferCanvas: false, minZoom: 2, worldCopyJump: true });
+    lmap.on("zoomend", () => paintMapScope());
+    aggiornaTemaMappa();
     // la mappa appare subito, poi si sposta su di te appena arriva la posizione
-    lmap.setView([37.5022, 15.0873], 13);
+    // si parte dalla tua ultima zona nota, mai dalla Sicilia di default
+    const lp = lastPos();
+    if (lp) lmap.setView([lp.lat, lp.lng], 13);
+    else if (myPos) lmap.setView([myPos.lat, myPos.lng], 13);
+    else lmap.setView([42.8333, 12.8333], 6);
   }
   setTimeout(() => { try { lmap.invalidateSize(); } catch {} }, 250);
   // prima disegno gli eventi con quello che so già; il GPS lavora dopo
@@ -1489,6 +1599,9 @@ async function openMap() {
       try { await api("/map/ping", { method: "POST", body: JSON.stringify({ device, lat: pos.lat, lng: pos.lng, on: true }) }); } catch {}
     }
     if (!$("#mapSheet")?.hidden) await refreshMap({ pos });
+    // DOPO il disegno (che prima inquadrava la zona di default): centro su di te,
+    // zoom di quartiere. Prima lo facevo prima e il disegno lo sovrascriveva.
+    try { if (!$("#mapSheet")?.hidden) { lmap.setView([pos.lat, pos.lng], 15, { animate: false }); mapFitted = true; paintMapScope(); } } catch {}
   });
   clearInterval(mapTimer);
   mapTimer = setInterval(() => { if (!$("#mapSheet")?.hidden) refreshMap(); }, 60000);
@@ -1675,23 +1788,51 @@ function ideaRoot(name) {
   return k.split(" ")[0] || k;
 }
 
-async function onShare() {
-  // i paragrafi sono separati da " |" nei testi: qui tornano a capo veri
-  const text = t("share.text").replace(/\s*¶\s*/g, "\n\n");
+let shareText = "";
+let shareTitle = "FUORI";
+let shareLink = "";
+
+// la finestra dove scegli dove mandarlo: WhatsApp, Telegram, Facebook, X, Instagram, email, SMS
+function apriCondivisione(testo, titolo, link) {
+  shareText = String(testo || t("share.text")).replace(/\s*¶\s*/g, "\n\n");
+  shareTitle = titolo || "FUORI";
+  shareLink = link || SHARE_LINK;
+  const p = $("#sharePreview");
+  if (p) p.textContent = shareText.length > 190 ? shareText.slice(0, 190).replace(/\s+\S*$/, "") + "…" : shareText;
+  show("share");
+}
+
+async function condividiCon(app) {
+  const u = encodeURIComponent(shareLink);
+  const tx = encodeURIComponent(shareText);
+  const insieme = encodeURIComponent(shareText + "\n" + shareLink);
+  const apri = (url, stessaScheda) => {
+    if (stessaScheda) { location.href = url; return; }
+    const w = window.open(url, "_blank", "noopener,noreferrer");
+    if (!w) location.href = url;
+  };
+  if (app === "whatsapp") return apri(`https://wa.me/?text=${insieme}`);
+  if (app === "telegram") return apri(`https://t.me/share/url?url=${u}&text=${tx}`);
+  if (app === "facebook") return apri(`https://www.facebook.com/sharer/sharer.php?u=${u}`);
+  if (app === "x") return apri(`https://twitter.com/intent/tweet?text=${tx}&url=${u}`);
+  if (app === "mail") return apri(`mailto:?subject=${encodeURIComponent(shareTitle)}&body=${insieme}`, true);
+  if (app === "sms") return apri(`sms:?&body=${insieme}`, true);
+  if (app === "copia") {
+    try { await navigator.clipboard.writeText(shareText + " " + shareLink); toast(t("share.copied")); }
+    catch { toast(shareLink); }
+    return;
+  }
+  // Instagram (e le altre app del telefono): passa dal foglio di sistema
   if (navigator.share) {
-    try {
-      await navigator.share({ title: "FUORI", text, url: SHARE_LINK });
-      return;
-    } catch (err) {
-      if (err && err.name === "AbortError") return;
-    }
+    try { await navigator.share({ title: shareTitle, text: shareText, url: shareLink }); }
+    catch (err) { if (err && err.name !== "AbortError") condividiCon("copia"); }
+    return;
   }
-  try {
-    await navigator.clipboard.writeText(text + " " + SHARE_LINK);
-    toast(t("share.copied"));
-  } catch {
-    toast(SHARE_LINK);
-  }
+  condividiCon("copia");
+}
+
+async function onShare() {
+  apriCondivisione(t("share.text"), "FUORI");
 }
 
 // i tre tocchi, spiegati uno per uno: servono quando Chrome non ci lascia
@@ -2082,7 +2223,10 @@ async function openDetail(id) {
       }
     }
   } catch {
-    if (!prima) $("#detailBody").innerHTML = `<h2>${esc(t("toast.error"))}</h2>`;
+    if (!prima)
+      $("#detailBody").innerHTML = `<h2>${esc(t("cancel.gone"))}</h2>
+        <p class="muted">${esc(t("home.emptyTitle"))}</p>
+        <button class="btn ghost wide" data-close type="button">${esc(t("common.close"))}</button>`;
   }
 }
 
@@ -2105,9 +2249,11 @@ function personRow(p, i) {
   if (!bits.length) bits.push("profilo essenziale");
   const meta = bits.join(" · ");
   const check = p.verified ? '<span class="vcheck" title="Utente verificato">✓</span>' : "";
+  // quante cose avete in comune: un invito a parlarsi, mai un voto alle persone
+  const aff = p.affinita && p.affinita.testo ? `<span class="aff" title="Quello che avete in comune, calcolato dai vostri interessi">✦ ${esc(p.affinita.testo)}</span>` : "";
   return `<button class="person" data-person="${i}">
     <span class="av">${img}</span>
-    <span class="pinfo"><span class="pn">${esc(p.name)}${check}</span>${status}${meta ? `<span class="pmeta">${esc(meta)}</span>` : ""}</span>
+    <span class="pinfo"><span class="pn">${esc(p.name)}${check}</span>${status}${aff}${meta ? `<span class="pmeta">${esc(meta)}</span>` : ""}</span>
   </button>`;
 }
 
@@ -2174,8 +2320,11 @@ function renderDetail(d) {
     actions = `<div class="notice">${esc(t("detail.full"))}</div>
       <div class="det-actions"><button class="btn ghost" id="shareBtn">${esc(t("detail.share"))}</button></div>`;
   } else if (ev.access === "invite" && !d.inviteOk && !inviteFromUrl) {
-    // evento privato e nessun invito in mano: niente pulsante, solo la spiegazione
+    // evento privato e nessun invito in mano: si può chiedere di entrare
     actions = `<div class="notice">${esc(t("invite.onlyInvited"))}</div>
+      ${person ? `<p class="hint">${esc(t("invite.askHint"))}</p>
+      <label class="field"><textarea id="joinNote" rows="2" maxlength="200" placeholder="${esc(t("detail.note"))}"></textarea></label>
+      <button class="btn primary wide" id="askBtn">${esc(t("invite.ask"))}</button>` : ""}
       <div class="det-actions"><button class="btn ghost" id="shareBtn">${esc(t("detail.share"))}</button></div>`;
   } else {
     const accessNote = ev.access && ev.access !== "open" ? `<p class="hint access-note">${esc(t("access." + ev.access))}</p>` : "";
@@ -2183,6 +2332,7 @@ function renderDetail(d) {
       <div class="det-actions">
         <button class="btn primary" id="joinBtn">${esc(ev.approval ? t("detail.join") : t("detail.take"))}</button>
         <button class="iconbtn" id="shareBtn" aria-label="Condividi">↗</button>
+        <button class="btn ghost fav-inline" id="saveBtn" type="button">${heartIcon(isSaved)}<span>${esc(isSaved ? t("detail.saved") : t("detail.save"))}</span></button>
       </div>`;
   }
 
@@ -2214,6 +2364,7 @@ function renderDetail(d) {
     <button class="x" data-close type="button" aria-label="Chiudi">×</button>
     <div class="det-tags"><span class="tag">${esc(catName(ev.category))}</span><span class="when">${esc(when)}</span></div>
     <h2 class="det-title">${esc(ev.title)}</h2>
+    ${(ev.vibe || ev.comfort) ? `        <div class="vibe-row">${ev.vibe ? `<span class="vibe ${esc(ev.vibe)}">${EV_VIBE[ev.vibe] || esc(ev.vibe)}</span>` : ""}${ev.comfort ? `<span class="vibe ${esc(ev.comfort)}">${EV_COMFORT[ev.comfort] || esc(ev.comfort)}</span>` : ""}</div>` : ""}
     ${fotoBlocco}
     <p class="det-sub">${esc(luogoDi(ev))} · <details class="det-q inline"><summary>${esc(t("detail.capacity", { joined: ev.joined, cap: ev.capacity }))}</summary><p class="hint">I posti sono ${esc(String(ev.capacity))} in tutto e ne restano ${esc(String(Math.max(0, ev.capacity - ev.joined)))}. Chi organizza può decidere chi entra.</p></details></p>
     ${ageLabel(ev) ? `<details class="det-q"><summary class="det-age">◗ ${esc(ageLabel(ev))}</summary><p class="hint">${esc(ageWhy(ev))}</p></details>` : ""}
@@ -2237,7 +2388,8 @@ function renderDetail(d) {
         </div>`
       : `<div class="people">${going.length ? going.map((p) => personRow(p, (d.people || []).indexOf(p))).join("") : `<p class="muted">${esc(t("detail.peopleEmpty"))}</p>`}</div>
         ${requests}`}
-    <p class="hint" style="margin-top:20px"><button class="tiny" id="saveBtn">${heartIcon(isSaved)}<span>${esc(isSaved ? t("detail.saved") : t("detail.save"))}</span></button></p>`;
+    ${actions.includes('id="saveBtn"') ? "" : `<p class="hint" style="margin-top:20px"><button class="tiny" id="saveBtn">${heartIcon(isSaved)}<span>${esc(isSaved ? t("detail.saved") : t("detail.save"))}</span></button></p>`}
+    `;
 
   $("#detailBody").style.paddingTop = "4px";
 
@@ -2246,7 +2398,9 @@ function renderDetail(d) {
   const invBtn = $("#inviteBtn");
   if (invBtn) invBtn.onclick = () => copyInvite(ev);
   const joinBtn = $("#joinBtn");
-  if (joinBtn) joinBtn.onclick = joinActive;
+  if (joinBtn) joinBtn.onclick = () => joinActive();
+  const askBtn = $("#askBtn");
+  if (askBtn) askBtn.onclick = () => joinActive(true);
   const nota = $("#joinNote");
   if (nota) {
     if (bozzaNota) nota.value = bozzaNota;
@@ -2288,7 +2442,7 @@ function renderDetail(d) {
   });
 }
 
-async function joinActive() {
+async function joinActive(richiesta = false) {
   if (!person) { hide("detail"); openRegister(); return; }
   if (!possoFareEventi()) return;
   const lo = Number(active.event.ageMin) || 0, hi = Number(active.event.ageMax) || 0;
@@ -2299,11 +2453,11 @@ async function joinActive() {
   }
   const note = $("#joinNote")?.value.trim() || "";
   const btn = $("#joinBtn");
-  if (btn) { btn.disabled = true; btn.textContent = t("common.sending"); }
+  if (btn) { btn.disabled = true; setBtnText(btn, t("common.sending")); }
   try {
     const r = await api(`/events/${active.event.id}/join`, {
       method: "POST",
-      body: JSON.stringify({ name: person.firstName, device, message: note, invite: inviteFromUrl || "" }),
+      body: JSON.stringify({ name: person.firstName, device, message: note, invite: inviteFromUrl || "", request: richiesta ? true : undefined }),
     });
     sendView("iscrizione");
     learn(active.event, 4);
@@ -2325,7 +2479,7 @@ async function joinActive() {
       return;
     }
     toastErr(err.data?.error || t("toast.error"));
-    if (btn) { btn.disabled = false; btn.textContent = t("detail.take"); }
+    if (btn) { btn.disabled = false; setBtnText(btn, t("detail.take")); }
   }
 }
 
@@ -2347,14 +2501,37 @@ async function decide(target, action) {
   } catch { toast(t("toast.error")); }
 }
 
-async function deleteActive() {
-  if (!confirm(t("detail.delete") + "?")) return;
+// annullare un evento: il motivo e' obbligatorio e arriva a tutti gli iscritti
+let cancellaId = "";
+function deleteActive() {
+  if (!active || !active.event) return;
+  cancellaId = active.event.id;
+  const why = $("#delWhy"), err = $("#delErr");
+  if (why) why.value = "";
+  if (err) err.hidden = true;
+  show("delEvent");
+  setTimeout(() => { try { why.focus(); } catch {} }, 120);
+}
+
+async function confermaAnnulla() {
+  const why = $("#delWhy"), err = $("#delErr"), ok = $("#delOk");
+  const motivo = String(why?.value || "").replace(/\s+/g, " ").trim();
+  if (motivo.length < 5) {
+    if (err) { err.textContent = "Scrivi perché lo annulli (almeno 5 caratteri): lo leggono tutti gli iscritti."; err.hidden = false; }
+    return;
+  }
   try {
-    await api(`/events/${active.event.id}`, { method: "DELETE", body: JSON.stringify({ device }) });
+    if (ok) { ok.disabled = true; ok.textContent = "Annullo…"; }
+    await api(`/events/${encodeURIComponent(cancellaId)}`, { method: "DELETE", body: JSON.stringify({ device, motivo }) });
     toast(t("toast.deleted"));
+    hide("delEvent");
     hide("detail");
     loadEvents(true);
-  } catch { toast(t("toast.error")); }
+  } catch {
+    toast(t("toast.error"));
+  } finally {
+    if (ok) { ok.disabled = false; ok.textContent = "Annulla l'evento e avvisa tutti"; }
+  }
 }
 
 async function shareEvent(ev) {
@@ -2362,8 +2539,7 @@ async function shareEvent(ev) {
   const code = ev.mine && ev.inviteCode ? ev.inviteCode : "";
   const url = location.origin + "/?e=" + ev.id + (code ? "&invite=" + code : "");
   const text = `${ev.title} · ${fmtWhen(prossimaVolta(ev))}${ev.place ? " · " + ev.place : ""}`;
-  if (navigator.share) { try { await navigator.share({ title: ev.title, text, url }); return; } catch {} }
-  try { await navigator.clipboard.writeText(url); toast(t("toast.copied")); } catch { toast(t("toast.noShare")); }
+  apriCondivisione(text, ev.title, url);
 }
 
 // il link da mandare a chi vuoi far entrare
@@ -2833,12 +3009,19 @@ function fillActivityOptions() {
 }
 
 // il pannello serve sia per creare sia per modificare: cambia solo il testo
+function setBtnText(btn, testo) {
+  if (!btn) return;
+  const why = btn.querySelector(":scope > .why");
+  btn.textContent = testo;
+  if (why) btn.appendChild(why);
+}
+
 function paintCreateMode() {
   const ttl = $("#createTitle"), sub = $("#createSub"), btn = $("#publishBtn");
   const edit = Boolean(editingId);
   if (ttl) ttl.textContent = t(edit ? t("edit.title") : t("create.title"));
   if (sub) sub.textContent = t(edit ? t("edit.sub") : t("create.sub"));
-  if (btn) btn.textContent = t(edit ? t("edit.save") : t("create.publish"));
+  if (btn) setBtnText(btn, t(edit ? t("edit.save") : t("create.publish")));
 }
 
 // apre lo stesso pannello con dentro i dati dell'evento
@@ -2854,7 +3037,8 @@ async function openEdit(ev) {
   form.capacity.value = ev.capacity || 12;
   form.host.value = ev.host || person.firstName || "";
   form.description.value = ev.description || "";
-  form.access.value = ev.access || "open";
+  // "solo chi ha una foto" non esiste più: gli eventi vecchi restano leggibili
+  form.access.value = ["verified", "invite"].includes(ev.access) ? ev.access : "verified";
   form.approval.value = ev.approval ? "1" : "0";
   // com'era impostata la ripetizione
   const mode = ev.weeklyDay !== null && ev.weeklyDay !== undefined ? "weekly"
@@ -2885,11 +3069,39 @@ async function openEdit(ev) {
     const hrs = ev.signupUntil ? Math.round((Number(ev.startsAt) - Number(ev.signupUntil)) / 3600000) : 0;
     form.signupHours.value = ["0", "2", "12", "24"].includes(String(hrs)) ? String(hrs) : "0";
   }
+  impostaChip("vibePick", ev.vibe || "");
+  impostaChip("comfortPick", ev.comfort || "");
   placeGeo = ev.lat && ev.lng ? { lat: ev.lat, lng: ev.lng } : null;
   fotoEvento = (ev.photos || []).map((u) => String(u).split("/").pop()).filter(Boolean).slice(0, 3);
   disegnaFotoEvento();
   paintCreateMode();
   show("create");
+}
+
+
+// le scelte a chip del modulo: una sola scelta per riga, si tocca di nuovo e si toglie
+function scegliChip(boxId, valore) {
+  const box = $("#" + boxId);
+  if (!box) return;
+  box.querySelectorAll("[data-vibe],[data-comfort]").forEach((b) => {
+    const suo = b.dataset.vibe || b.dataset.comfort;
+    b.classList.toggle("on", Boolean(valore) && suo === valore);
+  });
+}
+
+function impostaChip(boxId, valore) {
+  const box = $("#" + boxId);
+  if (!box) return;
+  box.querySelectorAll("[data-vibe],[data-comfort]").forEach((b) => {
+    b.onclick = () => {
+      const suo = b.dataset.vibe || b.dataset.comfort;
+      const campo = b.dataset.vibe ? $("#vibeValue") : $("#comfortValue");
+      const gia = campo && campo.value === suo;
+      if (campo) campo.value = gia ? "" : suo;
+      scegliChip(boxId, gia ? "" : suo);
+    };
+  });
+  scegliChip(boxId, valore || "");
 }
 
 async function openCreate() {
@@ -2904,10 +3116,15 @@ async function openCreate() {
   }
   fillActivityOptions();
   const form = $("#createForm");
+  // il modulo riparte davvero vuoto: niente testi, date o luoghi rimasti da prima
+  form.reset();
+  placeGeo = null;
   dayList = [];
   weekdaysList = [];
   fotoEvento = [];
   disegnaFotoEvento();
+  impostaChip("vibePick", "");
+  impostaChip("comfortPick", "");
   if (form.mode) form.mode.value = "single";
   if (form.endWhen) form.endWhen.value = "";
   if (form.repeatUntil) form.repeatUntil.value = "";
@@ -3133,6 +3350,8 @@ async function submitCreate(e) {
     host: form.host.value.trim() || person.firstName,
     approval: form.approval.value === "1",
     access: form.access ? form.access.value : "photo",
+    vibe: $("#vibeValue") ? $("#vibeValue").value : "",
+    comfort: $("#comfortValue") ? $("#comfortValue").value : "",
     signupHours: Number(form.signupHours.value) || 0,
     ageMin: Number($("#ageMin")?.value) || AGE_LO,
     ageMax: Number($("#ageMax")?.value) || AGE_HI,
@@ -3202,7 +3421,7 @@ async function submitCreate(e) {
     return;
   }
   btn.disabled = true;
-  btn.textContent = t("create.publishing");
+  setBtnText(btn, t("create.publishing"));
   try {
     const data = editId
       ? await api(`/events/${editId}`, { method: "PUT", body: JSON.stringify(payload) })
@@ -3440,6 +3659,7 @@ async function submitLogin(e) {
     save(K.person, person);
     if (r.owner) localStorage.setItem(OWNER_TOKEN_KEY, r.owner);
     syncMe();
+    try { askPushSoon(); } catch {}
     paintOwner();
     hide("login");
     f.password.value = "";
@@ -3488,11 +3708,26 @@ function renderProfileBadges() {
       : "");
 }
 
+// il nome si adatta alla sua lunghezza: la spunta resta sempre sulla stessa riga
+function fitProfileName() {
+  const el = $("#profileName");
+  if (!el) return;
+  const txt = el.querySelector(".pn-text");
+  el.style.fontSize = "20px";
+  if (!txt) return;
+  let size = 20;
+  // scende mezzo punto per volta finché nome e spunta stanno insieme
+  while (size > 13.5 && txt.scrollWidth > txt.clientWidth + 1) {
+    size -= 0.5;
+    el.style.fontSize = size + "px";
+  }
+}
+
 function openProfile() {
   if (!person) { openRegister(); return; }
   const set = (sel, v) => { const el = $(sel); if (el) el.value = v || ""; };
   $("#profileName").innerHTML =
-    esc([person.firstName, person.lastName].filter(Boolean).join(" ") || t("prof.title")) +
+    `<span class="pn-text">${esc([person.firstName, person.lastName].filter(Boolean).join(" ") || t("prof.title"))}</span>` +
     (person.verified ? '<span class="vcheck" title="Utente verificato">✓</span>' : "");
   set("#profileBio", person.bio);
   set("#profileLooking", person.lookingFor);
@@ -3503,6 +3738,8 @@ function openProfile() {
   if (person.photo) { img.src = person.photo; img.style.display = "block"; } else { img.removeAttribute("src"); img.style.display = "none"; }
   renderProfileBadges();
   show("profile");
+  // il pannello deve essere visibile per misurare il nome
+  requestAnimationFrame(() => fitProfileName());
   ricordaPannello("profile");
 }
 
@@ -3798,23 +4035,171 @@ async function loadGlossario() {
   return glossario;
 }
 
+function helpOf(name) {
+  const k = HELP_ALIAS[name] || name;
+  return HELP[k] || null;
+}
+
 function glossOf(name) {
-  return glossario[name] || "";
+  const h = helpOf(name);
+  return h ? h.s : (glossario[name] || "");
 }
 
 function whyHtml(name) {
   return glossOf(name)
-    ? `<span class="why" data-why="${esc(name)}" role="button" tabindex="0" aria-label="Che cos'è">?</span>`
+    ? `<span class="why" data-why="${esc(name)}" role="button" tabindex="0" aria-label="Come funziona">?</span>`
     : "";
 }
 
 function openGloss(name) {
+  const h = helpOf(name);
   const g = glossOf(name);
   if (!g) return;
-  $("#glossTitle").textContent = name;
+  $("#glossTitle").textContent = h ? h.t : name;
   $("#glossText").textContent = g;
+  const link = $("#glossGuida");
+  if (link) {
+    link.hidden = !h;
+    if (h) link.dataset.guida = h.g;
+  }
   show("gloss");
 }
+
+/* ---------- ogni funzione ha la sua spiegazione, presa dalla guida ---------- */
+const HELP = {
+  home: { t: "🏠 Home", g: "home", s: "È il punto di partenza per esplorare le attività. Da qui puoi creare un evento, partecipare a uno esistente, scegliere come ti senti, esplorare le categorie, aprire la mappa o chiedere qualche idea. Puoi filtrare gli eventi per distanza, categoria e preferenze oppure esplorarli tutti." },
+  "home.crea": { t: "Crea un evento", g: "home", s: "Organizza qualcosa di nuovo e invita altre persone. Premi il pulsante + al centro per scegliere titolo, fotografie, categoria, date, luogo e descrizione." },
+  "home.partecipa": { t: "Partecipa a un evento", g: "home", s: "Scopri le attività disponibili e unisciti a quelle che preferisci." },
+  "home.umore": { t: "Come ti senti oggi", g: "home", s: "Scegli il tuo stato d'animo e ricevi suggerimenti di attività già pronti." },
+  "home.categorie": { t: "Categorie", g: "home", s: "Esplora eventi per argomento, dalle attività sportive alla musica, dai viaggi alla cultura." },
+  "home.mappa": { t: "Mappa", g: "home", s: "Visualizza gli eventi in base alla loro posizione." },
+  "home.idee": { t: "Vuoi qualche idea?", g: "home", s: "Consulta tante proposte per trovare ispirazione." },
+  "home.filtri": { t: "Filtri", g: "home", s: "Puoi filtrare gli eventi per distanza, categoria e preferenze oppure esplorarli tutti." },
+
+  crea: { t: "➕ Crea un evento", g: "crea", s: "Premi il pulsante + al centro per organizzare la tua attività. Scegli titolo, fotografie, categoria, date, luogo e descrizione. Puoi anche stabilire il numero di partecipanti, i requisiti di accesso, le modalità di approvazione e la scadenza delle iscrizioni." },
+  "crea.titolo": { t: "Titolo", g: "crea", s: "Scegli il titolo del tuo evento: è la prima cosa che gli altri leggono." },
+  "crea.foto": { t: "Fotografie", g: "crea", s: "Scegli le fotografie del tuo evento. Puoi anche stabilire titolo, categoria, date, luogo e descrizione." },
+  "crea.categoria": { t: "Categoria", g: "crea", s: "Scegli la categoria giusta: aiuta gli altri a trovare il tuo evento tra le attività sportive, la musica, i viaggi e la cultura." },
+  "crea.date": { t: "Date", g: "crea", s: "Scegli le date dell'evento. Puoi anche stabilire titolo, fotografie, categoria, luogo e descrizione." },
+  "crea.luogo": { t: "Luogo", g: "crea", s: "Scegli il luogo dell'evento. Con Portami lì chi partecipa può aprire direttamente il navigatore e raggiungerlo." },
+  "crea.descrizione": { t: "Descrizione", g: "crea", s: "Scrivi una breve descrizione: cosa farete, cosa portare e quello che serve per stare bene insieme." },
+  "crea.partecipanti": { t: "Numero di partecipanti", g: "crea", s: "Puoi stabilire il numero di partecipanti. Una volta pubblicato, gli altri utenti potranno scoprirlo e partecipare secondo le condizioni che hai stabilito." },
+  "crea.accesso": { t: "Requisiti di accesso", g: "crea", s: "Puoi stabilire i requisiti di accesso all'evento. Gli altri potranno partecipare secondo le condizioni che hai scelto." },
+  "crea.approvazione": { t: "Modalità di approvazione", g: "crea", s: "Puoi decidere le modalità di approvazione delle richieste di partecipazione." },
+  "crea.scadenza": { t: "Scadenza delle iscrizioni", g: "crea", s: "Puoi stabilire la scadenza delle iscrizioni: dopo quel momento non si entra più, secondo le condizioni che hai scelto." },
+  "crea.pubblica": { t: "Pubblica l'evento", g: "crea", s: "Una volta pubblicato, gli altri utenti potranno scoprirlo e partecipare secondo le condizioni che hai stabilito." },
+
+  partecipa: { t: "📅 Partecipa a un evento", g: "partecipa", s: "Apri un evento per conoscere tutti i dettagli e richiedere la partecipazione, quando necessario. Una volta ammesso, potrai accedere alla chat di gruppo, conoscere gli altri partecipanti e organizzarti prima dell'incontro." },
+  "partecipa.chat": { t: "Chat di gruppo", g: "partecipa", s: "Una volta ammesso, potrai accedere alla chat di gruppo, conoscere gli altri partecipanti e organizzarti prima dell'incontro." },
+  "partecipa.naviga": { t: "Portami lì", g: "partecipa", s: "Con Portami lì puoi aprire direttamente il navigatore e raggiungere il luogo dell'evento." },
+  "partecipa.richiesta": { t: "Richiesta di partecipazione", g: "partecipa", s: "Apri un evento per conoscere tutti i dettagli e richiedere la partecipazione, quando necessario." },
+
+  community: { t: "👥 Community", g: "community", s: "Condividi fotografie dei tuoi eventi, scopri quelle pubblicate dagli altri utenti, commenta e rivivi insieme i momenti più belli." },
+  "community.pubblica": { t: "Pubblica", g: "community", s: "Condividi fotografie dei tuoi eventi e racconta quello che avete fatto. Quello che pubblichi lo vedono gli altri utenti." },
+  "community.commenta": { t: "Commenta", g: "community", s: "Commenta le fotografie e scopri quelle pubblicate dagli altri utenti. Così rivivete insieme i momenti più belli." },
+  "community.cuore": { t: "Cuore", g: "community", s: "Metti il cuore alle fotografie che ti piacciono e scopri quelle pubblicate dagli altri utenti." },
+
+  ricordi: { t: "🕒 Ricordi", g: "ricordi", s: "Qui trovi gli eventi conclusi, puoi vedere chi ha partecipato e lasciare una valutazione. I tuoi giudizi aiutano gli altri a scegliere le esperienze e gli organizzatori." },
+  "ricordi.voto": { t: "Valutazione", g: "ricordi", s: "Lascia una valutazione sugli eventi conclusi: i tuoi giudizi aiutano gli altri a scegliere le esperienze e gli organizzatori." },
+  "ricordi.filtri": { t: "Filtri dei Ricordi", g: "ricordi", s: "Sono disponibili filtri per trovare facilmente ciò che cerchi tra gli eventi conclusi." },
+  "ricordi.chi": { t: "Chi ha partecipato", g: "ricordi", s: "Qui trovi gli eventi conclusi e puoi vedere chi ha partecipato." },
+
+  preferiti: { t: "♡ Preferiti", g: "preferiti", s: "Ritrova tutti gli eventi che hai salvato per consultarli o partecipare in un secondo momento." },
+
+  profilo: { t: "👤 Profilo", g: "profilo", s: "Completa il tuo profilo con una fotografia personale, età, genere e una breve descrizione di te, delle tue passioni e dei tuoi interessi. La verifica tramite selfie conferma che la fotografia del profilo ti rappresenta." },
+  "profilo.foto": { t: "Fotografia personale", g: "profilo", s: "Completa il tuo profilo con una fotografia personale. La verifica tramite selfie conferma che la fotografia del profilo ti rappresenta." },
+  "profilo.eta": { t: "Età", g: "profilo", s: "Completa il tuo profilo con la tua età, insieme a fotografia, genere e una breve descrizione di te." },
+  "profilo.genere": { t: "Genere", g: "profilo", s: "Completa il tuo profilo con il tuo genere, insieme a fotografia, età e una breve descrizione di te." },
+  "profilo.descrizione": { t: "Descrizione di te", g: "profilo", s: "Scrivi una breve descrizione di te, delle tue passioni e dei tuoi interessi." },
+  "profilo.selfie": { t: "Verifica tramite selfie", g: "profilo", s: "La verifica tramite selfie conferma che la fotografia del profilo ti rappresenta. È richiesta per partecipare e organizzare eventi e contribuisce a rendere gli incontri più trasparenti." },
+  "profilo.interessi": { t: "I tuoi interessi", g: "profilo", s: "Dalle impostazioni puoi aggiornare i tuoi interessi e gestire le preferenze dell'app." },
+  "profilo.impostazioni": { t: "Impostazioni", g: "profilo", s: "Dalle impostazioni puoi aggiornare i tuoi interessi e gestire le preferenze dell'app." },
+  "profilo.registrazione": { t: "Il tuo profilo", g: "profilo", s: "Per partecipare e organizzare eventi serve un profilo completo: fotografia personale, età, genere, una breve descrizione di te e la verifica tramite selfie." },
+
+  ai: { t: "✨ Assistente AI", g: "ai", s: "Hai bisogno di un'idea? Chiedi all'assistente! Puoi ricevere suggerimenti su eventi, attività, luoghi, sport, esperienze, organizzazione e preparazione delle tue iniziative. Puoi chiedere consigli, esplorare nuove possibilità e trovare ispirazione." },
+  "ai.voce": { t: "Voce e microfono", g: "ai", s: "Puoi chiedere consigli all'assistente anche con la voce. Il microfono serve per utilizzare le funzioni vocali dell'assistente." },
+  "ai.idee": { t: "Suggerimenti", g: "ai", s: "Puoi ricevere suggerimenti su eventi, attività, luoghi, sport, esperienze, organizzazione e preparazione delle tue iniziative." },
+
+  privacy: { t: "🔒 Privacy e autorizzazioni", g: "privacy", s: "Puoi consultare le condizioni di utilizzo, l'informativa sulla privacy e gestire le autorizzazioni dalle impostazioni. Ogni autorizzazione viene richiesta quando serve alla relativa funzionalità." },
+  "privacy.posizione": { t: "Posizione", g: "privacy", s: "La posizione serve per trovare eventi vicino a te." },
+  "privacy.fotocamera": { t: "Fotocamera", g: "privacy", s: "La fotocamera serve per scattare foto e verificare il profilo." },
+  "privacy.galleria": { t: "Galleria", g: "privacy", s: "La galleria serve per caricare le tue fotografie." },
+  "privacy.microfono": { t: "Microfono", g: "privacy", s: "Il microfono serve per utilizzare le funzioni vocali dell'assistente." },
+  "privacy.notifiche": { t: "Notifiche", g: "privacy", s: "Le notifiche servono per ricevere aggiornamenti su eventi, messaggi e partecipazioni." },
+  "privacy.autorizzazioni": { t: "Autorizzazioni", g: "privacy", s: "Ogni autorizzazione viene richiesta quando serve alla relativa funzionalità. Puoi gestirla anche dalle impostazioni del telefono." },
+  "privacy.condizioni": { t: "Condizioni di utilizzo", g: "privacy", s: "Puoi consultare le condizioni di utilizzo dalle impostazioni." },
+  "privacy.informativa": { t: "Informativa sulla privacy", g: "privacy", s: "Puoi consultare l'informativa sulla privacy dalle impostazioni. I tuoi dati vengono trattati secondo l'informativa e i consensi prestati." },
+  "privacy.dati": { t: "I tuoi dati", g: "privacy", s: "I tuoi dati vengono trattati secondo l'informativa sulla privacy e i consensi prestati." },
+};
+
+const HELP_ALIAS = {
+  "Posti": "crea.partecipanti",
+  "Età minima e massima": "crea.accesso",
+  "Come si entra": "crea.accesso",
+  "Richieste da approvare": "crea.approvazione",
+  "Scadenza iscrizioni": "crea.scadenza",
+  "Ripetizione": "crea.date",
+  "Posizione": "privacy.posizione",
+  "Fotocamera": "privacy.fotocamera",
+  "Galleria": "privacy.galleria",
+  "Microfono": "privacy.microfono",
+  "Notifiche": "privacy.notifiche",
+};
+
+/* ---------- un "?" in ogni zona e accanto a ogni funzione ---------- */
+const AIUTO_ZONA = {
+  profile: "profilo",
+  register: "profilo.registrazione",
+  login: "profilo.registrazione",
+  chat: "partecipa.chat",
+  passati: "ricordi",
+  pastDetail: "ricordi",
+  pastEdit: "ricordi",
+  fav: "preferiti",
+  assistant: "ai",
+  person: "profilo",
+  verify: "profilo.selfie",
+  perms: "privacy.autorizzazioni",
+  permFix: "privacy.autorizzazioni",
+  privacy: "privacy",
+  quick: "profilo.interessi",
+  onboarding: "profilo.interessi",
+};
+
+function agganciaAiuti() {
+  for (const id in AIUTO_ZONA) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    const host = el.classList.contains("sheet") ? el.querySelector(".sheet-in") : el;
+    if (!host || host.querySelector(":scope > .q-aiuto")) continue;
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "q-aiuto";
+    b.dataset.why = AIUTO_ZONA[id];
+    b.setAttribute("aria-label", "Come funziona questa parte");
+    b.textContent = "?";
+    host.appendChild(b);
+  }
+}
+
+function apriGuida(zona) {
+  hide("gloss");
+  show("help");
+  const el = document.getElementById("guida-" + (zona || "home"));
+  if (el) setTimeout(() => el.scrollIntoView({ block: "start", behavior: "smooth" }), 80);
+}
+
+document.addEventListener(
+  "click",
+  (e) => {
+    const q = e.target && e.target.closest ? e.target.closest("[data-guida]") : null;
+    if (!q) return;
+    e.preventDefault();
+    e.stopPropagation();
+    apriGuida(q.dataset.guida);
+  },
+  true
+);
 
 // un solo ascoltatore per tutti i "?": non serve riagganciarli a ogni disegno
 document.addEventListener(
@@ -4101,7 +4486,7 @@ async function renderOnbCats() {
       .map((c) => {
         const on = onbCats.has(c.id);
         return `<button type="button" class="cat-chip${on ? " on" : ""}" data-cat="${c.id}">
-          <span class="cat-emoji">${CAT_EMOJI[c.id] || "✨"}</span>
+          <span class="cat-emoji">${catIcon(c.id)}</span>
           <span class="cat-nome">${esc(catName(c.id))}</span>
           <span class="cat-n">${conta(c.id)}</span>
         </button>`;
@@ -4339,6 +4724,7 @@ function aiAnswer(raw) {
 // La posizione non si eredita dalla volta prima: all'avvio si chiede sempre al telefono.
 // Così non resta "Trecastagni" solo perché era l'ultimo posto salvato.
 let myPos = null;
+let myPosAcc = 0;
 let myPosAt = 0;
 let myFixAt = 0; // quando il telefono ha davvero rilevato il punto (non quando l'ho ricevuto)
 let geoWatch = null;
@@ -4364,6 +4750,11 @@ function updateRadiusLabel() {
   if (n) n.textContent = radiusText();
   const v = $("#radiusVal");
   if (v) v.textContent = radiusKm > 0 ? radiusKm + " km" : t("radius.all");
+  const r = $("#radiusRange");
+  if (r) {
+    const max = Number(r.max) || 300;
+    r.style.setProperty("--fill", Math.round((Number(r.value) / max) * 100) + "%");
+  }
 }
 
 async function findCityCenter() {
@@ -4395,8 +4786,15 @@ function locate() {
           { enableHighAccuracy: high, timeout, maximumAge: 0 }
         );
       });
-    // prima il GPS preciso; se il telefono non ce la fa, ripiego su una lettura fresca ma più veloce
-    ask(true, 8000).then((p) => p || ask(false, 8000)).then(resolve);
+    // prima il GPS preciso, e se e' impreciso ne chiedo un altro: mai accontentarsi
+    // di una lettura veloce che puo' sbagliare di chilometri (es. Brera per Lambrate)
+    ask(true, 10000).then(async (p) => {
+      if (p && Number(p.accuracy) <= 250) return p;
+      const p2 = await ask(true, 10000);
+      const best = [p, p2].filter(Boolean).sort((a, b) => (a.accuracy || 1e9) - (b.accuracy || 1e9))[0];
+      if (best && Number(best.accuracy) <= 500) return best;
+      return best || ask(false, 8000);
+    }).then(resolve);
   });
 }
 
@@ -4413,6 +4811,9 @@ function useMyPosition(p, { force = false } = {}) {
   // restituisce ancora il fix di ieri (Trecastagni), lo scarto e aspetto il GPS.
   if (now - fixAt > 120000) return false;
   if (myPos && fixAt + 120000 < myFixAt) return false;
+  // precisione estrema: un fix peggiore di 500 m non sostituisce uno buono,
+  // altrimenti la mappa ti mette nel quartiere sbagliato
+  if (myPos && Number(myPosAcc) > 0 && Number(p.accuracy) > Number(myPosAcc) + 200 && Number(p.accuracy) > 300) return false;
   const moved = myPos ? distKm(myPos, p) : Infinity;
   if (Number(p.accuracy) > 1200 && !geoWarned) {
     geoWarned = true;
@@ -4420,14 +4821,16 @@ function useMyPosition(p, { force = false } = {}) {
   }
   if (Number(p.accuracy) > 0 && Number(p.accuracy) <= 1200) geoWarned = false;
   myPos = { lat: p.lat, lng: p.lng };
+  myPosAcc = Number(p.accuracy) || 0;
   myPosAt = now;
   myFixAt = Math.max(myFixAt, fixAt);
   geoRetryN = 0;
-  try { localStorage.setItem("fuori.pos", JSON.stringify({ lat: p.lat, lng: p.lng, at: now })); } catch {}
+  try { localStorage.setItem("fuori.pos", JSON.stringify({ lat: p.lat, lng: p.lng, acc: myPosAcc, at: now })); } catch {}
   // il GPS può mandare micro-spostamenti: ridisegno solo se mi sono mosso davvero
   const changed = force || moved === Infinity || moved === null || moved > 0.03 || now - lastGeoPaint > 60000;
   if (!changed) return true;
   lastGeoPaint = now;
+  aggiornaPaese();
   paintHero();
   paintMood();
   paintWeather();
@@ -4515,6 +4918,15 @@ window.addEventListener("online", () => {
 setInterval(() => {
   if (!document.hidden) refreshPosition();
 }, 60000);
+
+// le idee dell'umore cambiano ogni 15 minuti, anche con la pagina ferma
+let slotVivo = Math.floor(Date.now() / (15 * 60 * 1000));
+setInterval(() => {
+  const ora = Math.floor(Date.now() / SLOT_MS);
+  if (ora === slotVivo) return;
+  slotVivo = ora;
+  if (moodPick && !document.hidden) buildIdeas();
+}, 30000);
 
 function distKm(a, b) {
   if (!a || !b) return null;
@@ -4679,6 +5091,35 @@ function placeShort(z) {
 }
 
 // la testata della home parla alla persona, non al posto: ciao + cosa può fare oggi
+let myTown = "";
+let myPlaceShort = "";
+let myTownCell = "";
+
+// il nome del paese dove sono davvero (non la zona larga): lo dice il worker
+function townNow() {
+  // prima la frazione/quartiere esatto con la sigla (es. "Lambrate, MI")
+  return myPlaceShort || myTown || placeShort(zoneNear(myPos));
+}
+
+async function aggiornaPaese() {
+  if (!myPos) return;
+  // circa cinquecento metri: appena passi il confine il nome cambia
+  const cell = myPos.lat.toFixed(3) + "," + myPos.lng.toFixed(3);
+  if (cell === myTownCell) return;
+  myTownCell = cell;
+  try {
+    const r = await api(`/where?lat=${myPos.lat.toFixed(5)}&lng=${myPos.lng.toFixed(5)}`);
+    const nome = String((r && r.town) || "").trim();
+    const breve = String((r && (r.short || r.town)) || "").trim();
+    if ((nome && nome !== myTown) || (breve && breve !== myPlaceShort)) {
+      myTown = nome || myTown;
+      myPlaceShort = breve || myPlaceShort;
+      paintHero();
+      paintMood();
+    }
+  } catch {}
+}
+
 function paintHero() {
   const hi = $("#heroHi");
   if (!hi) return;
@@ -4688,14 +5129,17 @@ function paintHero() {
   hi.textContent = nome ? `${t(saluto)}, ${nome}` : t("hero.hello");
   const zoneEl = $("#heroZone");
   if (zoneEl) {
-    const zona = zoneNear(myPos);
+    const nome = townNow();
     // le zone possono arrivare dopo la posizione: appena ci sono, ridisegno
     // la testata invece di lasciare il posto senza nome
-    if (!zona && myPos && !zones) {
+    if (!nome && myPos && !zones) {
       loadZones().then(() => paintHero()).catch(() => {});
     }
-    zoneEl.hidden = !zona;
-    if (zona) zoneEl.textContent = placeShort(zona);
+    zoneEl.hidden = !nome;
+    if (nome) {
+      zoneEl.textContent = nome;
+      zoneEl.title = t("where.exact", { z: nome });
+    }
   }
   const sub = $("#heroSub");
   if (!sub) return;
@@ -4709,7 +5153,7 @@ function paintHero() {
   } else if (settimana.length) {
     sub.textContent = t(settimana.length === 1 ? "hero.week1" : "hero.weekN", { n: settimana.length });
   } else if (futuri.length) {
-    sub.textContent = t("hero.laterN", { n: Math.min(futuri.length, 99) });
+    sub.textContent = t(futuri.length === 1 ? "hero.later1" : "hero.laterN", { n: Math.min(futuri.length, 99) });
   } else {
     sub.textContent = person ? t("hero.none") : t("hero.noneAnon");
   }
@@ -4821,13 +5265,22 @@ function troppoForte(a, mood) {
 
 // le idee già proposte oggi, divise per umore: così la stessa attività
 // non esce per "calma" e poi di nuovo per "divertimento"
+// le idee cambiano ogni quarto d'ora: stesso umore, cose diverse
+const SLOT_MS = 15 * 60 * 1000;
+let moodKick = 0;
+function slotKey() {
+  return new Date().toISOString().slice(0, 10) + "#" + Math.floor(Date.now() / SLOT_MS);
+}
+function ideaSeed() {
+  return Math.floor(Date.now() / SLOT_MS) + moodKick;
+}
+
 function leggiIdee() {
   try {
     const d = JSON.parse(localStorage.getItem("fuori.idee") || "null");
-    const oggi = new Date().toISOString().slice(0, 10);
-    if (d && d.giorno === oggi && d.m) return d;
+    if (d && d.giorno === slotKey() && d.m) return d;
   } catch {}
-  return { giorno: new Date().toISOString().slice(0, 10), m: {} };
+  return { giorno: slotKey(), m: {} };
 }
 
 function salvaIdee(d) {
@@ -4935,7 +5388,7 @@ function buildIdeas() {
     s += Math.min(2, Number(taste.c[String((a && a.cat) || "")] || 0));
     return s;
   };
-  const semeGiorno = Math.floor(Date.now() / 86400000);
+  const semeGiorno = ideaSeed();
   const variazione = (a) => {
     let h = semeGiorno % 9973;
     const s = String((a && a.it) || "");
@@ -4980,7 +5433,7 @@ function buildIdeas() {
     }
   };
   // ogni giorno l'ordine cambia un po': le stesse regole, ma non sempre le solite cinque
-  const seme = Math.floor(Date.now() / 86400000);
+  const seme = ideaSeed();
   const mescola = (elenco) => {
     let s = seme * 9301 + 49297;
     const out = elenco.slice();
@@ -5006,16 +5459,17 @@ function buildIdeas() {
   }
   box.hidden = false;
   box.innerHTML =
-    `<p class="ideas2-label">${esc(t("mood.ideas"))}</p>` +
-    `<p class="ideas2-sub">${esc(t("mood.pick"))}</p>` +
+    `<div class="ideas2-head"><p class="ideas2-label">${esc(t("mood.ideas"))}</p><p class="ideas2-sub">${esc(t("mood.pick"))}</p></div>` +
+    `<div class="ideas2-row">` +
     picked
       .map(
         ({ a, why }) =>
-          `<button class="idea2" type="button" data-it="${esc(a.it)}" data-cat="${esc(a.cat)}" data-nome="${esc(actName(a))}"><span class="i2-t">${esc(actName(a))}</span><span class="i2-c">${esc(catName(a.cat))}</span>${
+          `<button class="idea2" type="button" data-it="${esc(a.it)}" data-cat="${esc(a.cat)}" data-nome="${esc(actName(a))}"><span class="i2-c"><span class="i2-ic">${catIcon(a.cat)}</span> ${esc(catName(a.cat))}</span><span class="i2-t">${esc(actName(a))}</span>${
             why ? `<span class="i2-w">${esc(why)}</span>` : ""
           }<span class="i2-go" aria-hidden="true">›</span></button>`
       )
-      .join("");
+      .join("") +
+    `</div>`;
   box.querySelectorAll("[data-it]").forEach((b) => {
     b.onclick = () => apriIdeaUmore(b.dataset.it, b.dataset.cat, b.dataset.nome);
   });
@@ -5049,7 +5503,7 @@ async function apriIdeaUmore(it, catId, nome) {
     return;
   }
   const emoji = $("#msEmoji"), title = $("#msTitle"), sub = $("#msSub"), list = $("#msList"), crea = $("#msCreate");
-  if (emoji) emoji.textContent = CAT_EMOJI[catId] || "✨";
+  if (emoji) emoji.innerHTML = catIcon(catId);
   if (title) title.textContent = nome || it;
   if (sub) sub.textContent = t("mood.interested");
   if (list) {
@@ -5088,10 +5542,32 @@ async function askPosition() {
   return true;
 }
 
-// scelto l'umore non si apre subito il modulo: prima le cinque idee di oggi
+// l'umore si chiede una volta al giorno, in sovraimpressione, appena apri l'app
+let moodPerCreare = false;
+function moodDayKey() {
+  try { return new Date().toISOString().slice(0, 10); } catch { return ""; }
+}
+function moodDailyPrompt() {
+  try { if (localStorage.getItem("fuori.moodDay") === moodDayKey()) return; } catch {}
+  if (!person && !localStorage.getItem("fuori.onbDone")) return;
+  setTimeout(() => {
+    if (document.querySelector(".sheet:not([hidden])")) return;
+    openMoodDaily();
+  }, 900);
+}
+function openMoodDaily() {
+  paintMood();
+  show("moodDaily");
+}
+// l'umore va anche negli insight: serve a capire cosa cerca la gente
+function salvaUmore(m) {
+  try { localStorage.setItem("fuori.moodDay", moodDayKey()); } catch {}
+  api("/mood", { method: "POST", body: JSON.stringify({ device, mood: m, day: moodDayKey() }) }).catch(() => {});
+}
+
+// scelto l'umore si chiude la domanda e la lista si riordina subito
 async function scegliUmore(id) {
   if (!id) return;
-  // lo stesso umore toccato due volte: le proposte si chiudono, come un interruttore
   const chiudi = moodPick === id;
   if (!taxonomy && !chiudi) { try { await loadTaxonomy(); } catch {} }
   moodPick = chiudi ? "" : id;
@@ -5100,7 +5576,19 @@ async function scegliUmore(id) {
     else localStorage.setItem("fuori.mood", id);
   } catch {}
   paintMood();
-  // le proposte si aprono lì sotto, senza spostare la pagina
+  if (chiudi) {
+    onlyMood = false;
+    renderList();
+  }
+  if (!chiudi) {
+    salvaUmore(id);
+    hide("moodDaily");
+    renderList();
+    if (moodPerCreare) {
+      moodPerCreare = false;
+      if (possoFareEventi()) openCreate();
+    }
+  }
 }
 
 function paintMood() {
@@ -5115,11 +5603,15 @@ function paintMood() {
   chips.querySelectorAll("[data-mood]").forEach((b) => {
     b.onclick = () => scegliUmore(b.dataset.mood);
   });
+  const ref = $("#moodRefresh");
+  if (ref) ref.hidden = !moodPick;
+  const rot = $("#moodRotate");
+  if (rot) rot.hidden = !moodPick;
   const where = $("#moodWhere");
   if (where) {
-    const z = zoneNear(myPos);
+    const z = townNow();
     if (z) {
-      where.textContent = t("mood.whereZone", { z: placeShort(z) });
+      where.textContent = t("mood.whereZone", { z });
     } else {
       where.innerHTML = `<button class="mood-loc" type="button" id="moodLocBtn">📍 ${esc(t("mood.whereAsk"))}</button>`;
       const b = $("#moodLocBtn");
@@ -5128,6 +5620,7 @@ function paintMood() {
   }
   paintHero();
   buildIdeas();
+  paintMoodSay();
 }
 
 function paintWeather() {
@@ -5374,20 +5867,88 @@ function blobToB64(blob) {
   });
 }
 
+// Il telefono registra in webm/opus, che il trascrittore del server non legge:
+// la trascrizione falliva e restavano le parole sbagliate del telefono.
+// Qui porto l'audio a 16 kHz mono e lo impacchetto in WAV, che si trascrive sempre.
+function wavDaCampioni(campioni, rate) {
+  const n = campioni.length;
+  const buf = new ArrayBuffer(44 + n * 2);
+  const v = new DataView(buf);
+  const scrivi = (off, s) => { for (let i = 0; i < s.length; i++) v.setUint8(off + i, s.charCodeAt(i)); };
+  scrivi(0, "RIFF");
+  v.setUint32(4, 36 + n * 2, true);
+  scrivi(8, "WAVEfmt ");
+  v.setUint32(16, 16, true);
+  v.setUint16(20, 1, true);
+  v.setUint16(22, 1, true);
+  v.setUint32(24, rate, true);
+  v.setUint32(28, rate * 2, true);
+  v.setUint16(32, 2, true);
+  v.setUint16(34, 16, true);
+  scrivi(36, "data");
+  v.setUint32(40, n * 2, true);
+  for (let i = 0; i < n; i++) {
+    const c = Math.max(-1, Math.min(1, campioni[i]));
+    v.setInt16(44 + i * 2, c < 0 ? c * 0x8000 : c * 0x7fff, true);
+  }
+  return new Blob([buf], { type: "audio/wav" });
+}
+
+async function audioInWav(blob) {
+  const AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) return null;
+  const ctx = new AC();
+  try {
+    const originale = await ctx.decodeAudioData(await blob.arrayBuffer());
+    const rate = 16000;
+    const Off = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    let dati = originale;
+    if (Off) {
+      const off = new Off(1, Math.max(1, Math.ceil(originale.duration * rate)), rate);
+      const src = off.createBufferSource();
+      src.buffer = originale;
+      src.connect(off.destination);
+      src.start();
+      dati = await off.startRendering();
+    }
+    // un canale solo: due tracce raddoppiano il peso senza aiutare la trascrizione
+    const canali = dati.numberOfChannels;
+    const lunghi = dati.length;
+    const mono = new Float32Array(lunghi);
+    for (let c = 0; c < canali; c++) {
+      const traccia = dati.getChannelData(c);
+      for (let i = 0; i < lunghi; i++) mono[i] += traccia[i] / canali;
+    }
+    return wavDaCampioni(mono, dati.sampleRate);
+  } catch {
+    return null;
+  } finally {
+    try { ctx.close(); } catch {}
+  }
+}
+
 async function transcribe(blob, ripiego) {
   const mic = $("#aiMic");
   const input = $("#aiInput");
   if (mic) mic.classList.add("busy");
   input.placeholder = t("ai.transcribing");
+  // le parole del telefono sono meno precise: le lascio scritte nel campo,
+  // così le controlli e correggi prima di mandarle (prima partivano da sole
+  // e l'AI rispondeva a una frase che non era quella detta)
   const usaRipiego = () => {
-    if (ripiego) { input.value = ripiego; askAi(); }
-    else toast(t("ai.micHeard"));
+    if (ripiego) {
+      input.value = ripiego;
+      input.focus();
+      toast("Ho scritto quello che ho capito: controlla e premi invio.");
+    } else toast(t("ai.micHeard"));
   };
   try {
-    const b64 = await blobToB64(blob);
+    const wav = await audioInWav(blob);
+    const invio = wav || blob;
+    const b64 = await blobToB64(invio);
     const r = await Promise.race([
-      api("/stt", { method: "POST", body: JSON.stringify({ audio: b64, mime: blob.type.split(";")[0], lang, device }) }),
-      new Promise((_, no) => setTimeout(() => no(new Error("timeout")), 12000)),
+      api("/stt", { method: "POST", body: JSON.stringify({ audio: b64, mime: invio.type.split(";")[0], lang, device }) }),
+      new Promise((_, no) => setTimeout(() => no(new Error("timeout")), 25000)),
     ]);
     const text = normalizzaDettato(String(r.text || "")).slice(0, 300);
     if (!text) return usaRipiego();
@@ -6212,17 +6773,28 @@ function renderVoice() {
   if (label) label.textContent = voiceOn ? t("ai.voiceOn") : t("ai.voice");
 }
 
-// la riga AZIONE= non si legge e non si dice: è un ordine per l'app
+// le righe-istruzione (AZIONE=, NAVIGA=) non si leggono e non si dicono:
+// sono ordini per l'app, non frasi da mostrare alla persona.
 function senzaAzione(t) {
-  return String(t || "").replace(/\n?\s*AZIONE=\{[\s\S]*$/i, "").trim();
+  let s = String(t || "");
+  // via la riga con il JSON, anche se lo streaming l'ha tagliata a metà
+  s = s.replace(/(?:^|\n)\s*(?:AZIONE|NAVIGA)\s*[=:]?\s*\{[\s\S]*$/gi, "\n");
+  // via il resto del JSON rimasto appeso
+  s = s.replace(/\{\s*"(?:tipo|evento)"[\s\S]*$/i, "");
+  // via la parola da sola, se il modello la scrive senza JSON
+  s = s.replace(/\b(?:AZIONE|NAVIGA)\b\s*[=:]?/gi, "");
+  return s.replace(/[ \t]+\n/g, "\n").replace(/\n{2,}/g, "\n").trim();
 }
 
 function leggiAzione(t) {
-  const m = /AZIONE=(\{[\s\S]*\})\s*$/im.exec(String(t || ""));
+  const m = /(?:AZIONE|NAVIGA)\s*[=:]\s*(\{[\s\S]*\})\s*$/im.exec(String(t || ""));
   if (!m) return null;
   try {
     const a = JSON.parse(m[1]);
-    return a && typeof a === "object" && a.tipo ? a : null;
+    if (!a || typeof a !== "object") return null;
+    if (String(a.tipo || "").toLowerCase() === "iscrivi") return null;
+    if (!a.tipo && a.evento) return { tipo: "naviga", evento: a.evento };
+    return a.tipo ? a : null;
   } catch {
     return null;
   }
@@ -6238,8 +6810,11 @@ async function eseguiAzione(azione) {
       body: JSON.stringify({ azione, device }),
     });
     riga.classList.remove("typing");
+    // se l'azione non è riuscita, la persona deve sapere che tocca a lei
     riga.textContent = r.fatto || r.error || t("ai.busy");
     if (voiceOn) parlaTesto(riga.textContent);
+    // navigatore: apro la scelta di mappe con il percorso verso l'evento
+    if (r.percorso) openDirections(r.percorso);
   } catch (e) {
     riga.classList.remove("typing");
     riga.textContent = e?.data?.error || t("ai.busy");
@@ -6393,6 +6968,11 @@ async function ensurePush() {
   try {
     const reg = await navigator.serviceWorker.ready;
     let sub = await reg.pushManager.getSubscription();
+    // l'iscrizione scaduta o col permesso tolto non riceve piu': la rifaccio
+    if (sub && sub.expirationTime && sub.expirationTime < Date.now()) {
+      try { await sub.unsubscribe(); } catch {}
+      sub = null;
+    }
     if (!sub) {
       const { key } = await api("/push/key");
       sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64(key) });
@@ -6464,7 +7044,11 @@ async function enablePush() {
   try {
     const reg = await navigator.serviceWorker.ready;
     const { key } = await api("/push/key");
-    const existing = await reg.pushManager.getSubscription();
+    let existing = await reg.pushManager.getSubscription();
+    if (existing && existing.expirationTime && existing.expirationTime < Date.now()) {
+      try { await existing.unsubscribe(); } catch {}
+      existing = null;
+    }
     const sub = existing || (await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlB64(key) }));
     await api("/push/subscribe", { method: "POST", body: JSON.stringify({ subscription: sub, device, email: person?.email || "" }) });
     toast(t("push.ok"));
@@ -6807,112 +7391,106 @@ function openFoto() {
 }
 
 function renderStats(d) {
-  const num = (label, v) => `<div class="num"><b>${v}</b><span>${esc(label)}</span></div>`;
-  const p = d.periodo || {}, o = d.oggi || {}, t = d.totali || {};
+  const p = d.periodo || {}, o = d.oggi || {}, t = d.totali || {}, com = d.community || {};
   const own = $("#statsOwn");
-  if (own) own.textContent = "Conto una persona una volta sola per dispositivo, anche se cambia rete. I tuoi dispositivi non sono contati.";
+  if (own) own.textContent = "";
+  const nf = (n) => (Number(n) || 0).toLocaleString("it-IT");
+  const pc = (n) => (Number(n) || 0) + "%";
+  const dec = (n) => String(Number(n) || 0).replace(".", ",");
 
-  // le frasi che leggono i numeri al posto tuo
-  const let_ = $("#statsLetture");
-  if (let_) {
-    let_.innerHTML = (d.letture || []).length
-      ? `<div class="read">${d.letture.map((x) => `<p>${esc(x)}</p>`).join("")}</div>`
-      : "";
+  // ---- adesso: cinque numeri che si muovono mentre guardi
+  const ad = com.adesso || {};
+  const boxAdesso = $("#statsAdesso");
+  if (boxAdesso) {
+    const vivo = Number(ad.online) > 0;
+    const cella = (label, v, sub, caldo) =>
+      `<div class="now${caldo ? " caldo" : ""}"><b>${nf(v)}</b><span>${esc(label)}</span><i>${esc(sub)}</i></div>`;
+    boxAdesso.innerHTML =
+      `<div class="now-lab"><span class="pulse${vivo ? "" : " spento"}" aria-hidden="true"></span>${vivo ? "Adesso, nella community" : "Nessuno dentro in questo momento"}</div>` +
+      `<div class="now-grid">` +
+      cella("online", ad.online, "persone nell'app", vivo) +
+      cella("eventi in corso", ad.inCorso, "iniziati da poco") +
+      cella("prossime 24 ore", ad.prossime24, "eventi in programma") +
+      cella("nuovi oggi", ad.oggiNuovi, "persone iscritte") +
+      cella("messaggi nell'ora", ad.msgOra, "nelle chat dei gruppi") +
+      `</div>`;
   }
 
-  // l'app: quanti la scaricano, quanti se ne vanno, dopo quanto e perché
-  const addio = $("#addioBox");
-  if (addio) {
-    const a = d.app || {};
-    const scar = Number(a.installati) || 0;
-    const via = Number(a.disinstallati) || 0;
-    const torna = Number(a.tornati) || 0;
-    const resta = Number(a.restano) || 0;
-    const perc = scar ? Math.round((resta / scar) * 100) : 0;
-    const dopo = a.dopo || {};
-    if (!scar && !via) {
-      addio.innerHTML = "";
-    } else {
-      const righe = [];
-      righe.push(
-        `<p class="muted">${scar} ${scar === 1 ? "persona l'ha scaricata" : "persone l'hanno scaricata"}${
-          Number(a.installatiPeriodo) ? ` (${a.installatiPeriodo} negli ultimi ${d.giorni || 7} giorni)` : ""
-        }</p>`
-      );
-      if (via || scar) {
-        righe.push(
-          `<p class="addio-grande"><b>${resta}</b> su ${scar} restano${via ? ` · ${via} ${via === 1 ? "se n'è andata" : "se ne sono andate"}${torna ? `, ${torna} ${torna === 1 ? "è tornata" : "sono tornate"}` : ""}` : ""}${
-            scar ? ` <span class="addio-perc">${perc}%</span>` : ""
-          }</p>`
-        );
-      }
-      if (via && (dopo.entroUno || dopo.entroSette || dopo.oltre)) {
-        const pezzi = [];
-        if (dopo.entroUno) pezzi.push(`${dopo.entroUno} entro 24 ore`);
-        if (dopo.entroSette) pezzi.push(`${dopo.entroSette} entro una settimana`);
-        if (dopo.oltre) pezzi.push(`${dopo.oltre} dopo più di una settimana`);
-        righe.push(
-          `<p class="muted">Se ne vanno dopo ${String(dopo.media || 0).replace(".", ",")} giorni in media · ${pezzi.join(" · ")}</p>`
-        );
-      }
-      if (via && (a.motivi || []).length) {
-        const m = a.motivi.map((x) => `${x.n} ${esc(x.testo)}`);
-        righe.push(`<p class="muted">Perché, per quello che si vede dai dati: ${m.join(" · ")}</p>`);
-      }
-      if (Number(a.spariti)) {
-        righe.push(`<p class="muted">${a.spariti} ${Number(a.spariti) === 1 ? "non si fa" : "non si fanno"} vedere da due settimane (non so se hanno disinstallato).</p>`);
-      }
-      const nomi = (a.nomi || [])
-        .map(
-          (x) =>
-            `<div class="addio-riga"><b>${esc(x.chi)}</b><span>${esc(
-              x.giorni === null ? x.perche : `dopo ${String(x.giorni).replace(".", ",")} giorni: ${x.perche}`
-            )}${x.tornato ? " · poi è tornata" : ""}</span></div>`
-        )
-        .join("");
-      addio.innerHTML = `<div class="stat-block"><h3>L'app sul telefono</h3>${righe.join("")}${nomi}</div>`;
+  // ---- le frasi che leggono i numeri al posto tuo: solo sulla community
+  const let_ = $("#statsLetture");
+  if (let_) {
+    const ins = [];
+    const cat = (com.categorie || []).slice().sort((a, b) => b.n - a.n)[0];
+    const citta = (com.citta || []).slice().sort((a, b) => b.n - a.n)[0];
+    const giorno = (com.giorni || []).slice().sort((a, b) => b.n - a.n)[0];
+    const fascia = (com.fasce || []).slice().sort((a, b) => b.n - a.n)[0];
+    const c = com.crescita || {};
+    if (cat && cat.n) ins.push({ v: pc(cat.perc), t: `degli eventi è ${cat.k}`, s: `${nf(cat.n)} ${Number(cat.n) === 1 ? "evento" : "eventi"} su ${nf(com.eventi)}` });
+    if (citta && citta.n) ins.push({ v: pc(citta.perc), t: `degli eventi è a ${citta.k}`, s: `la zona più attiva` });
+    if (giorno && giorno.n) ins.push({ v: giorno.k, t: `è il giorno con più eventi`, s: `${pc(giorno.perc)} del totale` });
+    if (fascia && fascia.n) ins.push({ v: fascia.k, t: `è la fascia preferita`, s: `${pc(fascia.perc)} degli eventi` });
+    if (Number(com.riempimento) > 0) ins.push({ v: pc(com.riempimento), t: `dei posti è occupato`, s: `sugli eventi in programma` });
+    if (Number(com.ritornoPersone) > 0) ins.push({ v: pc(com.ritornoPersone), t: `torna a un secondo evento`, s: `persone che non si fermano alla prima volta` });
+    if (Number(com.etaMedia) > 0) ins.push({ v: com.etaMedia, t: `anni è l'età media`, s: `di chi ha un profilo` });
+    if (c.eventi && Number(c.eventi.ora) > 0) ins.push({ v: (c.eventi.perc > 0 ? "+" : "") + pc(c.eventi.perc), t: `eventi questa settimana`, s: `${nf(c.eventi.ora)} contro ${nf(c.eventi.prima)} la settimana prima` });
+    if (let_) {
+      let_.innerHTML = ins.length
+        ? `<div class="stat-block"><h3>Cosa dicono i numeri</h3><div class="insight-grid">${ins
+            .slice(0, 6)
+            .map((x) => `<div class="insight"><b>${esc(String(x.v))}</b><span>${esc(x.t)}</span><i>${esc(x.s)}</i></div>`)
+            .join("")}</div></div>`
+        : `<div class="stat-block"><h3>Cosa dicono i numeri</h3><p class="muted">Appena ci saranno eventi e persone, qui trovi le frasi che leggono i numeri.</p></div>`;
     }
   }
 
+  // ---- i numeri, compatti
   const nums = $("#statsNums");
   if (nums) {
+    const n = (label, v, sub) =>
+      `<div class="num"><b>${v}</b><span>${esc(label)}</span>${sub ? `<i>${esc(sub)}</i>` : ""}</div>`;
+    const c = com.crescita || {};
     nums.innerHTML = [
-      num("persone nel periodo", p.unici || 0),
-      num("quante tornano", (p.ritorno || 0) + "%"),
-      num("nuove", p.nuovi || 0),
-      num("media al giorno", p.media || 0),
-      num("oggi", o.unici || 0),
-      num("online adesso", o.online || 0),
-      num("iscritti", t.iscritti || 0),
-      num("iscritti nel periodo", p.iscritti || 0),
-      num("download nel periodo", p.download || 0),
-      num("download totali", t.download || 0),
-      num("persone di sempre", t.persone || 0),
-      num("dall'app installata", t.inApp || 0),
-      num("eventi in programma", t.eventi || 0),
-      num("messaggi scambiati", t.messaggi || 0),
-      num("pareri lasciati", t.feedback || 0),
-      num("domande all'AI", t.domande || 0),
+      n("persone nella community", nf(com.persone), "profili veri, senza di te"),
+      n("eventi creati in tutto", nf(com.eventi)),
+      n("eventi in programma", nf(com.inProgramma)),
+      n("partecipazioni", nf(com.partecipazioni)),
+      n("persone per evento", dec(com.mediaPartecipanti), "media"),
+      n("persone che tornano", pc(com.ritornoPersone), "a più di un evento"),
+      n("posti occupati", pc(com.riempimento), "sugli eventi in arrivo"),
+      n("ricordi", nf(com.ricordi && com.ricordi.tot), `${nf(com.ricordi && com.ricordi.conFoto)} con foto`),
+      n("messaggi nelle chat", nf(com.chat && com.chat.messaggi), `${nf(com.chat && com.chat.eventi)} eventi con chat`),
+      n("nuovi questa settimana", nf(c.nuovi && c.nuovi.ora), c.nuovi && c.nuovi.ora ? `${c.nuovi.perc > 0 ? "+" : ""}${pc(c.nuovi.perc)} sulla precedente` : ""),
+      n("voto medio dei ricordi", com.ricordi && com.ricordi.votoMedio ? dec(com.ricordi.votoMedio) + " / 5" : "–", com.ricordi && com.ricordi.tot ? `${nf(com.ricordi.tot)} ricordi` : ""),
+      n("età media", com.etaMedia ? nf(com.etaMedia) + " anni" : "–"),
     ].join("");
   }
 
-  // grafico giorno per giorno
+  // ---- per voce, con la percentuale sul totale
+  const bloccoPerc = (titolo, righe, nota) => {
+    const tot = (righe || []).reduce((a, r) => a + (Number(r.n) || 0), 0);
+    if (!righe || !righe.length) return `<div class="stat-block"><h3>${esc(titolo)}</h3><p class="muted">Ancora niente da contare.</p></div>`;
+    return `<div class="stat-block"><h3>${esc(titolo)}</h3>${righe
+      .map((r) => {
+        const perc = Number.isFinite(Number(r.perc)) ? Number(r.perc) : tot ? Math.round(((Number(r.n) || 0) / tot) * 100) : 0;
+        return `<div class="stat-riga"><span class="sr-k">${esc(r.k)}</span><span class="sr-n">${r.n} · ${perc}%</span><i style="width:${perc > 0 ? Math.max(2, perc) : 0}%"></i></div>`;
+      })
+      .join("")}${nota ? `<p class="muted">${esc(nota)}</p>` : ""}</div>`;
+  };
+
+  // ---- il grafico giorno per giorno
   const serie = $("#statsSerie");
   if (serie) {
     const rows = d.serie || [];
     const max = Math.max(1, ...rows.map((r) => r.unici));
     const bars = rows
-      .map(
-        (r) =>
-          `<i style="height:${Math.max(3, Math.round((r.unici / max) * 100))}%" title="${r.d}: ${r.unici} persone, ${r.views} schermate"></i>`
-      )
+      .map((r) => `<i style="height:${Math.max(3, Math.round((r.unici / max) * 100))}%" title="${r.d}: ${r.unici} persone"></i>`)
       .join("");
     const first = rows[0]?.d ? rows[0].d.slice(5).split("-").reverse().join("/") : "";
     const last = rows.length ? rows[rows.length - 1].d.slice(5).split("-").reverse().join("/") : "";
     serie.innerHTML = `<div class="stat-block"><h3>Persone diverse, giorno per giorno</h3><div class="spark">${bars}</div><div class="spark-x"><span>${first}</span><span>${last}</span></div></div>`;
   }
 
-  // andamento nel tempo: settimana, mesi, anni (come un grafico di borsa)
+  // ---- andamento nel tempo
   const trend = $("#statsTrend");
   if (trend) {
     const a = d.andamento || {};
@@ -6923,9 +7501,8 @@ function renderStats(d) {
       { t: "Anni", punti: a.anni || [], etichetta: (k) => k, nota: "dal primo anno a oggi" },
     ];
     const disegni = blocchi.map((b) => {
-      const vals = b.punti.map((p) => Number(p.n) || 0);
+      const vals = b.punti.map((x) => Number(x.n) || 0);
       if (!vals.length) return "";
-      // con un solo periodo la linea è piatta: conta il numero, non il disegno
       const disegno = vals.length > 1 ? vals : [vals[0], vals[0]];
       const W = 100, H = 30;
       const max = Math.max(1, ...disegno), min = Math.min(...disegno);
@@ -6947,61 +7524,44 @@ function renderStats(d) {
       : "";
   }
 
-  // imbuto: dove si perde la gente
-  const fun = $("#statsFunnel");
-  if (fun) {
-    const rows = (d.imbuto || []).filter((r) => r.n > 0 || (d.imbuto && d.imbuto[0].n > 0));
-    const top = Math.max(1, (d.imbuto && d.imbuto[0] && d.imbuto[0].n) || 1);
-    fun.innerHTML = rows.length
-      ? `<div class="stat-block"><h3>Il percorso, passo per passo</h3><div class="funnel">${d.imbuto
+  // ---- gli eventi che stanno riempiendo adesso
+  const top = $("#statsTop");
+  if (top) {
+    const righe = com.top || [];
+    top.innerHTML = righe.length
+      ? `<h3>Gli eventi che stanno riempiendo</h3>${righe
           .map(
-            (r) =>
-              `<div class="fn"><i style="width:${Math.max(6, Math.round((r.n / top) * 100))}%"></i><b>${esc(r.k)}<span>${r.n}</span></b></div>`
+            (e) => `<div class="top-ev"><div class="te-t"><b>${esc(e.title || "Senza titolo")}</b><span>${esc(e.city || "")}</span></div>
+              <div class="te-n">${e.going}/${e.capacity || "–"}</div>
+              <div class="te-b"><i style="width:${Math.min(100, Math.max(2, e.perc))}%"></i></div></div>`
           )
-          .join("")}</div></div>`
-      : "";
+          .join("")}`
+      : `<h3>Gli eventi che stanno riempiendo</h3><p class="muted">Nessun evento in programma con posti prenotati.</p>`;
   }
 
-  // le solite classifiche
   const sesso = (d.sesso || []).map((r) => ({
     k: r.k === "f" ? "donne" : r.k === "m" ? "uomini" : r.k === "n" ? "altro" : "non detto",
     n: r.n,
   }));
-  const ore = (d.ore || []).filter((h) => h.n > 0).map((h) => ({ k: `${String(h.h).padStart(2, "0")}:00`, n: h.n }));
   const charts = $("#statsCharts");
   if (charts) {
     charts.innerHTML = [
-      statBlock("Donne e uomini", sesso),
-      statBlock("Età", d.eta),
-      statBlock("Interessi più scelti", d.interessi),
-      statBlock("A che ora entrano", ore),
-      statBlock("Città", d.citta),
-      statBlock("Lingue", d.lingue),
-      statBlock("Cosa aprono", d.percorsi),
-      (d.ultimiFeedback || []).length
-        ? `<div class="stat-block"><h3>Ultimi feedback</h3>${d.ultimiFeedback
-            .map((f) => `<p class="muted">“${esc(String(f.text || "").slice(0, 160))}”</p>`)
-            .join("")}</div>`
-        : "",
+      bloccoPerc("Eventi per categoria", com.categorie, "Percentuale sul totale degli eventi creati."),
+      bloccoPerc("Eventi per città", com.citta, "Percentuale sul totale degli eventi creati."),
+      bloccoPerc("Come si entra", com.accesso, "Foto, viso verificato o invito: come sono impostati gli eventi."),
+      bloccoPerc("Giorni della settimana", com.giorni, "Quando si esce, sugli eventi degli ultimi 3 mesi."),
+      bloccoPerc("Fasce della giornata", com.fasce, "Mattina, pomeriggio, sera, notte."),
+      bloccoPerc("Donne e uomini", sesso),
+      bloccoPerc("Età", d.eta),
+      bloccoPerc("Interessi più scelti", d.interessi),
+      bloccoPerc("Lingue", d.lingue),
     ].join("");
-  }
-
-  // dove si bloccano
-  const fr = $("#statsFriction");
-  if (fr) {
-    const rows = d.attrito || [];
-    fr.innerHTML = rows.length
-      ? `<div class="stat-block"><h3>Dove si bloccano</h3>${rows
-          .map(
-            (r) =>
-              `<div class="fr"><div>${esc(r.kind)}${r.detail ? `<em>${esc(r.detail)}</em>` : ""}</div><b>${r.n}</b></div>`
-          )
-          .join("")}<p class="tagline">Se una voce cresce, quella cosa va semplificata: dimmelo e la sistemo.</p></div>`
-      : `<div class="stat-block"><h3>Dove si bloccano</h3><p class="muted">Nessun intoppo registrato nel periodo. Buon segno.</p></div>`;
   }
 }
 
+
 let statsDays = 7;
+let statsDataTimer = 0;
 
 async function caricaCodaViso() {
   const token = localStorage.getItem(OWNER_TOKEN_KEY) || "";
@@ -7147,6 +7707,33 @@ function agoShort(ts) {
   return Math.round(s / 86400) + " g";
 }
 
+// come si sentono le persone: l'umore scelto una volta al giorno finisce qui
+async function loadMoodStats() {
+  const box = $("#statsMood");
+  if (!box) return;
+  try {
+    const d = await api(`/moods?days=${statsDays}&device=${encodeURIComponent(device)}`);
+    const list = (d.moods || []).filter((x) => x && x.n);
+    const tot = list.reduce((s, x) => s + Number(x.n || 0), 0);
+    if (!tot) {
+      box.innerHTML = `<h3 class="stat-block-t">Come ti sentono</h3><p class="muted">Ancora nessuna risposta: l'umore lo si sceglie una volta al giorno.</p>`;
+      return;
+    }
+    const emo = {};
+    for (const m of MOODS) emo[m.id] = m.emoji;
+    box.innerHTML = `<h3 class="stat-block-t">Come si sentono</h3>
+      <p class="muted">${tot} risposte negli ultimi ${statsDays} giorni · oggi ${Number(d.today) || 0}</p>
+      ${list.map((x) => {
+        const pc = Math.round((Number(x.n) / tot) * 100);
+        return `<div class="mood-bar"><b>${emo[x.mood] || ""} ${esc(t("mood." + x.mood))}</b>
+          <span class="mb-track"><i style="width:${pc}%"></i></span>
+          <span class="mb-n">${x.n} · ${pc}%</span></div>`;
+      }).join("")}`;
+  } catch {
+    box.innerHTML = "";
+  }
+}
+
 async function loadLive() {
   const box = $("#statsLive");
   if (!box) return;
@@ -7176,9 +7763,9 @@ async function loadLive() {
       })),
     ]
       .sort((a, b) => b.t - a.t)
-      .slice(0, 24);
+      .slice(0, 10);
 
-    const head = `<h3 style="margin:18px 0 6px">In tempo reale</h3>`;
+    const head = `<h3 style="margin:18px 0 6px">Cosa stanno facendo adesso</h3>`;
     const wait = pending
       ? `<button class="live-wait" id="liveWait" type="button">${pending} ${pending === 1 ? "verifica da guardare" : "verifiche da guardare"} ›</button>`
       : "";
@@ -7203,6 +7790,8 @@ async function loadLive() {
       : "";
     const tempoList = tempi.length
       ? tempi
+          .filter((p) => !p.tu)
+          .slice(0, 6)
           .map(
             (p) => `<div class="live-row"><span class="live-k">${esc(p.chi)}${p.tu ? " (tu)" : ""}</span>
               <span class="live-t">${esc(minuti(p.sec))}</span>
@@ -7214,6 +7803,44 @@ async function loadLive() {
     box.innerHTML = head + wait + list + tempoHead + tempoIntro + tempoList;
     const apri = $("#liveWait");
     if (apri) apri.onclick = () => apriRevisione("todo");
+
+    // ---- chi è online adesso, con il nome (tu resti fuori)
+    const online = d.online || [];
+    const boxOn = $("#statsOnline");
+    if (boxOn) {
+      boxOn.innerHTML = online.length
+        ? online
+            .map(
+              (p) => `<div class="live-row"><span class="live-dot" aria-hidden="true"></span>
+                <span class="live-k">${esc(p.chi)}</span>
+                <span class="live-w">${p.modo === "app" ? "dall'app" : "dal browser"}</span>
+                <span class="live-t">${esc(agoShort(p.at || Date.now()))}</span></div>`
+            )
+            .join("")
+        : `<p class="muted">Nessun altro dentro in questo momento: solo tu.</p>`;
+    }
+    const onN = $("#statsOnlineN");
+    if (onN) onN.textContent = online.length ? String(online.length) : "";
+
+    // ---- chi ha votato cosa: nomi, stelle e pollici
+    const voti = d.voti || [];
+    const boxVoti = $("#statsVoti");
+    if (boxVoti) {
+      boxVoti.innerHTML = voti.length
+        ? voti
+            .map((v) => {
+              const segno = v.stelle ? `★ ${v.stelle}/5` : v.pollice === 1 ? "👍" : v.pollice === -1 ? "👎" : "voto";
+              return `<div class="live-row"><span class="live-k">${esc(v.chi)}</span>
+                <span class="live-w">${esc(segno)}${v.titolo ? " · " + esc(v.titolo) : ""}</span>
+                <span class="live-t">${esc(agoShort(v.at || Date.now()))}</span></div>`;
+            })
+            .join("")
+        : `<p class="muted">Nessun voto ancora. Quando qualcuno vota un ricordo, compare qui con il nome.</p>`;
+    }
+    const vN = $("#statsVotiN");
+    if (vN) vN.textContent = voti.length ? String(voti.length) : "";
+    const lN = $("#statsLiveN");
+    if (lN) lN.textContent = String(items.length + ops.length) || "";
   } catch {
     box.innerHTML = "";
   }
@@ -7914,6 +8541,8 @@ async function openStats() {
   loadPeople();
   loadPushStato();
   loadSegnalazioni();
+  loadMoodStats();
+  loadSecurity();
   // mentre guardi i numeri, avvisi e segnalazioni si rinfrescano da soli
   clearInterval(statTimer);
   statTimer = setInterval(() => {
@@ -7955,7 +8584,7 @@ async function openStats() {
   // il permesso dei numeri scade: invece di chiedere di rientrare, lo rinnovo da solo
   const leggiNumeri = async () => {
     const token = localStorage.getItem(OWNER_TOKEN_KEY) || "";
-    const res = await fetch(`/api/owner/stats?days=${statsDays}&t=${Date.now()}&token=` + encodeURIComponent(token), {
+    const res = await fetch(`/api/owner/stats?days=${statsDays}&device=${encodeURIComponent(device)}&t=${Date.now()}&token=` + encodeURIComponent(token), {
       headers: { "content-type": "application/json" },
       cache: "no-store",
     });
@@ -7978,6 +8607,14 @@ async function openStats() {
       dati = await leggiNumeri();
     }
     renderStats(dati);
+    // mentre guardi, i numeri si aggiornano da soli: la community è viva
+    clearInterval(statsDataTimer);
+    statsDataTimer = setInterval(async () => {
+      if (document.hidden || !$("#stats") || $("#stats").hidden) return;
+      try {
+        renderStats(await leggiNumeri());
+      } catch {}
+    }, 30000);
   } catch {
     if (nums) nums.innerHTML = "";
     if (charts)
@@ -8009,7 +8646,7 @@ async function permState(kind) {
           if (st === "granted" || st === "denied") return st;
         } catch {}
       }
-      return myPos || localStorage.getItem("fuori.pos") ? "granted" : "prompt";
+      return myPos ? "granted" : "prompt";
     }
     if (kind === "mic" || kind === "cam") {
       // Chrome spesso risponde "denied" per fotocamera e microfono anche quando vanno:
@@ -8205,18 +8842,24 @@ function openPerms() {
 function paintTestPush() {
   const btn = $("#permTestBtn");
   if (!btn) return;
-  const can = "Notification" in window && Notification.permission === "granted" && Boolean(person?.email);
-  btn.hidden = !can;
+  // sempre visibile: se il permesso manca lo dice, invece di nascondere il tasto
+  btn.hidden = false;
+  const can = true;
   btn.onclick = async () => {
+    if (!("Notification" in window) || Notification.permission !== "granted") {
+      toastErr("Prima accendi gli avvisi qui sopra: senza permesso il telefono non mostra niente, anche se il server manda.");
+      return;
+    }
     if (!person?.email) {
-      toastErr(t("perm.testOff"));
+      toastErr("Prima entra col tuo account: l'avviso va legato a una mail.");
       return;
     }
     try {
+      await ensurePush();
       const d = await api("/push/test", { method: "POST", body: JSON.stringify({ email: person.email, device }) });
       if (d.sent) {
         const ok = (d.statuses || []).every((x) => x >= 200 && x < 300);
-        toast(ok ? t("perm.testSent") : t("perm.testRetry"));
+        toast(ok ? t("perm.testSent") + " Se l'app è aperta la vedi anche qui sopra." : t("perm.testRetry"));
       } else toastErr(t("perm.testOff"));
     } catch (err) {
       toastErr(err.data?.error || t("perm.testOff"));
@@ -8256,26 +8899,34 @@ function bind() {
   };
   const heroFind = $("#heroFind");
   if (heroFind) heroFind.onclick = () => vaiA(document.querySelector(".matrix-wrap"));
-  const zoneBtn = $("#heroZone");
-  if (zoneBtn) zoneBtn.onclick = async () => {
-    if (zoneBtn.disabled) return;
-    zoneBtn.disabled = true;
-    const ok = await refreshPosition({ force: true });
-    zoneBtn.disabled = false;
-    toast(ok ? "Posizione aggiornata" : "GPS non disponibile: riprova tra poco");
-  };
   const heroCreate = $("#heroCreate");
   if (heroCreate) heroCreate.onclick = () => {
-    // prima la zona "come ti senti": le idee proposte; se non piacciono si crea
-    const mood = $("#moodCard");
-    vaiA(mood);
-    if (mood) {
-      mood.classList.add("mood-focus");
-      setTimeout(() => mood.classList.remove("mood-focus"), 1800);
-    }
+    // prima come si sente, una volta al giorno: poi il modulo
+    if (moodPick) { if (possoFareEventi()) openCreate(); return; }
+    moodPerCreare = true;
+    openMoodDaily();
+  };
+  const moodSkip = $("#moodSkip");
+  if (moodSkip) moodSkip.onclick = () => {
+    try { localStorage.setItem("fuori.moodDay", moodDayKey()); } catch {}
+    moodPerCreare = false;
+    hide("moodDaily");
   };
   const moodCreate = $("#moodCreate");
   if (moodCreate) moodCreate.onclick = () => { if (possoFareEventi()) openCreate(); };
+  const moodRefresh = $("#moodRefresh");
+  if (moodRefresh) moodRefresh.onclick = () => {
+    // altre cinque, subito: non aspetto il quarto d'ora
+    moodKick = Math.floor(Math.random() * 900) + 1;
+    try {
+      const m = leggiIdee();
+      if (m.m) delete m.m[moodPick];
+      salvaIdee(m);
+    } catch {}
+    buildIdeas();
+    const box = $("#moodIdeas");
+    if (box) box.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  };
   const moodOther = $("#moodOther");
   if (moodOther) moodOther.onclick = () => {
     // nessun umore va bene: tolgo la scelta e porto direttamente alle attività
@@ -8304,6 +8955,9 @@ function bind() {
     // non filtro gli eventi: apro subito la creazione con questa attività già scelta
     apriCreaCon(b.dataset.act, b.dataset.cat);
   };
+  document.querySelectorAll("#share [data-share]").forEach((b) => {
+    b.onclick = () => condividiCon(b.dataset.share);
+  });
   const heroShare = $("#heroShareBtn");
   if (heroShare) heroShare.onclick = onShare;
   const shareBtnHome = $("#shareHomeBtn");
@@ -8384,7 +9038,18 @@ function bind() {
   // sotto gli eventi: il modo per crearne uno, scritto in chiaro
   const creaCta = $("#creaCta");
   if (creaCta) creaCta.onclick = () => { if (possoFareEventi()) openCreate(); };
-  $("#aiBtn").onclick = openAi;
+  $("#aiBtn").onclick = () => { nascondiMascotte(); openAi(); };
+  const mascotX = $("#mascotClose");
+  if (mascotX) mascotX.onclick = (e) => { e.stopPropagation(); nascondiMascotte(true); };
+  const mascotB = $("#mascotBubble");
+  // v631b: Sì apre la chat e le mostra gli eventi vicini; No chiude e basta
+  const mascotSi = $("#mascotSi");
+  if (mascotSi) mascotSi.onclick = (e) => { e.stopPropagation(); mascotteRispondi(true); };
+  const mascotNo = $("#mascotNo");
+  if (mascotNo) mascotNo.onclick = (e) => { e.stopPropagation(); mascotteRispondi(false); };
+  const delOk = $("#delOk");
+  if (delOk) delOk.onclick = confermaAnnulla;
+  mascotteAvvia();
   $("#favBtn").onclick = openFav;
   wireNav();
   $("#moreBtn").onclick = () => loadEvents(false);
@@ -8628,8 +9293,7 @@ function bind() {
     };
   const bellBtn = $("#muteBtn");
   if (bellBtn) bellBtn.onclick = () => openMute(chatId || "all");
-  const groupsBtn = $("#groupsBtn");
-  if (groupsBtn) groupsBtn.onclick = () => openMute("all");
+
   $$("[data-mute]").forEach((b) => {
     b.onclick = () => saveMute(b.dataset.mute);
   });
@@ -8646,7 +9310,8 @@ function bind() {
       const b = e.target.closest("[data-mf]");
       if (!b) return;
       if (b.dataset.mf === "scelti") return void apriSceltaMappa();
-      cambiaFiltroMappa(b.dataset.mf);
+      // toccare il filtro già scelto lo toglie: si torna a "tutti"
+      cambiaFiltroMappa(b.dataset.mf === mapFiltro ? "tutti" : b.dataset.mf);
     };
   }
   const mscelta = $("#mapSceltaOk");
@@ -8707,6 +9372,11 @@ function bind() {
 
   $("#profileSave").onclick = saveProfile;
   $("#profileBadges").onclick = () => $("#photoInput").click();
+  // se ruoti o cambi schermo, il nome si riproporziona (un solo ascoltatore)
+  if (!window.__fuoriNomeFit) {
+    window.__fuoriNomeFit = true;
+    window.addEventListener("resize", () => { const p = $("#profile"); if (p && !p.hidden) fitProfileName(); });
+  }
   $("#photoInput").onchange = (e) => { const f = e.target.files?.[0]; if (f) openCrop(f); e.target.value = ""; };
   $("#cropOk").onclick = confirmCrop;
   $("#cropCancel").onclick = () => hide("crop");
@@ -9001,17 +9671,18 @@ async function init() {
   if (TELEFONO_LENTO) {
     document.documentElement.classList.add("risparmio");
     dopoAvvio(() => {
-      loadTaxonomy().then(() => { renderCats(); paintWeather(); fillActivityOptions(); }).catch(() => {});
+      loadTaxonomy().then(() => { renderCats(); paintWeather(); }).catch(() => {});
       loadZones().then(() => paintMood()).catch(() => {});
     }, 400);
   } else {
-    loadTaxonomy().then(() => { renderCats(); paintWeather(); fillActivityOptions(); }).catch(() => {});
+    loadTaxonomy().then(() => { renderCats(); paintWeather(); }).catch(() => {});
     loadZones().then(() => paintMood()).catch(() => {});
   }
   refreshMe();
   // meteo e avvisi non servono per leggere la prima schermata
   dopoAvvio(() => bootWeather(), TELEFONO_LENTO ? 4000 : 900);
   dopoAvvio(() => startUnread(), TELEFONO_LENTO ? 5000 : 1500);
+  dopoAvvio(() => startNotif(), TELEFONO_LENTO ? 6000 : 2000);
   // dice al server "sono aperta": serve a capire se l'app parte davvero
   dopoAvvio(() => api("/open", {
     method: "POST",
@@ -9031,6 +9702,7 @@ async function init() {
   // la lista si aggiorna da sola e l'app si accorge quando c'è una versione nuova
   avviaListaViva();
   dopoAvvio(() => controllaVersione(), 2200);
+  dopoAvvio(() => moodDailyPrompt(), 700);
   // la Community si prepara in sottofondo: quando la apri ricordi e post sono già lì
   dopoAvvio(() => { if (localStorage.getItem("fuori.onbDone")) loadPast(); }, 1500);
   dopoAvvio(() => { if (localStorage.getItem("fuori.onbDone")) loadFeed(false, true); }, 2100);
@@ -9040,23 +9712,23 @@ async function init() {
     if (view === "home" && !document.querySelector(".sheet:not([hidden])")) loadEvents(true);
   });
 
-  // avvisi: se il telefono ha già detto sì, si attivano da soli; se sono spenti lo ricordo
-  paintPushBar();
-  ensurePush();
-  syncSaved();
-  paintTwaBar();
+  // avvisi: se il telefono ha già detto sì, si attivano da soli; se sono spenti lo ricordo.
+  // Ognuna di queste cose è un extra: se una fallisce l'app deve comunque partire.
+  try { paintPushBar(); } catch {}
+  try { ensurePush(); } catch {}
+  try { askPushSoon(); } catch {}
+  try { syncSaved(); } catch {}
+  try { paintTwaBar(); } catch {}
+  // un "?" in ogni zona, che apre la guida sulla parte giusta
+  try { agganciaAiuti(); } catch {}
   // le spiegazioni dei "?" servono dalla prima schermata: le carico e poi ridisegno le idee
-  loadGlossario()
-    .then(() => {
-      buildIdeas();
-      renderList();
-      if (aiOpen) { renderAiMode(); renderVoice(); }
-    })
-    .catch(() => {});
+  // le spiegazioni servono solo quando apri un "?": si caricano senza ridisegnare la home
+  loadGlossario().catch(() => {});
   const deep = new URLSearchParams(location.search).get("e");
   if (deep) openDetail(deep);
   if (new URLSearchParams(location.search).get("verify")) setTimeout(() => openVerify(), 900);
   if (new URLSearchParams(location.search).get("segnalazioni")) setTimeout(() => openStats(), 700);
+  if (new URLSearchParams(location.search).get("sicurezza")) setTimeout(() => openStats(), 700);
   const rt = new URLSearchParams(location.search).get("reset");
   if (rt) openReset(rt);
   else if (!person && !deep && !localStorage.getItem("fuori.onbDone"))
@@ -9244,6 +9916,36 @@ function giornoBreve(ms) {
   try { return new Intl.DateTimeFormat(LOCALES[lang], { day: "numeric", month: "short" }).format(new Date(ms)); } catch { return ""; }
 }
 
+// la categoria di un ricordo anche quando non è salvata: la ricavo dal nome
+const CAT_REGOLE = [
+  [/yoga|meditazion|spa|sauna|massagg|benessere|respiraz|pilates|stretch/, "benessere"],
+  [/corsa|calcio|padel|tennis|palestra|bici|nuoto|trekking|escursion|sport|arrampic/, "sport"],
+  [/musica|concerto|live|jazz|dj|karaoke|coro|band/, "musica"],
+  [/cinema|film|teatro|museo|mostra|libro|arte|fotografia|cultura/, "cinema"],
+  [/cena|pranzo|aperitivo|pizza|vino|birra|cucin|food|brunch|caffè|gelato/, "serate"],
+  [/gioco|giochi|quiz|biliardo|bowling|scacchi|escape|laser/, "giochi"],
+  [/pittura|disegno|ceramica|fotografia creativa|creativ|scrittura|musica/, "creativita"],
+  [/mare|montagna|parco|natura|orto|giardin|picnic|campeggio/, "natura"],
+  [/cane|gatto|animal|pet/, "animali"],
+  [/volontariato|pulizia|raccolta|aiuto|donazion/, "volontariato"],
+  [/lingua|inglese|spagnolo|conversazione/, "lingue"],
+  [/viaggio|gita|tour|visita/, "viaggi"],
+  [/code|tech|computer|robot|coding/, "tech"],
+  [/conoscere|incontro|amici|gruppo|community/, "sociale"],
+];
+function catDaTesto(txt) {
+  const s = String(txt || "").toLowerCase();
+  for (const [re, id] of CAT_REGOLE) if (re.test(s)) return id;
+  return "creativita";
+}
+
+// la copertina di un ricordo senza foto: gradiente + icona del tema, mai vuota
+function copertinaRicordo(p, grande) {
+  const cat = p.cat || catDaTesto((p.att || "") + " " + (p.titolo || ""));
+  return `<span class="past-cover${grande ? " past-cover--big" : ""}" data-cat="${esc(cat)}" aria-hidden="true">
+    ${catIcon(cat)}<i>${esc(catName(cat) !== cat ? catName(cat) : "")}</i></span>`;
+}
+
 // una riga di ricordo: si tocca e si apre tutto (foto, voti, com'è andata)
 function pastCard(p) {
   const v = p.voti || { media: 0, stelle: 0, like: 0, dislike: 0, mio: 0, mie: 0 };
@@ -9251,11 +9953,11 @@ function pastCard(p) {
   return `<button class="pcard pcard--mini" type="button" data-past="${esc(p.id)}">
     ${p.foto
       ? `<img class="pcard-foto" src="${esc(p.foto)}" alt="" loading="lazy" decoding="async">`
-      : `<span class="pcard-emoji" aria-hidden="true">${CAT_EMOJI[p.cat] || "📍"}</span>`}
+      : copertinaRicordo(p)}
     <span class="pcard-t">
       <b>${esc(p.titolo || t("past.generico"))}</b>
       <span class="pcard-sub">${p.privato && !p.luogo ? `<span class="pcard-priv">🔒 ${esc(t("past.privato"))}</span> · ` : `${esc(dove)}${dove ? " · " : ""}`}${esc(giornoBreve(p.quando))}${p.persone ? ` · ${esc(t("past.persone", { n: p.persone }))}` : ""}</span>
-      <span class="pcard-voto">${v.stelle ? `★ ${esc(String(v.media))} · ${esc(String(v.stelle))}` : esc(t("voti.nessuno"))}</span>
+      <span class="pcard-voto">${v.mie ? `<span class="pv-mine">★ ${v.mie}/5</span> · ` : ""}${v.stelle ? `${v.stelle} ${v.stelle === 1 ? "voto" : "voti"}` : esc(t("voti.nessuno"))}</span>
     </span>
     <span class="pcard-go" aria-hidden="true">›</span>
   </button>`;
@@ -9361,7 +10063,8 @@ function renderPassati() {
     .map(([k, label]) => `<button class="chip ${passatiFiltro === k ? "on" : ""}" type="button" data-pf="${esc(k)}">${k === "preferiti" ? heartIcon(true) : ""}${esc(label)}</button>`)
     .join("");
   filtri.querySelectorAll("[data-pf]").forEach((b) => {
-    b.onclick = () => { passatiFiltro = b.dataset.pf; renderPassati(); };
+    // ritoccare il filtro attivo lo toglie: si torna ai più recenti
+    b.onclick = () => { passatiFiltro = passatiFiltro === b.dataset.pf && b.dataset.pf !== "recenti" ? "recenti" : b.dataset.pf; renderPassati(); };
   });
   const list = passatiScelti();
   const vuoto = passatiFiltro === "preferiti" ? t("past.favEmpty") : t("past.passEmpty");
@@ -9379,7 +10082,7 @@ function openPast(id) {
   const dove = [p.luogo, p.citta].filter(Boolean).join(", ");
   const foto = Array.isArray(p.fotos) && p.fotos.length
     ? `<div class="det-photos">${p.fotos.map((u) => `<img src="${esc(u)}" alt="${esc(t("detail.photos"))}" loading="lazy" decoding="async">`).join("")}</div>`
-    : "";
+    : copertinaRicordo(p, true);
   box.innerHTML = `
     <button class="x" data-close type="button" aria-label="Chiudi">×</button>
     <div class="det-tags"><span class="tag">${esc(catName(p.cat))}</span><span class="when">${esc(giornoBreve(p.quando))} · ${esc(t("past.eventoPassato"))}</span></div>
@@ -9390,10 +10093,18 @@ function openPast(id) {
     ${p.att ? `<p class="hint">${esc(p.att)}</p>` : ""}
     ${p.privato && !p.luogo ? `<p class="hint priv-note">🔒 ${esc(t("past.privatoNota"))}</p>` : ""}
     ${p.descrizione ? `<div class="det-desc"><p class="sec">${esc(t("past.descrizione"))}</p><p class="body">${esc(p.descrizione)}</p></div>` : ""}
+    ${Array.isArray(p.elenco) && p.elenco.length
+      ? `<div class="det-desc"><p class="sec">Chi c'era</p><div class="chi-cera">${p.elenco
+          .map((q) => `<span class="chi${q.io ? " io" : ""}">${esc(q.nome)}${q.io ? " (tu)" : ""}</span>`)
+          .join("")}</div></div>`
+      : p.posso
+        ? `<p class="hint">Nessun nome registrato per questo ricordo.</p>`
+        : `<p class="hint">🔒 L'elenco di chi c'era lo vedono solo le persone che hanno partecipato.</p>`}
     <p class="sec">${esc(t("past.recensioni"))}</p>
     <div class="rec-box">
       <div class="rec-media">${v.stelle ? `<b>${esc(String(v.media))}</b><span>${esc(t("voti.su5", { n: v.stelle }))}</span>` : `<b>–</b><span>${esc(t("voti.nessuno"))}</span>`}</div>
-      <div class="rec-stelle">${stelleHtml(v.mie || v.media, p.posso ? p.id : "")}</div>
+      <div class="rec-stelle">${stelleHtml(v.mie || 0, p.posso ? p.id : "")}<span class="why" data-why="ricordi.voto" aria-hidden="true">?</span></div>
+      ${v.stelle ? `<span class="rec-voti">${v.stelle} ${v.stelle === 1 ? "voto" : "voti"}${v.media ? ` · media ${v.media}` : ""}${v.mie ? ` · il tuo: ${v.mie}/5` : ""}</span>` : ""}
       ${p.posso
         ? `<div class="pcard-voti rec-pollice">
             <button class="pv up ${v.mio === 1 ? "on" : ""}" type="button" data-pvoto="1" data-ev="${esc(p.id)}">👍 ${esc(t("voti.like"))}</button>
@@ -10127,4 +10838,390 @@ function wireNav() {
   wireBack();
   // all'avvio torno dove eri: la home solo se non c'era altro
   setView(statoUI.v === "feed" ? "feed" : "home", false);
+}
+
+/* ---------- v594: l'umore che cambia davvero la home ---------- */
+let onlyMood = false;
+
+function moodName(id) {
+  const m = MOODS.find((x) => x.id === id);
+  return m ? t("mood." + m.id).toLowerCase() : "";
+}
+
+// l'umore non resta un dato buttato: dice quanti eventi gli somigliano
+// e ti lascia vedere solo quelli. Se non c'e' niente, lo dice chiaro.
+function paintMoodSay() {
+  const box = $("#moodSay");
+  if (!box) return;
+  if (!moodPick) { box.hidden = true; onlyMood = false; return; }
+  const m = MOODS.find((x) => x.id === moodPick);
+  const n = events.filter((ev) => moodFit(ev)).length;
+  const em = $("#moodSayEmoji");
+  const tx = $("#moodSayTxt");
+  const btn = $("#moodSayBtn");
+  if (em) em.textContent = m ? m.emoji : "✨";
+  if (tx) {
+    const etichetta = moodPick ? t("mood." + moodPick) : "";
+    tx.textContent = n
+      ? `Oggi: ${etichetta}. ${n} ${n === 1 ? "evento ha" : "eventi hanno"} a che fare con questo.`
+      : `Oggi: ${etichetta}. In questo momento non c'è niente che ci somigli: puoi crearlo tu.`;
+  }
+  if (btn) {
+    btn.hidden = !n;
+    btn.textContent = onlyMood ? "Mostra tutto" : "Solo questi";
+    btn.onclick = () => {
+      onlyMood = !onlyMood;
+      renderList();
+      paintMoodSay();
+    };
+  }
+  box.hidden = false;
+}
+
+/* ---------- v594: la mascotte al posto della scritta AI ---------- */
+const MASCOT_LINES = [
+  "Dimmi cosa ti va di fare: ti trovo qualcosa vicino a te.",
+  "Hai voglia di uscire? Ti mostro gli eventi di oggi.",
+  "C'è qualcosa che fa per te, vicino a te: vuoi che te lo mostri?",
+  "Cerchi compagnia per stasera? Posso cercarti qualcosa.",
+  "Dimmi che tipo di giornata vuoi: ti propongo io qualcosa.",
+  "Vuoi provare qualcosa di nuovo o rimettere qualcosa che ti piaceva?",
+];
+
+function mascotteOra() {
+  const h = new Date().getHours();
+  if (h >= 5 && h < 12) return "Buongiorno: oggi che tipo di giornata vuoi?";
+  if (h >= 12 && h < 18) return "Buon pomeriggio: ti va di fare qualcosa oggi?";
+  if (h >= 18 && h < 23) return "Stasera hai voglia di uscire o di stare tranquillo?";
+  return "Ancora sveglio: domani ti va di fare qualcosa?";
+}
+
+let mascotTimer = 0;
+let mascotChiusaOra = false;
+
+// v636: la mascotte cambia posa e guance secondo quello che sta facendo
+// ("chat" = parla e saluta, "pensa" = si tiene il mento, "" = giro di emozioni)
+function mascotteUmore(nome) {
+  const btn = $("#aiBtn");
+  if (!btn) return;
+  btn.classList.toggle("mf-chat", nome === "chat");
+  btn.classList.toggle("mf-pensa", nome === "pensa");
+}
+
+function nascondiMascotte() {
+  const b = $("#mascotBubble");
+  if (b) b.hidden = true;
+  mascotteUmore("");
+  // la X la nasconde per questa apertura, non per tutto il giorno:
+  // prima restava via fino a domani, ed e' per questo che sembrava "dopo 1 anno"
+  mascotChiusaOra = true;
+  if (mascotTimer) { clearTimeout(mascotTimer); mascotTimer = 0; }
+}
+
+function mascotConteggio() {
+  try {
+    const salvato = localStorage.getItem("fuori.mascotCount") || "";
+    return salvato.startsWith(moodDayKey() + ":") ? Number(salvato.split(":")[1]) || 0 : 0;
+  } catch { return 0; }
+}
+
+function mascotteMostra(b) {
+  // 3 secondi e si mostra: prima aspettava che si chiudesse un pannello
+  // (e se l'app ne riapriva uno all'avvio, non arrivava mai)
+  if (mascotChiusaOra) return;
+  if (mascotConteggio() >= 3) return;
+  // un solo avviso per apertura dell'app: il refresh della pagina non ne manda un altro
+  try { if (sessionStorage.getItem("fuori.mascotShown")) return; sessionStorage.setItem("fuori.mascotShown", "1"); } catch {}
+  try { localStorage.setItem("fuori.mascotCount", moodDayKey() + ":" + (mascotConteggio() + 1)); } catch {}
+  mascotteUmore("chat");
+  b.hidden = false;
+}
+
+// v631b: la mascotte prima guarda cosa c'è vicino a te, poi parla: niente frasi a caso
+let mascotEventiVicini = [];
+
+function mascotteRispondi(si) {
+  nascondiMascotte();
+  if (!si) return;
+  openAi();
+  if (mascotEventiVicini.length) {
+    const n = mascotEventiVicini.length;
+    aiBubble(n === 1 ? "Ecco l'evento vicino a te:" : `Ecco i ${n} eventi vicino a te:`, "bot", mascotEventiVicini);
+  } else {
+    aiBubble("Qui intorno non c'è niente. Scrivimi dove vuoi andare (una città o una zona) e ti cerco qualcosa.", "bot");
+  }
+}
+
+async function mascotteCerca() {
+  mascotteUmore("pensa");
+  mascotEventiVicini = [];
+  const pos = myPos || lastPos();
+  if (!pos) return null;
+  try {
+    const data = await api(`/map?device=${encodeURIComponent(device)}&lat=${pos.lat}&lng=${pos.lng}&r=10`);
+    mascotEventiVicini = (data.events || []).filter((e) => e.distance <= 10000);
+    return mascotEventiVicini.length;
+  } catch {
+    return null;
+  }
+}
+
+function mascotteFrase(n) {
+  if (n === null) return mascotteOra();
+  if (n > 0) return `Ci sono ${n === 1 ? "un evento interessante" : n + " eventi interessanti"} vicino a te. Vuoi che te li mostri?`;
+  return "Qui intorno non c'è niente in programma. Vuoi che ti cerchi qualcosa in un'altra zona?";
+}
+
+async function mascotteAvvia() {
+  const b = $("#mascotBubble");
+  if (!b || mascotTimer) return;
+  if (mascotConteggio() >= 3) return;
+  if (sessionStorage.getItem("fuori.mascotShown")) return;
+  const n = await mascotteCerca();
+  const tx = $("#mascotTxt");
+  if (tx) tx.textContent = mascotteFrase(n);
+  b.dataset.esito = n === null ? "" : n > 0 ? "vicini" : "nulla";
+  // 3 secondi dopo l'apertura, non subito e non dopo un anno
+  mascotTimer = setTimeout(() => { mascotTimer = 0; mascotteMostra(b); }, 3000);
+}
+
+/* ---------- v594: sicurezza, tentativi di reset sotto gli occhi del padrone ---------- */
+async function loadSecurity() {
+  const box = $("#statsSecurity");
+  if (!box) return;
+  try {
+    const d = await api(`/owner/alerts?device=${encodeURIComponent(device)}&t=${Date.now()}`);
+    const list = d.alerts || [];
+    if (!list.length) {
+      box.innerHTML = `<h3 class="stat-block-t">Sicurezza</h3><p class="muted">Nessun tentativo strano: il tuo profilo si apre solo dal tuo telefono.</p>`;
+      return;
+    }
+    box.innerHTML = `<h3 class="stat-block-t">Sicurezza</h3>
+      <p class="muted">Tentativi di entrare nel tuo account da altri telefoni. Restano qui finché non li guardi tu.</p>
+      ${list
+        .map((a) => {
+          const quando = new Date(Number(a.at) || Date.now()).toLocaleString("it-IT", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+          // i tentativi appena arrivati restano 30 secondi "in valutazione":
+          // il tempo di capire se è la persona giusta o no, poi l'esito
+          const eta = Date.now() - (Number(a.at) || 0);
+          const resto = Math.ceil((30000 - eta) / 1000);
+          const inValutazione = eta >= 0 && eta < 30000;
+          const esito = inValutazione
+            ? `<span class="sa-wait">valuto… ${resto}s</span>`
+            : a.esito === "bloccato"
+              ? `<span class="sa-done">bloccato</span>`
+              : a.esito === "mio"
+                ? `<span class="sa-done">eri tu</span>`
+                : `<span class="sa-wait">lo decidi tu</span>`;
+          return `<div class="sec-alert"><b>${esc(a.che || "Tentativo")}</b> · ${esito}
+            <span class="sa-time">${esc(quando)}${a.dove ? " · " + esc(a.dove) : ""}${a.nota ? " · " + esc(a.nota) : ""}</span></div>`;
+        })
+        .join("")}`;
+    // finché c'è un tentativo in valutazione, il riquadro si aggiorna da solo
+    if (list.some((a) => Date.now() - (Number(a.at) || 0) < 30000) && !$("#stats").hidden) {
+      clearTimeout(window.__secT);
+      window.__secT = setTimeout(() => { if (!$("#stats").hidden) loadSecurity(); }, 1500);
+    }
+  } catch {
+    box.innerHTML = "";
+  }
+}
+
+/* ---------- v594: la mappa dice dove sei davvero e quanto e' larga ---------- */
+let mapPlace = "";
+let mapScopeKey = "";
+let mapPaese = "";
+let mapPaeseCode = "";
+let mapConteggi = {};
+let mapMondo = 0;
+
+/* tema mappa: di giorno luminosa chiara, di notte scura.
+   Notte dalle 18 in inverno, dalle 20 in estate (ora legale EU). */
+function eNotte() {
+  const now = new Date();
+  const h = now.getHours();
+  // ora legale: ultima domenica di marzo -> ultima domenica di ottobre
+  const mk = (m, d) => new Date(now.getFullYear(), m, d).getTime();
+  const dom = (m) => { const d = new Date(now.getFullYear(), m + 1, 0); return d.getDate() - ((d.getDay() + 1) % 7); };
+  const estate = now.getTime() >= mk(2, dom(2)) && now.getTime() < mk(9, dom(9));
+  const da = estate ? 20 : 18;
+  return h >= da || h < 6;
+}
+let mapTiles = null;
+function aggiornaTemaMappa() {
+  if (!lmap || !window.L) return;
+  const notte = eNotte();
+  if (mapTiles) { try { lmap.removeLayer(mapTiles); } catch {} }
+  lmap.getContainer().classList.toggle("map-night", notte);
+  mapTiles = window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(lmap);
+}
+
+async function paintMapScope() {
+  const el = $("#mapScope");
+  if (!el) return;
+  // il paese esatto (frazione compresa): lo chiede il server una volta per punto
+  if (myPos) {
+    const key = myPos.lat.toFixed(3) + "," + myPos.lng.toFixed(3);
+    if (key !== mapScopeKey) {
+      mapScopeKey = key;
+      try {
+        const d = await api(`/where?lat=${myPos.lat}&lng=${myPos.lng}`);
+        mapPlace = String(d.label || d.town || "").trim();
+        mapPaese = String(d.paese || "").trim();
+        mapPaeseCode = String(d.paeseCode || "").toLowerCase();
+        mapConteggi = d.perPaese || {};
+        mapMondo = Number(d.mondo) || 0;
+      } catch {}
+    }
+  }
+  const r = radiusKm || 300;
+  const dentro = (e) => {
+    if (!myPos || !Number.isFinite(e.lat)) return false;
+    const d = distKm(myPos, e);
+    return d !== null && d <= r;
+  };
+  const vicini = mapTuttiEv.filter(dentro).length;
+  const tot = mapTuttiEv.length;
+  const nelPaese = Object.keys(mapConteggi || {}).length ? (mapConteggi[mapPaeseCode] || 0) : tot;
+  const nelMondo = mapMondo || tot;
+  const zoom = lmap ? lmap.getZoom() : 3;
+  const vista = zoom < 6 ? "vista: mondo" : zoom < 9 ? "vista: paesi lontani" : zoom < 11 ? "vista: regione" : zoom < 14 ? "vista: zona" : "vista: quartiere";
+  const parti = [];
+  if (mapPlace) parti.push(`Sei a ${mapPlace}${myPosAcc ? ` (±${Math.round(myPosAcc)} m)` : ""}`);
+  else if (myPos) parti.push("Sei qui");
+  if (myPos) {
+    parti.push(`${vicini} ${vicini === 1 ? "evento" : "eventi"} entro ${r} km`);
+    // per paese e per mondo: niente "3 in tutto" che non dice niente
+    parti.push(nelPaese ? `in ${mapPaese || "questo paese"}: ${nelPaese}` : `in ${mapPaese || "questo paese"}: nessun evento`);
+    parti.push(`nel mondo: ${nelMondo}`);
+  } else {
+    parti.push(`${tot} ${tot === 1 ? "evento" : "eventi"} sulla mappa`);
+    parti.push("attiva la posizione per vedere cosa c'è intorno a te");
+  }
+  parti.push(vista);
+  el.textContent = parti.join(" · ");
+}
+
+/* ---------- v601: avvisi in-app (quelli che arrivano mentre guardi) ---------- */
+// il server li tiene gia' pronti (/appnotif): qui li chiedo, li conto sulla
+// campanella e li mostro appena arrivano. Senza questo giro, dentro l'app
+// non arrivava niente.
+let notifItems = [];
+let notifSeen = new Set();
+let notifTimer = null;
+let ianUrl = "/";
+
+function notifIcon(n) {
+  const s = String(n.id || "");
+  if (s.startsWith("msg:")) return "💬";
+  if (s.startsWith("m:")) return "🕐";
+  if (s.startsWith("e:")) return "🔔";
+  return "✨";
+}
+
+function paintBell() {
+  const c = $("#bellCount");
+  if (!c) return;
+  const n = notifItems.filter((x) => !notifSeen.has(x.id)).length + Object.values(unread || {}).reduce((a, b) => a + (Number(b) || 0), 0);
+  c.hidden = !n;
+  c.textContent = n > 9 ? "9+" : String(n);
+}
+
+function mostraInApp(titolo, corpo, url) {
+  const box = $("#inAppNotif");
+  if (!box) return;
+  const t = $("#ianTitle"), b = $("#ianBody");
+  if (t) t.textContent = String(titolo || "FUORI").slice(0, 80);
+  if (b) b.textContent = String(corpo || "").slice(0, 140);
+  ianUrl = String(url || "/");
+  box.hidden = false;
+  clearTimeout(window.__ianT);
+  window.__ianT = setTimeout(() => { box.hidden = true; }, 9000);
+}
+
+function nascondiInApp() {
+  const box = $("#inAppNotif");
+  if (box) box.hidden = true;
+}
+
+async function loadNotif(annuncia) {
+  try {
+    const q = person && person.email ? `email=${encodeURIComponent(person.email)}&d=${encodeURIComponent(device)}` : `d=${encodeURIComponent(device)}`;
+    const d = await api(`/appnotif?${q}&t=${Date.now()}`);
+    const items = Array.isArray(d.items) ? d.items : [];
+    const nuovi = items.filter((x) => x && x.id && !notifSeen.has(x.id));
+    notifItems = items;
+    if (annuncia && nuovi.length) {
+      const n = nuovi[0];
+      mostraInApp(n.title, n.body, "/");
+      try { navigator.vibrate?.([60, 40, 60]); } catch {}
+    }
+    paintBell();
+    paintNotifList();
+  } catch {}
+}
+
+function paintNotifList() {
+  const box = $("#notifList");
+  if (!box || $("#notif").hidden) return;
+  if (!notifItems.length) {
+    box.innerHTML = `<div class="notif-empty">Niente di nuovo per ora. Quando succede qualcosa — un messaggio nel gruppo, una richiesta, un evento che sta per cominciare — lo trovi qui.</div>`;
+    return;
+  }
+  box.innerHTML = notifItems
+    .map((n) => `<button class="notif-item" type="button" data-notif="${esc(n.id)}"><span class="ni-ico" aria-hidden="true">${notifIcon(n)}</span><span class="ni-t"><b>${esc(n.title || "FUORI")}</b><span>${esc(n.body || "")}</span></span></button>`)
+    .join("");
+  box.querySelectorAll("[data-notif]").forEach((b) => {
+    b.onclick = () => {
+      notifSeen.add(b.dataset.notif);
+      paintBell();
+      hide("notif");
+    };
+  });
+}
+
+function openNotif() {
+  notifItems.forEach((x) => notifSeen.add(x.id));
+  paintBell();
+  paintNotifList();
+  show("notif");
+  loadNotif(false);
+}
+
+function startNotif() {
+  loadNotif(true);
+  clearInterval(notifTimer);
+  notifTimer = setInterval(() => {
+    if (document.hidden || navigator.onLine === false) return;
+    loadNotif(true);
+  }, 60000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) loadNotif(true);
+  });
+  // la push che arriva mentre l'app e' aperta: il service worker me la passa qui
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("message", (e) => {
+      const m = e.data || {};
+      if (m.type === "fuori-push") {
+        mostraInApp(m.title, m.body, m.url || "/");
+        loadNotif(false);
+      }
+    });
+  }
+  const bell = $("#bellBtn");
+  if (bell) bell.onclick = openNotif;
+  const ianX = $("#ianClose");
+  if (ianX) ianX.onclick = nascondiInApp;
+  const ianO = $("#ianOpen");
+  if (ianO) ianO.onclick = () => { nascondiInApp(); try { location.href = ianUrl || "/"; } catch {} };
+  const test = $("#notifTestBtn");
+  if (test) test.onclick = async () => {
+    const out = $("#notifTestOut");
+    try {
+      const d = await api("/push/test", { method: "POST", body: JSON.stringify({ email: person?.email || "", device }) });
+      if (out) out.textContent = d.ok ? `Prova inviata: il server l'ha accettata (${(d.statuses || []).join(", ") || "ok"}). Se hai il telefono in mano la vedi sopra; se non arriva, il blocco e' nelle impostazioni del telefono (Impostazioni > App > Chrome > Notifiche), non nell'app.` : (d.error || "Non riesco a mandarla.");
+    } catch (e) {
+      if (out) out.textContent = "Non riesco a mandarla: controlla la connessione e riprova.";
+    }
+  };
 }

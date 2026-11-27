@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <defs>
+    <linearGradient id="palm" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22b558"/>
+      <stop offset="1" stop-color="#128a3e"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#palm)" fill-opacity=".16" stroke="#1ca24b" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+    <!-- MANO SINISTRA: un'unica sagoma, polso in alto, dita in giu' attaccate -->
+    <path d="M240 105h160v295c0 14 2 28 4 42l3 68c1 26-12 40-26 34-11-5-15-20-15-44v-55
+      c0 28 1 62 2 92 1 23-12 35-25 29-11-5-15-20-15-46v-58
+      c0 26 1 58 2 84 1 22-12 33-24 28-11-5-15-19-15-44v-58
+      c0 24 1 52 2 76 1 20-11 30-22 25-10-4-14-17-14-40v-62
+      c-4-34-8-70-12-105V105Z"/>
+    <!-- pollice: lato interno -->
+    <path d="M398 318c34 16 52 50 50 90-2 32-18 54-38 52-16-2-25-19-23-44 2-30 5-66 11-98Z"/>
+    <path d="M285 240c28 34 42 74 44 118" fill="none" opacity=".5"/>
+    <path d="M340 232c20 40 28 84 26 130" fill="none" opacity=".5"/>
+    <!-- MANO DESTRA: speculare -->
+    <g transform="matrix(-1 0 0 1 1000 0)">
+      <path d="M240 105h160v295c0 14 2 28 4 42l3 68c1 26-12 40-26 34-11-5-15-20-15-44v-55
+        c0 28 1 62 2 92 1 23-12 35-25 29-11-5-15-20-15-46v-58
+        c0 26 1 58 2 84 1 22-12 33-24 28-11-5-15-19-15-44v-58
+        c0 24 1 52 2 76 1 20-11 30-22 25-10-4-14-17-14-40v-62
+        c-4-34-8-70-12-105V105Z"/>
+      <path d="M398 318c34 16 52 50 50 90-2 32-18 54-38 52-16-2-25-19-23-44 2-30 5-66 11-98Z"/>
+      <path d="M285 240c28 34 42 74 44 118" fill="none" opacity=".5"/>
+      <path d="M340 232c20 40 28 84 26 130" fill="none" opacity=".5"/>
+    </g>
+  </g>
+</svg>
